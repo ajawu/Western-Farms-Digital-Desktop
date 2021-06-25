@@ -1,0 +1,22 @@
+{
+  "name": "my-electron-app",
+  "version": "1.0.0",
+  "description": "Sample app to learn electron",
+  "main": "main.js",
+  "author": "Ajawu David",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^13.1.2",
+    "electron-builder": "^22.11.7",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  },
+  "scripts": {
+    "start": "electron .",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "sqlite3": "^5.0.2"
+  }
+}
