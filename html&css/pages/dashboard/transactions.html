@@ -102,7 +102,7 @@
           </a>
         </li>
         <li class="nav-item  active">
-          <a href="" class="nav-link">
+          <a href="transactions.html" class="nav-link">
             <span class="sidebar-icon">
               <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
@@ -111,7 +111,7 @@
                   clip-rule="evenodd"></path>
               </svg>
             </span>
-            <span class="sidebar-text">Sales</span>
+            <span class="sidebar-text">View Sales</span>
           </a>
         </li>
         <li class="nav-item">
@@ -139,57 +139,37 @@
           <div class="multi-level collapse " role="list" id="submenu-app" aria-expanded="false">
             <ul class="flex-column nav">
               <li class="nav-item ">
-                <a class="nav-link" href="#">
+                <a class="nav-link" target="_blank" href="add-inventory.html">
                   <span class="sidebar-text">Add Item</span>
                 </a>
               </li>
               <li class="nav-item ">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="inventory-list.html">
                   <span class="sidebar-text">View Items</span>
+                </a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="expired-inventory-list.html">
+                  <span class="sidebar-text">View Expired Items</span>
                 </a>
               </li>
             </ul>
           </div>
         </li>
         <li class="nav-item">
-          <span class="nav-link  collapsed  d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
-            data-bs-target="#submenu-components">
-            <span>
-              <span class="sidebar-icon">
-                <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                    clip-rule="evenodd"></path>
-                </svg>
-              </span>
-              <span class="sidebar-text">Users</span>
-            </span>
-            <span class="link-arrow">
-              <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"></path>
+          <a href="users-list.html" class="nav-link">
+            <span class="sidebar-icon">
+              <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z">
+                </path>
               </svg>
             </span>
-          </span>
-          <div class="multi-level collapse " role="list" id="submenu-components" aria-expanded="false">
-            <ul class="flex-column nav">
-              <li class="nav-item">
-                <a class="nav-link" target="_blank" href="#">
-                  <span class="sidebar-text">Add User</span>
-                </a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link" href="#">
-                  <span class="sidebar-text">View Users</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+            <span class="sidebar-text">Users</span>
+          </a>
         </li>
         <li class="nav-item ">
-          <a href="../../../../pages/settings.html" class="nav-link">
+          <a href="settings.html" class="nav-link">
             <span class="sidebar-icon">
               <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
@@ -200,8 +180,20 @@
             <span class="sidebar-text">Settings</span>
           </a>
         </li>
+
+        <li role="separator" class="dropdown-divider mt-2 mb-3 border-gray-700"></li>
+
+        <button class="btn btn-secondary d-inline-flex align-items-center me-2 dropdown-toggle">
+          <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+            </path>
+          </svg>
+          New Sale
+        </button>
+
         <!-- Side navbar separator -->
-        <li role="separator" class="dropdown-divider mt-3 mb-4 border-gray-700"></li>
+        <li role="separator" class="dropdown-divider mt-3 mb-3 border-gray-700"></li>
         <li class="nav-item ">
           <a href="../../examples/sign-in.html" class="nav-link">
             <span class="sidebar-icon">
@@ -259,7 +251,7 @@
               d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
               clip-rule="evenodd"></path>
           </svg>
-          Reports
+          Generate Report
           <svg class="icon icon-xs ms-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd"
               d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -297,12 +289,12 @@
       <table class="table table-hover mb-5" id="order-table">
         <thead>
           <tr>
-            <th class="border-gray-200">#</th>
-            <th class="border-gray-200">Bill For</th>
-            <th class="border-gray-200">Issue Date</th>
-            <th class="border-gray-200">Due Date</th>
+            <th class="border-gray-200">Receipt ID</th>
+            <th class="border-gray-200">Customer Name</th>
+            <th class="border-gray-200">Purchase Date</th>
+            <th class="border-gray-200">Purchase Time</th>
             <th class="border-gray-200">Total</th>
-            <th class="border-gray-200"></th>
+            <th class="border-gray-200">Payment Method</th>
             <th class="border-gray-200">Action</th>
           </tr>
         </thead>
@@ -315,28 +307,48 @@
               </a>
             </td>
             <td>
-              <span class="fw-normal">Platinum Subscription Plan</span>
+              <span class="fw-normal">Daniel Olabisi</span>
             </td>
-            <td><span class="fw-normal">1 May 2020</span></td>
-            <td><span class="fw-normal">1 Jun 2020</span></td>
-            <td><span class="fw-bold">₦799,00</span></td>
-            <td><span class="fw-bold text-warning">Due</span></td>
+            <td><span class="fw-normal">2020/05/10</span></td>
+            <td><span class="fw-normal">11:00</span></td>
+            <td><span class="fw-bold">₦79,900</span></td>
+            <td><span class="fw-bold text-warning">POS</span></td>
             <td>
-              <div class="btn-group">
-                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="icon icon-sm">
-                    <span class="fas fa-ellipsis-h icon-dark"></span>
-                  </span>
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu py-0">
-                  <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                  <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                  <a class="dropdown-item text-danger rounded-bottom" href="#"><span
-                      class="fas fa-trash-alt me-2"></span>Remove</a>
+              <div class="btn-group"><button
+                  class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"><svg class="icon icon-xs" fill="currentColor"
+                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
+                    </path>
+                  </svg> <span class="visually-hidden">Toggle Dropdown</span></button>
+                <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                      <path fill-rule="evenodd"
+                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                        clip-rule="evenodd"></path>
+                    </svg> View Details
+                  </a>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                        d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                    Refund
+                  </a>
                 </div>
-              </div>
+              </div><svg class="icon icon-xs text-danger ms-1" title="" data-bs-toggle="tooltip" fill="currentColor"
+                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-bs-original-title="Delete"
+                aria-label="Delete">
+                <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"></path>
+              </svg>
             </td>
           </tr>
           <!-- Item -->
@@ -347,285 +359,48 @@
               </a>
             </td>
             <td>
-              <span class="fw-normal">Platinum Subscription Plan</span>
+              <span class="fw-normal">Vivian Onochie</span>
             </td>
-            <td><span class="fw-normal">1 Apr 2020</span></td>
-            <td><span class="fw-normal">1 May 2020</span></td>
-            <td><span class="fw-bold">₦799,00</span></td>
+            <td><span class="fw-normal">2020/09/26</span></td>
+            <td><span class="fw-normal">13:10</span></td>
+            <td><span class="fw-bold">₦20,000</span></td>
             <td><span class="fw-bold text-success">Cash</span></td>
             <td>
-              <div class="btn-group">
-                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="icon icon-sm">
-                    <span class="fas fa-ellipsis-h icon-dark"></span>
-                  </span>
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu py-0">
-                  <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                  <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                  <a class="dropdown-item text-danger rounded-bottom" href="#"><span
-                      class="fas fa-trash-alt me-2"></span>Remove</a>
+              <div class="btn-group"><button
+                  class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"><svg class="icon icon-xs" fill="currentColor"
+                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
+                    </path>
+                  </svg> <span class="visually-hidden">Toggle Dropdown</span></button>
+                <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                      <path fill-rule="evenodd"
+                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                        clip-rule="evenodd"></path>
+                    </svg> View Details
+                  </a>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                        d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                    Refund
+                  </a>
                 </div>
-              </div>
-            </td>
-          </tr>
-          <!-- Item -->
-          <tr>
-            <td>
-              <a href="#" class="fw-bold">
-                456420
-              </a>
-            </td>
-            <td>
-              <span class="fw-normal">Platinum Subscription Plan</span>
-            </td>
-            <td><span class="fw-normal">1 Mar 2020</span></td>
-            <td><span class="fw-normal">1 Apr 2020</span></td>
-            <td><span class="fw-bold">₦799,00</span></td>
-            <td><span class="fw-bold text-success">Cash</span></td>
-            <td>
-              <div class="btn-group">
-                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="icon icon-sm">
-                    <span class="fas fa-ellipsis-h icon-dark"></span>
-                  </span>
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu py-0">
-                  <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                  <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                  <a class="dropdown-item text-danger rounded-bottom" href="#"><span
-                      class="fas fa-trash-alt me-2"></span>Remove</a>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <!-- Item -->
-          <tr>
-            <td>
-              <a href="#" class="fw-bold">
-                456421
-              </a>
-            </td>
-            <td>
-              <span class="fw-normal">Platinum Subscription Plan</span>
-            </td>
-            <td><span class="fw-normal">1 Feb 2020</span></td>
-            <td><span class="fw-normal">1 Mar 2020</span></td>
-            <td><span class="fw-bold">₦799,00</span></td>
-            <td><span class="fw-bold text-success">Cash</span></td>
-            <td>
-              <div class="btn-group">
-                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="icon icon-sm">
-                    <span class="fas fa-ellipsis-h icon-dark"></span>
-                  </span>
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu py-0">
-                  <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                  <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                  <a class="dropdown-item text-danger rounded-bottom" href="#"><span
-                      class="fas fa-trash-alt me-2"></span>Remove</a>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <!-- Item -->
-          <tr>
-            <td>
-              <a href="#" class="fw-bold">
-                456420
-              </a>
-            </td>
-            <td>
-              <span class="fw-normal">Platinum Subscription Plan</span>
-            </td>
-            <td><span class="fw-normal">1 Jan 2020</span></td>
-            <td><span class="fw-normal">1 Feb 2020</span></td>
-            <td><span class="fw-bold">₦799,00</span></td>
-            <td><span class="fw-bold text-success">Cash</span></td>
-            <td>
-              <div class="btn-group">
-                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="icon icon-sm">
-                    <span class="fas fa-ellipsis-h icon-dark"></span>
-                  </span>
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu py-0">
-                  <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                  <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                  <a class="dropdown-item text-danger rounded-bottom" href="#"><span
-                      class="fas fa-trash-alt me-2"></span>Remove</a>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <!-- Item -->
-          <tr>
-            <td>
-              <a href="#" class="fw-bold">
-                456479
-              </a>
-            </td>
-            <td>
-              <span class="fw-normal">Platinum Subscription Plan</span>
-            </td>
-            <td><span class="fw-normal">1 Dec 2019</span></td>
-            <td><span class="fw-normal">1 Jan 2020</span></td>
-            <td><span class="fw-bold">₦799,00</span></td>
-            <td><span class="fw-bold text-success">Cash</span></td>
-            <td>
-              <div class="btn-group">
-                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="icon icon-sm">
-                    <span class="fas fa-ellipsis-h icon-dark"></span>
-                  </span>
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu py-0">
-                  <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                  <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                  <a class="dropdown-item text-danger rounded-bottom" href="#"><span
-                      class="fas fa-trash-alt me-2"></span>Remove</a>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <!-- Item -->
-          <!-- Item -->
-          <tr>
-            <td>
-              <a href="#" class="fw-bold">
-                456478
-              </a>
-            </td>
-            <td>
-              <span class="fw-normal">Platinum Subscription Plan</span>
-            </td>
-            <td><span class="fw-normal">1 Nov 2019</span></td>
-            <td><span class="fw-normal">1 Dec 2019</span></td>
-            <td><span class="fw-bold">₦799,00</span></td>
-            <td><span class="fw-bold text-success">Cash</span></td>
-            <td>
-              <div class="btn-group">
-                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="icon icon-sm">
-                    <span class="fas fa-ellipsis-h icon-dark"></span>
-                  </span>
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu py-0">
-                  <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                  <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                  <a class="dropdown-item text-danger rounded-bottom" href="#"><span
-                      class="fas fa-trash-alt me-2"></span>Remove</a>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <!-- Item -->
-          <tr>
-            <td>
-              <a href="#" class="fw-bold">
-                453673
-              </a>
-            </td>
-            <td>
-              <span class="fw-normal">Gold Subscription Plan</span>
-            </td>
-            <td><span class="fw-normal">1 Oct 2019</span></td>
-            <td><span class="fw-normal">1 Nov 2019</span></td>
-            <td><span class="fw-bold">₦533,42</span></td>
-            <td><span class="fw-bold text-danger">Cancelled</span></td>
-            <td>
-              <div class="btn-group">
-                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="icon icon-sm">
-                    <span class="fas fa-ellipsis-h icon-dark"></span>
-                  </span>
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu py-0">
-                  <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                  <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                  <a class="dropdown-item text-danger rounded-bottom" href="#"><span
-                      class="fas fa-trash-alt me-2"></span>Remove</a>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <!-- Item -->
-          <tr>
-            <td>
-              <a href="#" class="fw-bold">
-                456468
-              </a>
-            </td>
-            <td>
-              <span class="fw-normal">Gold Subscription Plan</span>
-            </td>
-            <td><span class="fw-normal">1 Sep 2019</span></td>
-            <td><span class="fw-normal">1 Oct 2019</span></td>
-            <td><span class="fw-bold">₦533,42</span></td>
-            <td><span class="fw-bold text-success">Cash</span></td>
-            <td>
-              <div class="btn-group">
-                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="icon icon-sm">
-                    <span class="fas fa-ellipsis-h icon-dark"></span>
-                  </span>
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu py-0">
-                  <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                  <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                  <a class="dropdown-item text-danger rounded-bottom" href="#"><span
-                      class="fas fa-trash-alt me-2"></span>Remove</a>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <!-- Item -->
-          <tr>
-            <td>
-              <a href="#" class="fw-bold">
-                456478
-              </a>
-            </td>
-            <td>
-              <span class="fw-normal">Flexible Subscription Plan</span>
-            </td>
-            <td><span class="fw-normal">1 Aug 2019</span></td>
-            <td><span class="fw-normal">1 Sep 2019</span></td>
-            <td><span class="fw-bold">₦233,42</span></td>
-            <td><span class="fw-bold text-success">Cash</span></td>
-            <td>
-              <div class="btn-group">
-                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="icon icon-sm">
-                    <span class="fas fa-ellipsis-h icon-dark"></span>
-                  </span>
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu py-0">
-                  <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                  <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                  <a class="dropdown-item text-danger rounded-bottom" href="#"><span
-                      class="fas fa-trash-alt me-2"></span>Remove</a>
-                </div>
-              </div>
+              </div><svg class="icon icon-xs text-danger ms-1" title="" data-bs-toggle="tooltip" fill="currentColor"
+                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-bs-original-title="Delete"
+                aria-label="Delete">
+                <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"></path>
+              </svg>
             </td>
           </tr>
         </tbody>
