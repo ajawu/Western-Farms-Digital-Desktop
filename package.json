@@ -17,6 +17,7 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "sqlite3": "^5.0.2"
   }
 }

@@ -1,22 +1,23 @@
 const { app, BrowserWindow } = require('electron');
-const path = require('path');
 
-const nodeRequire = require;
+let win;
 
 function createWindow() {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+  win = new BrowserWindow({
+    backgroundColor: '#fff',
     minWidth: 600,
     minHeight: 200,
-    // webPreferences: {
-    //   preload: path.join(__dirname, 'preload.js'),
-    // },
+    webPreferences: {
+      // preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    },
   });
 
-  win.loadFile('html&css/pages/examples/sign-in.html');
-  win.require = nodeRequire;
+  win.loadFile('html&css/pages/account/sign-in.html');
   win.maximize();
+  win.openDevTools();
 }
 
 app.whenReady().then(() => {
