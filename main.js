@@ -15,9 +15,9 @@ function createWindow() {
     },
   });
 
-  win.loadFile('html&css/pages/account/sign-in.html');
+  win.loadFile('html&css/pages/dashboard/dashboard.html');
   win.maximize();
-  win.openDevTools();
+  // win.openDevTools();
 }
 
 app.whenReady().then(() => {

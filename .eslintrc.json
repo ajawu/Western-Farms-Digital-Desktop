@@ -12,6 +12,16 @@
     },
     "rules": {
         "no-console": "off",
-        "no-else-return": "off"
+        "no-else-return": "off",
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": true,
+                "optionalDependencies": false,
+                "peerDependencies": false
+            }
+        ],
+        "prefer-template": "off",
+        "quotes": "off"
     }
 }

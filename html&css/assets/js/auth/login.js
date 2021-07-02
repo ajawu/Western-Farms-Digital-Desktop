@@ -24,7 +24,7 @@ function saveAuth(emailAddress) {
  * @returns null
  */
 function loginUser(emailAddress, password) {
-  const db = new sqlite3.Database('western-data.db');
+  const db = new sqlite3.Database('../western-data.db');
   db.get(`SELECT password FROM auth WHERE email='${emailAddress}'`, (err, row) => {
     if (err) {
       console.log(err); // Display sql error to the user ?
@@ -46,11 +46,13 @@ function loginUser(emailAddress, password) {
   db.close();
 }
 
+// login handler
 loginButton.addEventListener('click', (e) => {
   e.preventDefault();
   errorField.textContent = '';
   loginButton.classList.remove('btn-gray-800');
   loginButton.classList.add('primary-hover');
   loginLoader.classList.remove('d-none');
-  loginUser(emailField.value, passwordField.value);
+  remote.getCurrentWindow().loadFile('html&css/pages/dashboard/dashboard.html');
+  // loginUser(emailField.value, passwordField.value);
 });
