@@ -2,6 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const moment = require('moment');
 const Chartist = require('chartist');
 const numeral = require('numeral');
+const ChartistTooltip = require('chartist-plugin-tooltips-updated');
 
 const currentMonthTextFields = document.getElementsByClassName('current-month-text');
 const customerCountField = document.getElementById('customer-count');
@@ -152,6 +153,9 @@ function displayGraphData(labels, series) {
     low: 0,
     showArea: true,
     fullWidth: true,
+    plugins: [
+      ChartistTooltip(),
+    ],
     axisX: {
       // On the x-axis start means top and end means bottom
       position: 'end',
@@ -171,11 +175,47 @@ function displayGraphData(labels, series) {
  * @param {string} period Period to extract data for
  */
 function getGraphData(period) {
-  console.log(period);
-  displayGraphData(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [0, 10, 30, 40, 80, 60, 100]);
+  let label;
+  let data;
+
+  if (period === 'today') {
+    label = ['12 AM', '6 AM', '12 PM', '6 PM'];
+    data = [0, 0, 40, 100];
+  } else if (period === 'current-week') {
+    label = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    data = [0, 10, 30, 40, 80, 60, 100];
+  } else if (period === 'current-month') {
+    label = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+    data = [0, 0, 40, 100];
+  } else if (period === 'current-year') {
+    label = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    data = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 5000, 6000, 2000];
+  } else if (period === 'past-week') {
+    label = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    data = [0, 10, 30, 40, 80, 60, 100];
+  } else if (period === 'past-month') {
+    label = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+    data = [50, 30, 60, 45];
+  } else if (period === 'past-year') {
+    label = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    data = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 5000, 6000, 2000];
+  } else {
+    label = ['2021', '2022', '2023', '2024', '2025'];
+    data = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 5000, 6000, 2000];
+  }
+
+  displayGraphData(label, data);
+}
+
+/**
+ * Call functions to load graph and metrics data
+ * @param {string} period period of time to extract data for
+ */
+function pageRefresh(period) {
+  getSalesPeriod(period);
+  getGraphData(period);
 }
 
 window.onload = () => {
-  getSalesPeriod('today');
-  getGraphData('today');
+  pageRefresh('today');
 };
