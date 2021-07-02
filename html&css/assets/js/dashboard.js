@@ -78,56 +78,52 @@ function changePeriodText(displayedPeriod) {
  * @param {string} period period of time to fetch sales
  */
 function getSalesPeriod(period) {
-  const db = new sqlite3.Database('html&css/assets/js/western-data.db');
-  let statement;
-  const date = new Date();
-  let month = date.getMonth() + 1;
-  if (month < 10) { month = `0${month}`; }
+  let startDate;
+  let endDate;
+  let query;
 
-  if (period === 'all') {
-    statement = db.prepare(`SELECT SUM(total_revenue) as total_revenue, SUM(total_price)
-     as total_sales, COUNT(DISTINCT customer_name) as customer_count FROM sales`);
-    // --
-  } else if (period === 'today') {
-    statement = db.prepare("SELECT SUM(total_revenue) as total_revenue, SUM(total_price) as total_sales, "
-      + "COUNT(DISTINCT customer_name) as customer_count FROM sales WHERE strftime('%Y-%m-%d', `purchase_time`)='"
-      + moment().format('YYYY[-]MM[-]DD') + "'");
+  if (period === 'today') {
+    startDate = moment().format('YYYY[-]MM[-]DD');
+    endDate = moment().format('YYYY[-]MM[-]DD');
     // --
   } else if (period === 'current-week') {
-    statement = db.prepare("SELECT SUM(total_revenue) as total_revenue, SUM(total_price) as total_sales, "
-      + "COUNT(DISTINCT customer_name) as customer_count FROM sales WHERE strftime('%Y-%m-%d', `purchase_time`)>='"
-      + moment().startOf('week').format('YYYY[-]MM[-]DD') + "' AND strftime('%Y-%m-%d', `purchase_time`)<='" + moment().format('YYYY[-]MM[-]DD') + "'");
+    startDate = moment().startOf('week').format('YYYY[-]MM[-]DD');
+    endDate = moment().format('YYYY[-]MM[-]DD');
     // --
   } else if (period === 'current-month') {
-    statement = db.prepare("SELECT SUM(total_revenue) as total_revenue, SUM(total_price) as total_sales, "
-      + "COUNT(DISTINCT customer_name) as customer_count FROM sales WHERE strftime('%Y-%m-%d', `purchase_time`)>='"
-      + moment().startOf('month').format('YYYY[-]MM[-]DD') + "' AND strftime('%Y-%m-%d', `purchase_time`)<='" + moment().format('YYYY[-]MM[-]DD') + "'");
+    startDate = moment().startOf('month').format('YYYY[-]MM[-]DD');
+    endDate = moment().format('YYYY[-]MM[-]DD');
     // --
   } else if (period === 'current-year') {
-    statement = db.prepare("SELECT SUM(total_revenue) as total_revenue, SUM(total_price) as total_sales, "
-      + "COUNT(DISTINCT customer_name) as customer_count FROM sales WHERE strftime('%Y-%m-%d', `purchase_time`)>='"
-      + moment().startOf('year').format('YYYY[-]MM[-]DD') + "' AND strftime('%Y-%m-%d', `purchase_time`)<='" + moment().format('YYYY[-]MM[-]DD') + "'");
+    startDate = moment().startOf('year').format('YYYY[-]MM[-]DD');
+    endDate = moment().format('YYYY[-]MM[-]DD');
     // --
   } else if (period === 'past-week') {
-    statement = db.prepare("SELECT SUM(total_revenue) as total_revenue, SUM(total_price) as total_sales, "
-      + "COUNT(DISTINCT customer_name) as customer_count FROM sales WHERE strftime('%Y-%m-%d', `purchase_time`)>='"
-      + moment().subtract(1, "week").startOf("week").format('YYYY[-]MM[-]DD') + "' AND strftime('%Y-%m-%d', `purchase_time`)<='"
-      + moment().subtract(1, "week").endOf("week").format('YYYY[-]MM[-]DD') + "'");
+    startDate = moment().subtract(1, "week").startOf("week").format('YYYY[-]MM[-]DD');
+    endDate = moment().subtract(1, "week").endOf("week").format('YYYY[-]MM[-]DD');
     // --
   } else if (period === 'past-month') {
-    statement = db.prepare("SELECT SUM(total_revenue) as total_revenue, SUM(total_price) as total_sales, "
-      + "COUNT(DISTINCT customer_name) as customer_count FROM sales WHERE strftime('%Y-%m-%d', `purchase_time`)>='"
-      + moment().subtract(1, "month").startOf("month").format('YYYY[-]MM[-]DD') + "' AND strftime('%Y-%m-%d', `purchase_time`)<='"
-      + moment().subtract(1, "month").endOf("month").format('YYYY[-]MM[-]DD') + "'");
+    startDate = moment().subtract(1, "month").startOf("month").format('YYYY[-]MM[-]DD');
+    endDate = moment().subtract(1, "month").endOf("month").format('YYYY[-]MM[-]DD');
     // --
   } else if (period === 'past-year') {
-    statement = db.prepare("SELECT SUM(total_revenue) as total_revenue, SUM(total_price) as total_sales, "
-      + "COUNT(DISTINCT customer_name) as customer_count FROM sales WHERE strftime('%Y-%m-%d', `purchase_time`)>='"
-      + moment().subtract(1, "year").startOf("year").format('YYYY[-]MM[-]DD') + "' AND strftime('%Y-%m-%d', `purchase_time`)<='"
-      + moment().subtract(1, "year").endOf("year").format('YYYY[-]MM[-]DD') + "'");
+    startDate = moment().subtract(1, "year").startOf("year").format('YYYY[-]MM[-]DD');
+    endDate = moment().subtract(1, "year").endOf("year").format('YYYY[-]MM[-]DD');
   }
 
-  statement.get((err, row) => {
+  // Create and execute db query
+  const db = new sqlite3.Database('html&css/assets/js/western-data.db');
+
+  if (period === 'all') {
+    query = db.prepare(`SELECT SUM(total_revenue) as total_revenue, SUM(total_price)
+     as total_sales, COUNT(DISTINCT customer_name) as customer_count FROM sales`);
+  } else {
+    query = db.prepare("SELECT SUM(total_revenue) as total_revenue, SUM(total_price) as total_sales, "
+      + "COUNT(DISTINCT customer_name) as customer_count FROM sales WHERE strftime('%Y-%m-%d', `purchase_time`)>='"
+      + startDate + "' AND strftime('%Y-%m-%d', `purchase_time`)<='" + endDate + "'");
+  }
+
+  query.get((err, row) => {
     if (row) {
       displayData(row.total_revenue, row.total_sales, row.customer_count);
       changePeriodText(period);
@@ -179,8 +175,57 @@ function getGraphData(period) {
   let data;
 
   if (period === 'today') {
+    data = [];
     label = ['12 AM', '6 AM', '12 PM', '6 PM'];
-    data = [0, 0, 40, 100];
+
+    const midnightToMorning = "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
+      + moment().format('YYYY[-]MM[-]DD') + "'"
+      + "AND STRFTIME('%H', purchase_time) >= '00' AND STRFTIME('%H', purchase_time) < '06'";
+
+    const morningToAfternoon = "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
+      + moment().format('YYYY[-]MM[-]DD') + "'"
+      + "AND STRFTIME('%H', purchase_time) >= '06' AND STRFTIME('%H', purchase_time) < '12'";
+
+    const afternoonToEvening = "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
+      + moment().format('YYYY[-]MM[-]DD') + "'"
+      + "AND STRFTIME('%H', purchase_time) >= '12' AND STRFTIME('%H', purchase_time) < '18'";
+
+    const eveningToMidnight = "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
+      + moment().format('YYYY[-]MM[-]DD') + "'"
+      + "AND STRFTIME('%H', purchase_time) >= '18' AND STRFTIME('%H', purchase_time) < '00'";
+
+    const db = new sqlite3.Database('html&css/assets/js/western-data.db');
+
+    db.get(eveningToMidnight, (err, row) => {
+      if (row.total_sales) {
+        data.push(row.total_sales);
+      } else {
+        data.push(0);
+      }
+      db.get(midnightToMorning, (err1, row1) => {
+        if (row1.total_sales) {
+          data.push(row1.total_sales);
+        } else {
+          data.push(0);
+        }
+        db.get(morningToAfternoon, (err2, row2) => {
+          if (row2.total_sales) {
+            data.push(row2.total_sales);
+          } else {
+            data.push(0);
+          }
+          db.get(afternoonToEvening, (err3, row3) => {
+            if (row3.total_sales) {
+              data.push(row3.total_sales);
+            } else {
+              data.push(0);
+            }
+          });
+        });
+      });
+    });
+    db.close();
+    // ----
   } else if (period === 'current-week') {
     label = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     data = [0, 10, 30, 40, 80, 60, 100];
