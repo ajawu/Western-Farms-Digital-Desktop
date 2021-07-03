@@ -142,31 +142,33 @@ function getSalesPeriod(period) {
  * @param {Array} series Graph data to be displayed
  */
 function displayGraphData(labels, series) {
-  const chart = new Chartist.Line('.ct-chart-sales-value', {
-    labels: labels,
-    series: [series],
-  }, {
-    low: 0,
-    showArea: true,
-    fullWidth: true,
-    plugins: [
-      ChartistTooltip(),
-    ],
-    axisX: {
-      // On the x-axis start means top and end means bottom
-      position: 'end',
-      showGrid: true,
-    },
-    axisY: {
-      // On the y-axis start means left and end means right
-      showGrid: false,
-      showLabel: false,
-      labelInterpolationFnc: (value) => '$' + (value / 1) + 'k',
-    },
-    options: {
-      spanGaps: true, // this is the property I found
-    },
-  });
+  setTimeout(() => {
+    const chart = new Chartist.Line('.ct-chart-sales-value', {
+      labels: labels,
+      series: [series],
+    }, {
+      low: 0,
+      showArea: true,
+      fullWidth: true,
+      plugins: [
+        ChartistTooltip(),
+      ],
+      axisX: {
+        // On the x-axis start means top and end means bottom
+        position: 'end',
+        showGrid: true,
+      },
+      axisY: {
+        // On the y-axis start means left and end means right
+        showGrid: false,
+        showLabel: false,
+        labelInterpolationFnc: (value) => '$' + (value / 1) + 'k',
+      },
+      options: {
+        spanGaps: true, // this is the property I found
+      },
+    });
+  }, 500);
 }
 
 /**
@@ -530,5 +532,5 @@ function pageRefresh(period) {
 }
 
 window.onload = () => {
-  pageRefresh('all');
+  pageRefresh('current-week');
 };
