@@ -20,10 +20,14 @@
     "bcrypt": "^5.0.1",
     "chartist": "^0.11.4",
     "chartist-plugin-tooltips-updated": "^0.1.4",
+    "datatables.net-bs5": "^1.10.25",
+    "datatables.net-fixedheader-bs5": "^3.1.9",
     "email-validator": "^2.0.4",
+    "jquery": "^3.6.0",
     "mailgun-js": "^0.22.0",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
-    "sqlite3": "^5.0.2"
+    "sqlite3": "^5.0.2",
+    "sweetalert": "^2.1.2"
   }
 }

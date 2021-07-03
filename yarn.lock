@@ -847,6 +847,28 @@ data-uri-to-buffer@1:
   resolved "https://registry.yarnpkg.com/data-uri-to-buffer/-/data-uri-to-buffer-1.2.0.tgz#77163ea9c20d8641b4707e8f18abdf9a78f34835"
   integrity sha512-vKQ9DTQPN1FLYiiEEOQ6IBGFqvjCa5rSK3cWMy/Nespm5d/x3dGFT9UBZnkLxCwua/IXBi2TYnwTEpsOvhC4UQ==
 
+datatables.net-bs5@^1.10.25:
+  version "1.10.25"
+  resolved "https://registry.yarnpkg.com/datatables.net-bs5/-/datatables.net-bs5-1.10.25.tgz#68d6a3e109aec0d6a57645844434025215a89656"
+  integrity sha512-SiONLsCrVOuSZm8AcKcMrpo9ZriCdtuf9udzxwK92yrI2a+mnuSi0EreG35Rcq1ORRELqrp3/2o+qcTHo7fSsg==
+  dependencies:
+    datatables.net "^1.10.15"
+    jquery ">=1.7"
+
+datatables.net-fixedheader-bs5@^3.1.9:
+  version "3.1.9"
+  resolved "https://registry.yarnpkg.com/datatables.net-fixedheader-bs5/-/datatables.net-fixedheader-bs5-3.1.9.tgz#3c201af95337146a84cc991a3d79854dc6c933ce"
+  integrity sha512-QX+fGn/vbuDJiplue1EqxVHkzq5QYlfSX6e+pWciFyNVOmisoxTWrmyY3ELfBA7jZD1qB7VhEB1QOnhbPlOFLQ==
+  dependencies:
+    jquery ">=1.7"
+
+datatables.net@^1.10.15:
+  version "1.10.25"
+  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.10.25.tgz#fc03a239e08f91d1d64ba101aa54daf4086d162c"
+  integrity sha512-y0+C7all+MC/h1acwnjErhaJPjYGKpWTvbXrfEUbR8+P+nnhgjNn5nL1udgsTwBObMhlj1KITNBRrM/ZLSoj+Q==
+  dependencies:
+    jquery ">=1.7"
+
 debug@2, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
@@ -1156,6 +1178,11 @@ es6-error@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/es6-error/-/es6-error-4.1.1.tgz#9e3af407459deed47e9a91f9b885a84eb05c561d"
   integrity sha512-Um/+FxMr9CISWh0bi5Zv0iOD+4cFh5qLeks1qhAopKVAJw3drgKbKySikp7wGhDL0HPeaja0P5ULZrxLkniUVg==
+
+es6-object-assign@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/es6-object-assign/-/es6-object-assign-1.1.0.tgz#c2c3582656247c39ea107cb1e6652b6f9f24523c"
+  integrity sha1-wsNYJlYkfDnqEHyx5mUrb58kUjw=
 
 es6-promise@^4.0.3:
   version "4.2.8"
@@ -2086,6 +2113,11 @@ jake@^10.6.1:
     filelist "^1.0.1"
     minimatch "^3.0.4"
 
+jquery@>=1.7, jquery@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
+  integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
+
 js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -2830,6 +2862,11 @@ progress@^2.0.0, progress@^2.0.3:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
+promise-polyfill@^6.0.2:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-6.1.0.tgz#dfa96943ea9c121fca4de9b5868cb39d3472e057"
+  integrity sha1-36lpQ+qcEh/KTem1hoyznTRy4Fc=
+
 promisify-call@^2.0.2:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/promisify-call/-/promisify-call-2.0.4.tgz#d48c2d45652ccccd52801ddecbd533a6d4bd5fba"
@@ -3405,6 +3442,14 @@ supports-color@^7.1.0:
   integrity sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==
   dependencies:
     has-flag "^4.0.0"
+
+sweetalert@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/sweetalert/-/sweetalert-2.1.2.tgz#010baaa80d0dbdc86f96bfcaa96b490728594b79"
+  integrity sha512-iWx7X4anRBNDa/a+AdTmvAzQtkN1+s4j/JJRWlHpYE8Qimkohs8/XnFcWeYHH2lMA8LRCa5tj2d244If3S/hzA==
+  dependencies:
+    es6-object-assign "^1.1.0"
+    promise-polyfill "^6.0.2"
 
 table@^6.0.9:
   version "6.7.1"

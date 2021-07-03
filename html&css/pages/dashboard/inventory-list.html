@@ -31,7 +31,7 @@
 
     <!-- Volt CSS -->
     <link type="text/css" href="../../css/volt.css" rel="stylesheet">
-
+    <link href="../../vendor/font-awesome/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="../../vendor/datatables/datatables.min.css">
 </head>
 
@@ -57,7 +57,7 @@
                 class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
                 <div class="d-flex align-items-center">
                     <div class="avatar-lg me-4">
-                        <img src="../../../../assets/img/team/profile-picture-3.jpg"
+                        <img src="../../assets/img/team/default-avatar.jpg"
                             class="card-img-top rounded-circle border-white" alt="Bonnie Green">
                     </div>
                     <div class="d-block">
@@ -146,9 +146,6 @@
                     <div class="multi-level collapse " role="list" id="submenu-app" aria-expanded="false">
                         <ul class="flex-column nav">
                             <li class="nav-item">
-                                <a class="nav-link" target="_blank" href="add-inventory.html">
-                                    <span class="sidebar-text">Add Item</span>
-                                </a>
                             </li>
                             <li class="nav-item active">
                                 <a class="nav-link" href="inventory-list.html">
@@ -253,6 +250,15 @@
 
             <!-- Reports dropdown -->
             <div>
+                <div class="d-inline-block">
+                    <button class="btn btn-sm btn-gray-800 d-inline-flex align-items-center" id="addUser">
+                        <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg> New Item
+                    </button>
+                </div>
                 <button class="btn btn-gray-800 d-inline-flex align-items-center dropdown-toggle"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
@@ -271,20 +277,20 @@
                     </svg>
                 </button>
                 <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
-                    <a class="dropdown-item d-flex align-items-center" href="#">
+                    <button class="dropdown-item d-flex align-items-center">
                         Today
-                    </a>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
+                    </button>
+                    <button class="dropdown-item d-flex align-items-center">
                         Past Week
-                    </a>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
+                    </button>
+                    <button class="dropdown-item d-flex align-items-center">
                         Past Month
-                    </a>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
+                    </button>
+                    <button class="dropdown-item d-flex align-items-center">
                         Past Year
-                    </a>
+                    </button>
                     <div role="separator" class="dropdown-divider my-1"></div>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
+                    <button class="dropdown-item d-flex align-items-center">
                         <svg class="dropdown-icon text-gray-800 me-2" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
                             <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
@@ -293,12 +299,12 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                         All Time
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
         <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5 mt-2">
-            <table class="table table-hover mb-5" id="expired-inventory-table">
+            <table class="table table-hover mb-5" id="inventory-table">
                 <thead>
                     <tr>
                         <th class="border-gray-200">#</th>
@@ -310,98 +316,41 @@
                         <th class="border-gray-200">Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <a href="#" class="fw-bold">
-                                456423
-                            </a>
-                        </td>
-                        <td>
-                            <span class="fw-normal">Platinumar Subscription Plan</span>
-                        </td>
-                        <td><span class="fw-normal">1 Apr 2020</span></td>
-                        <td><span class="fw-normal">1 May 2020</span></td>
-                        <td><span class="fw-bold">₦799,00</span></td>
-                        <td><span class="fw-bold text-success">Unexpired</span></td>
-                        <td>
-                            <div class="btn-group"><button
-                                    class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><svg
-                                        class="icon icon-xs" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
-                                        </path>
-                                    </svg> <span class="visually-hidden">Toggle Dropdown</span></button>
-                                <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor"
-                                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                                            <path fill-rule="evenodd"
-                                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg> View Details
-                                    </a>
-                                </div>
-                            </div><svg class="icon icon-xs text-danger ms-1" title="" data-bs-toggle="tooltip"
-                                fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
-                                data-bs-original-title="Delete" aria-label="Delete">
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="#" class="fw-bold">
-                                456430
-                            </a>
-                        </td>
-                        <td>
-                            <span class="fw-normal">Chicken Feed - 50KG</span>
-                        </td>
-                        <td><span class="fw-normal">2021/10/20</span></td>
-                        <td><span class="fw-normal">2023/10/20</span></td>
-                        <td><span class="fw-bold">₦90,000</span></td>
-                        <td><span class="fw-bold text-danger">Expired</span></td>
-                        <td>
-                            <div class="btn-group"><button
-                                    class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><svg
-                                        class="icon icon-xs" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
-                                        </path>
-                                    </svg> <span class="visually-hidden">Toggle Dropdown</span></button>
-                                <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor"
-                                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                                            <path fill-rule="evenodd"
-                                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg> View Details
-                                    </a>
-                                </div>
-                            </div><svg class="icon icon-xs text-danger ms-1" title="" data-bs-toggle="tooltip"
-                                fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
-                                data-bs-original-title="Delete" aria-label="Delete">
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </td>
-                    </tr>
+                <tbody id="inventory-body">
                 </tbody>
             </table>
         </div>
 
-
+        <!-- DELETE Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn btn-close btn-link" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center pt-0">
+                        <i class="far fa-times-circle text-danger" style="font-size: 70px; font-weight: 400;"></i>
+                        <h3 class="modal-title mt-2 mb-2" id="deleteModalLabel">
+                            Are you Sure?
+                        </h3>
+                        <p class="modal-body-text mb-0">
+                            Do you really want to delete this product?<br>
+                            <span id="productDeleteName" class="text-danger fw-bold text-uppercase"></span><br>
+                            This process cannot be undone.
+                        </p>
+                        <span class="d-none" id="productIdField"></span>
+                    </div>
+                    <div class="modal-footer justify-content-evenly mb-3">
+                        <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">No, Cancel</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteProduct()" data-bs-dismiss="modal">
+                            Yes, Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Core -->
@@ -416,14 +365,6 @@
 
     <!-- Smooth scroll -->
     <script src="../../vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
-
-    <!-- Charts -->
-    <script src="../../vendor/chartist/dist/chartist.min.js"></script>
-    <script src="../../vendor/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
-
-    <!-- Datepicker -->
-    <script src="../../vendor/vanillajs-datepicker/dist/js/datepicker.min.js"></script>
-
     <!-- Sweet Alerts 2 -->
     <script src="../../vendor/sweetalert2/dist/sweetalert2.all.min.js"></script>
 
@@ -439,21 +380,13 @@
     <!-- Simplebar -->
     <script src="../../vendor/simplebar/dist/simplebar.min.js"></script>
 
-    <!-- Github buttons -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-
     <!-- Volt JS -->
     <script src="../../assets/js/volt.js"></script>
 
-    <script type="text/javascript" src="../../vendor/datatables/jquery.min.js"></script>
-    <script type="text/javascript" src="../../vendor/datatables/datatables.min.js"></script>
+    <!-- <script type="text/javascript" src="../../vendor/datatables/jquery.min.js"></script>
+    <script type="text/javascript" src="../../vendor/datatables/datatables.min.js"></script> -->
 
-    <script>
-        $(document).ready(function () {
-            $('#expired-inventory-table').DataTable();
-            $('#inventory-button').trigger("click");
-        });
-    </script>
+    <script src="../../assets/js/inventory.js"></script>
 </body>
 
 </html>

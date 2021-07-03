@@ -146,11 +146,6 @@
                     <div class="multi-level collapse " role="list" id="submenu-app" aria-expanded="false">
                         <ul class="flex-column nav">
                             <li class="nav-item ">
-                                <a class="nav-link" target="_blank" href="add-inventory.html">
-                                    <span class="sidebar-text">Add Item</span>
-                                </a>
-                            </li>
-                            <li class="nav-item ">
                                 <a class="nav-link" href="inventory-list.html">
                                     <span class="sidebar-text">View Items</span>
                                 </a>
@@ -253,6 +248,16 @@
 
             <!-- Reports dropdown -->
             <div>
+                <div class="d-inline-block">
+                    <button class="btn btn-sm btn-gray-800 d-inline-flex align-items-center" id="addUser">
+                        <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+                            </path>
+                        </svg> New Item
+                    </button>
+                </div>
                 <button class="btn btn-gray-800 d-inline-flex align-items-center dropdown-toggle"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
@@ -262,7 +267,7 @@
                             d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
                             clip-rule="evenodd"></path>
                     </svg>
-                    Reports
+                    Generate Reports
                     <svg class="icon icon-xs ms-1" fill="currentColor" viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd"
@@ -271,20 +276,20 @@
                     </svg>
                 </button>
                 <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
-                    <a class="dropdown-item d-flex align-items-center" href="#">
+                    <button class="dropdown-item d-flex align-items-center">
                         Today
-                    </a>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
+                    </button>
+                    <button class="dropdown-item d-flex align-items-center">
                         Past Week
-                    </a>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
+                    </button>
+                    <button class="dropdown-item d-flex align-items-center">
                         Past Month
-                    </a>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
+                    </button>
+                    <button class="dropdown-item d-flex align-items-center">
                         Past Year
-                    </a>
+                    </button>
                     <div role="separator" class="dropdown-divider my-1"></div>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
+                    <button class="dropdown-item d-flex align-items-center">
                         <svg class="dropdown-icon text-gray-800 me-2" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
                             <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
@@ -293,7 +298,7 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                         All Time
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
