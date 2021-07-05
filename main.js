@@ -16,7 +16,7 @@ function createWindow() {
     },
   });
 
-  win.loadFile('html&css/pages/dashboard/inventory-list.html');
+  win.loadFile('html&css/pages/dashboard/dashboard.html');
   win.maximize();
   // win.openDevTools();
 }

@@ -1,7 +1,8 @@
-const sqlite3 = require('sqlite3').verbose();
+const Database = require('better-sqlite3');
 const moment = require('moment');
 const Chartist = require('chartist');
 const numeral = require('numeral');
+const swal = require('sweetalert');
 const ChartistTooltip = require('chartist-plugin-tooltips-updated');
 
 const currentMonthTextFields = document.getElementsByClassName('current-month-text');
@@ -74,13 +75,13 @@ function changePeriodText(displayedPeriod) {
 }
 
 /**
- * Fetch sales within a given period
+ * Fetch sales within a given period from the database and displays it
  * @param {string} period period of time to fetch sales
  */
 function getSalesPeriod(period) {
   let startDate;
   let endDate;
-  let query;
+  let salesQuery;
 
   if (period === 'today') {
     startDate = moment().format('YYYY[-]MM[-]DD');
@@ -112,28 +113,25 @@ function getSalesPeriod(period) {
   }
 
   // Create and execute db query
-  const db = new sqlite3.Database('html&css/assets/js/western-data.db');
+  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
 
-  if (period === 'all') {
-    query = db.prepare(`SELECT SUM(total_revenue) as total_revenue, SUM(total_price)
+  try {
+    if (period === 'all') {
+      salesQuery = db.prepare(`SELECT SUM(total_revenue) as total_revenue, SUM(total_price)
      as total_sales, COUNT(DISTINCT customer_name) as customer_count FROM sales`);
-  } else {
-    query = db.prepare("SELECT SUM(total_revenue) as total_revenue, SUM(total_price) as total_sales, "
-      + "COUNT(DISTINCT customer_name) as customer_count FROM sales WHERE strftime('%Y-%m-%d', `purchase_time`)>='"
-      + startDate + "' AND strftime('%Y-%m-%d', `purchase_time`)<='" + endDate + "'");
-  }
-
-  query.get((err, row) => {
-    if (row) {
-      displayData(row.total_revenue, row.total_sales, row.customer_count);
-      changePeriodText(period);
     } else {
-      // Log error and report to developer show error notification
-      console.log(err);
-      displayData(0, 0, 0);
-      changePeriodText('An error occured - [E04]');
+      salesQuery = db.prepare("SELECT SUM(total_revenue) as total_revenue, SUM(total_price) as total_sales, "
+        + "COUNT(DISTINCT customer_name) as customer_count FROM sales WHERE strftime('%Y-%m-%d', `purchase_time`)>='"
+        + startDate + "' AND strftime('%Y-%m-%d', `purchase_time`)<='" + endDate + "'");
     }
-  });
+
+    const salesData = salesQuery.get();
+    displayData(salesData.total_revenue, salesData.total_sales, salesData.customer_count);
+    changePeriodText(period);
+  } catch (err) {
+    swal("Oops!", err.message, "error");
+  }
+  db.close();
 }
 
 /**
@@ -142,384 +140,234 @@ function getSalesPeriod(period) {
  * @param {Array} series Graph data to be displayed
  */
 function displayGraphData(labels, series) {
-  setTimeout(() => {
-    const chart = new Chartist.Line('.ct-chart-sales-value', {
-      labels: labels,
-      series: [series],
-    }, {
-      low: 0,
-      showArea: true,
-      fullWidth: true,
-      plugins: [
-        ChartistTooltip(),
-      ],
-      axisX: {
-        // On the x-axis start means top and end means bottom
-        position: 'end',
-        showGrid: true,
-      },
-      axisY: {
-        // On the y-axis start means left and end means right
-        showGrid: false,
-        showLabel: false,
-        labelInterpolationFnc: (value) => '$' + (value / 1) + 'k',
-      },
-      options: {
-        spanGaps: true, // this is the property I found
-      },
-    });
-  }, 500);
+  const chart = new Chartist.Line('.ct-chart-sales-value', {
+    labels: labels,
+    series: [series],
+  }, {
+    low: 0,
+    showArea: true,
+    fullWidth: true,
+    plugins: [
+      ChartistTooltip(),
+    ],
+    axisX: {
+      // On the x-axis start means top and end means bottom
+      position: 'end',
+      showGrid: true,
+    },
+    axisY: {
+      // On the y-axis start means left and end means right
+      showGrid: false,
+      showLabel: false,
+      labelInterpolationFnc: (value) => '$' + (value / 1) + 'k',
+    },
+    options: {
+      spanGaps: true, // this is the property I found
+    },
+  });
 }
 
 /**
- * Get dtaa to display in graphs from db
+ * Get data to display in graphs from db
  * @param {string} period Period to extract data for
  */
 function getGraphData(period) {
   let label;
-  let data;
-  const db = new sqlite3.Database('html&css/assets/js/western-data.db');
+  const data = [];
+  let query;
+  let periods = [];
+  // Create and execute db query
+  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+
   if (period === 'today') {
-    data = [0, 0, 0, 0];
     label = ['12 AM', '6 AM', '12 PM', '6 PM'];
-    const queries = [
-      // eveningToMidnight
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().format('YYYY[-]MM[-]DD') + "'"
-      + "AND STRFTIME('%H', purchase_time) >= '18' AND STRFTIME('%H', purchase_time) < '00'",
-      // Midnight to Morning
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().format('YYYY[-]MM[-]DD') + "'"
-      + "AND STRFTIME('%H', purchase_time) > '00' AND STRFTIME('%H', purchase_time) <= '06'",
-      // Morning to Afternoon
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().format('YYYY[-]MM[-]DD') + "'"
-      + "AND STRFTIME('%H', purchase_time) > '06' AND STRFTIME('%H', purchase_time) <= '12'",
-      // Afternoon to Evening
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().format('YYYY[-]MM[-]DD') + "'"
-      + "AND STRFTIME('%H', purchase_time) > '12' AND STRFTIME('%H', purchase_time) <= '18'"];
+    query = db.prepare(`SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)=date('now')
+      AND STRFTIME('%H', purchase_time) > @start AND STRFTIME('%H', purchase_time) <= @stop`);
 
-    queries.forEach((query) => {
-      db.get(query, (err, row) => {
-        if (row) {
-          if (row.total_sales) {
-            data[queries.indexOf(query)] = row.total_sales;
-          } else {
-            data[queries.indexOf(query)] = 0;
-          }
-        }
-      });
-    });
-
-    db.close();
+    periods = [
+      { start: '18', stop: '00' }, // eveningToMidnight
+      { start: '00', stop: '06' }, // Midnight to Morning
+      { start: '06', stop: '12' }, // Morning to Afternoon
+      { start: '12', stop: '18' }, // Afternoon to Evening
+    ];
+    // -----
   } else if (period === 'current-week') {
     label = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    data = [0, 0, 0, 0, 0, 0, 0];
-    const queries = [
-      // Sunday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').format('YYYY[-]MM[-]DD') + "'",
-      // Monday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').add(1, 'day').format('YYYY[-]MM[-]DD') + "'",
-      // Tuesday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').add(2, 'day').format('YYYY[-]MM[-]DD') + "'",
-      // Wednesday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').add(3, 'day').format('YYYY[-]MM[-]DD') + "'",
-      // Thursday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').add(4, 'day').format('YYYY[-]MM[-]DD') + "'",
-      // Friday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').add(5, 'day').format('YYYY[-]MM[-]DD') + "'",
-      // Saturday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').add(6, 'day').format('YYYY[-]MM[-]DD') + "'"];
+    query = db.prepare(`SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)=@day`);
 
-    queries.forEach((query) => {
-      db.get(query, (err, row) => {
-        if (row) {
-          if (row.total_sales) {
-            data[queries.indexOf(query)] = row.total_sales;
-          } else {
-            data[queries.indexOf(query)] = 0;
-          }
-        }
-      });
-    });
-
-    db.close();
+    periods = [
+      { day: moment().startOf('week').format('YYYY[-]MM[-]DD') }, // Sunday
+      { day: moment().startOf('week').add(1, 'day').format('YYYY[-]MM[-]DD') }, // Monday
+      { day: moment().startOf('week').add(2, 'day').format('YYYY[-]MM[-]DD') }, // Tuesday
+      { day: moment().startOf('week').add(3, 'day').format('YYYY[-]MM[-]DD') }, // Wednesday
+      { day: moment().startOf('week').add(4, 'day').format('YYYY[-]MM[-]DD') }, // Thursday
+      { day: moment().startOf('week').add(5, 'day').format('YYYY[-]MM[-]DD') }, // Friday
+      { day: moment().startOf('week').add(6, 'day').format('YYYY[-]MM[-]DD') }, // Saturday
+    ];
     // ----
   } else if (period === 'current-month') {
     label = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-    data = [0, 0, 0, 0];
-    const queries = [
-      // Week 1
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)>='"
-      + moment().startOf('month').format('YYYY[-]MM[-]DD') + "' AND date(purchase_time)<='"
-      + moment().startOf('month').endOf('week').format('YYYY[-]MM[-]DD') + "'",
-      // Week 2
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)>='"
-      + moment().startOf('month').add(1, 'week').format('YYYY[-]MM[-]DD') + "' AND date(purchase_time)<='"
-      + moment().startOf('month').endOf('week').format('YYYY[-]MM[-]DD') + "'",
-      // Week 3
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)>='"
-      + moment().startOf('month').add(2, 'week').format('YYYY[-]MM[-]DD') + "' AND date(purchase_time)<='"
-      + moment().startOf('month').endOf('week').format('YYYY[-]MM[-]DD') + "'",
-      // Week 4
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)>='"
-      + moment().startOf('month').add(3, 'week').format('YYYY[-]MM[-]DD') + "' AND date(purchase_time)<='"
-      + moment().startOf('month').endOf('week').format('YYYY[-]MM[-]DD') + "'"];
+    query = db.prepare(`SELECT SUM(total_price) as total_sales FROM sales WHERE 
+      date(purchase_time) >= @start AND date(purchase_time) <= @stop`);
 
-    queries.forEach((query) => {
-      db.get(query, (err, row) => {
-        if (row) {
-          if (row.total_sales) {
-            data[queries.indexOf(query)] = row.total_sales;
-          } else {
-            data[queries.indexOf(query)] = 0;
-          }
-        }
-      });
-    });
-
-    db.close();
+    periods = [
+      { // Week 1
+        start: moment().startOf('month').format('YYYY[-]MM[-]DD'),
+        stop: moment().startOf('month').endOf('week').format('YYYY[-]MM[-]DD'),
+      },
+      { // Week 2
+        start: moment().startOf('month').add(1, 'week').startOf('week')
+          .format('YYYY[-]MM[-]DD'),
+        stop: moment().startOf('month').add(1, 'week').endOf('week')
+          .format('YYYY[-]MM[-]DD'),
+      },
+      { // Week 3
+        start: moment().startOf('month').add(2, 'week').startOf('week')
+          .format('YYYY[-]MM[-]DD'),
+        stop: moment().startOf('month').add(2, 'week').endOf('week')
+          .format('YYYY[-]MM[-]DD'),
+      },
+      { // Week 4
+        start: moment().startOf('month').add(3, 'week').startOf('week')
+          .format('YYYY[-]MM[-]DD'),
+        stop: moment().endOf('month').format('YYYY[-]MM[-]DD'),
+      },
+    ];
     // ----
   } else if (period === 'current-year') {
     label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    const queries = [
-      // Jan
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='01' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().year() + "'",
-      // Feb
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='02' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().year() + "'",
-      // Mar
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='03' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().year() + "'",
-      // Apr
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='04' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().year() + "'",
-      // May
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='05' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().year() + "'",
-      // Jun
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='06' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().year() + "'",
-      // Jul
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='07' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().year() + "'",
-      // Aug
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='08' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().year() + "'",
-      // Sep
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='09' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().year() + "'",
-      // Oct
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='10' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().year() + "'",
-      // Nov
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='11' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().year() + "'",
-      // Dec
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='12' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().year() + "'"];
+    query = db.prepare(`SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time) = @month
+      AND STRFTIME('%Y', purchase_time) = @year`);
 
-    queries.forEach((query) => {
-      db.get(query, (err, row) => {
-        if (row) {
-          if (row.total_sales) {
-            data[queries.indexOf(query)] = row.total_sales;
-          } else {
-            data[queries.indexOf(query)] = 0;
-          }
-        }
-      });
-    });
-
-    db.close();
+    periods = [
+      { month: '01', year: `${moment().year()}` }, // January
+      { month: '02', year: `${moment().year()}` }, // February
+      { month: '03', year: `${moment().year()}` }, // March
+      { month: '04', year: `${moment().year()}` }, // April
+      { month: '05', year: `${moment().year()}` }, // May
+      { month: '06', year: `${moment().year()}` }, // June
+      { month: '07', year: `${moment().year()}` }, // July
+      { month: '08', year: `${moment().year()}` }, // August
+      { month: '09', year: `${moment().year()}` }, // September
+      { month: '10', year: `${moment().year()}` }, // October
+      { month: '11', year: `${moment().year()}` }, // November
+      { month: '12', year: `${moment().year()}` }, // December
+    ];
     // ----
   } else if (period === 'past-week') {
     label = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    data = [0, 0, 0, 0, 0, 0, 0];
-    const queries = [
-      // Sunday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').subtract(1, 'week').format('YYYY[-]MM[-]DD') + "'",
-      // Monday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').subtract(1, 'week').add(1, 'day')
-        .format('YYYY[-]MM[-]DD') + "'",
-      // Tuesday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').subtract(1, 'week').add(2, 'day')
-        .format('YYYY[-]MM[-]DD') + "'",
-      // Wednesday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').subtract(1, 'week').add(3, 'day')
-        .format('YYYY[-]MM[-]DD') + "'",
-      // Thursday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').subtract(1, 'week').add(4, 'day')
-        .format('YYYY[-]MM[-]DD') + "'",
-      // Friday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').subtract(1, 'week').add(5, 'day')
-        .format('YYYY[-]MM[-]DD') + "'",
-      // Saturday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)='"
-      + moment().startOf('week').subtract(1, 'week').add(6, 'day')
-        .format('YYYY[-]MM[-]DD') + "'"];
+    query = db.prepare(`SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)=@day`);
 
-    queries.forEach((query) => {
-      db.get(query, (err, row) => {
-        if (row) {
-          if (row.total_sales) {
-            data[queries.indexOf(query)] = row.total_sales;
-          } else {
-            data[queries.indexOf(query)] = 0;
-          }
-        }
-      });
-    });
-
-    db.close();
+    periods = [
+      { day: moment().startOf('week').subtract(1, 'week').format('YYYY[-]MM[-]DD') }, // Sunday
+      { // Monday
+        day: moment().startOf('week').subtract(1, 'week').add(1, 'day')
+          .format('YYYY[-]MM[-]DD'),
+      },
+      { // Tuesday
+        day: moment().startOf('week').subtract(1, 'week').add(2, 'day')
+          .format('YYYY[-]MM[-]DD'),
+      },
+      { // Wednesday
+        day: moment().startOf('week').subtract(1, 'week').add(3, 'day')
+          .format('YYYY[-]MM[-]DD'),
+      },
+      { // Thursday
+        day: moment().startOf('week').subtract(1, 'week').add(4, 'day')
+          .format('YYYY[-]MM[-]DD'),
+      },
+      { // Friday
+        day: moment().startOf('week').subtract(1, 'week').add(5, 'day')
+          .format('YYYY[-]MM[-]DD'),
+      },
+      { // Saturday
+        day: moment().startOf('week').subtract(1, 'week').add(6, 'day')
+          .format('YYYY[-]MM[-]DD'),
+      },
+    ];
     // ----
   } else if (period === 'past-month') {
     label = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-    data = [0, 0, 0, 0];
-    const queries = [
-      // Week 1
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)>='"
-      + moment().startOf('month').subtract(1, 'month').format('YYYY[-]MM[-]DD') + "' AND date(purchase_time)<='"
-      + moment().startOf('month').subtract(1, 'month').endOf('week')
-        .format('YYYY[-]MM[-]DD') + "'",
-      // Week 2
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)>='"
-      + moment().startOf('month').subtract(1, 'month').add(1, 'week')
-        .format('YYYY[-]MM[-]DD') + "' AND date(purchase_time)<='"
-      + moment().startOf('month').subtract(1, 'month').endOf('week')
-        .format('YYYY[-]MM[-]DD') + "'",
-      // Week 3
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)>='"
-      + moment().startOf('month').subtract(1, 'month').add(2, 'week')
-        .format('YYYY[-]MM[-]DD') + "' AND date(purchase_time)<='"
-      + moment().startOf('month').subtract(1, 'month').endOf('week')
-        .format('YYYY[-]MM[-]DD') + "'",
-      // Week 4
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE date(purchase_time)>='"
-      + moment().startOf('month').subtract(1, 'month').add(3, 'week')
-        .format('YYYY[-]MM[-]DD') + "' AND date(purchase_time)<='"
-      + moment().startOf('month').subtract(1, 'month').endOf('month')
-        .format('YYYY[-]MM[-]DD') + "'"];
+    query = db.prepare(`SELECT SUM(total_price) as total_sales FROM sales WHERE 
+      date(purchase_time) >= @start AND date(purchase_time) <= @stop`);
 
-    queries.forEach((query) => {
-      db.get(query, (err, row) => {
-        if (row) {
-          if (row.total_sales) {
-            data[queries.indexOf(query)] = row.total_sales;
-          } else {
-            data[queries.indexOf(query)] = 0;
-          }
-        }
-      });
-    });
-
-    db.close();
+    periods = [
+      { // Week 1
+        start: moment().startOf('month').subtract(1, 'month').format('YYYY[-]MM[-]DD'),
+        stop: moment().startOf('month').subtract(1, 'month').endOf('week')
+          .format('YYYY[-]MM[-]DD'),
+      },
+      { // Week 2
+        start: moment().startOf('month').subtract(1, 'month').add(1, 'week')
+          .format('YYYY[-]MM[-]DD'),
+        stop: moment().startOf('month').subtract(1, 'month').add(1, 'week')
+          .endOf('week')
+          .format('YYYY[-]MM[-]DD'),
+      },
+      { // Week 3
+        start: moment().startOf('month').subtract(1, 'month').add(2, 'week')
+          .format('YYYY[-]MM[-]DD'),
+        stop: moment().startOf('month').subtract(1, 'month').add(2, 'week')
+          .endOf('week')
+          .format('YYYY[-]MM[-]DD'),
+      },
+      { // Week 4
+        start: moment().startOf('month').subtract(1, 'month').add(3, 'week')
+          .format('YYYY[-]MM[-]DD'),
+        stop: moment().startOf('month').subtract(1, 'month').endOf('month')
+          .format('YYYY[-]MM[-]DD'),
+      },
+    ];
     // ----
   } else if (period === 'past-year') {
     label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    const queries = [
-      // Jan
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='01' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().subtract(1, 'year').format('YYYY') + "'",
-      // Feb
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='02' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().subtract(1, 'year').format('YYYY') + "'",
-      // Mar
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='03' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().subtract(1, 'year').format('YYYY') + "'",
-      // Apr
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='04' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().subtract(1, 'year').format('YYYY') + "'",
-      // May
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='05' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().subtract(1, 'year').format('YYYY') + "'",
-      // Jun
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='06' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().subtract(1, 'year').format('YYYY') + "'",
-      // Jul
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='07' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().subtract(1, 'year').format('YYYY') + "'",
-      // Aug
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='08' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().subtract(1, 'year').format('YYYY') + "'",
-      // Sep
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='09' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().subtract(1, 'year').format('YYYY') + "'",
-      // Oct
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='10' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().subtract(1, 'year').format('YYYY') + "'",
-      // Nov
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='11' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().subtract(1, 'year').format('YYYY') + "'",
-      // Dec
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time)='12' "
-      + "AND STRFTIME('%Y', purchase_time)='" + moment().subtract(1, 'year').format('YYYY') + "'"];
+    query = db.prepare(`SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%m', purchase_time) = @month
+      AND STRFTIME('%Y', purchase_time) = @year`);
 
-    queries.forEach((query) => {
-      db.get(query, (err, row) => {
-        if (row) {
-          if (row.total_sales) {
-            data[queries.indexOf(query)] = row.total_sales;
-          } else {
-            data[queries.indexOf(query)] = 0;
-          }
-        }
-      });
-    });
-
-    db.close();
+    periods = [
+      { month: '01', year: `${moment().subtract(1, 'year').format('YYYY')}` }, // January
+      { month: '02', year: `${moment().subtract(1, 'year').format('YYYY')}` }, // February
+      { month: '03', year: `${moment().subtract(1, 'year').format('YYYY')}` }, // March
+      { month: '04', year: `${moment().subtract(1, 'year').format('YYYY')}` }, // April
+      { month: '05', year: `${moment().subtract(1, 'year').format('YYYY')}` }, // May
+      { month: '06', year: `${moment().subtract(1, 'year').format('YYYY')}` }, // June
+      { month: '07', year: `${moment().subtract(1, 'year').format('YYYY')}` }, // July
+      { month: '08', year: `${moment().subtract(1, 'year').format('YYYY')}` }, // August
+      { month: '09', year: `${moment().subtract(1, 'year').format('YYYY')}` }, // September
+      { month: '10', year: `${moment().subtract(1, 'year').format('YYYY')}` }, // October
+      { month: '11', year: `${moment().subtract(1, 'year').format('YYYY')}` }, // November
+      { month: '12', year: `${moment().subtract(1, 'year').format('YYYY')}` }, // December
+    ];
     // ----
   } else {
-    label = [moment().subtract(3, 'year').format('YYYY'), moment().subtract(2, 'year').format('YYYY'), moment().subtract(1, 'year').format('YYYY'), moment().year()];
-    data = [];
-    const queries = [
-      // Sunday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%Y', purchase_time)='"
-      + moment().subtract(3, 'year').format('YYYY') + "'",
-      // Monday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%Y', purchase_time)='"
-      + moment().subtract(2, 'year').format('YYYY') + "'",
-      // Tuesday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%Y', purchase_time)='"
-      + moment().subtract(1, 'year').format('YYYY') + "'",
-      // Wednesday
-      "SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%Y', purchase_time)='"
-      + moment().year() + "'"];
+    label = [moment().subtract(3, 'year').format('YYYY'), moment().subtract(2, 'year').format('YYYY'),
+    moment().subtract(1, 'year').format('YYYY'), moment().year()];
 
-    queries.forEach((query) => {
-      db.get(query, (err, row) => {
-        if (row) {
-          if (row.total_sales) {
-            data[queries.indexOf(query)] = row.total_sales;
-          } else {
-            data[queries.indexOf(query)] = 0;
-          }
-        }
-      });
-    });
+    query = db.prepare(`SELECT SUM(total_price) as total_sales FROM sales WHERE STRFTIME('%Y', purchase_time)= @year`);
 
-    db.close();
+    periods = [
+      { year: `${moment().subtract(3, 'year').format('YYYY')}` }, // Three years ago
+      { year: `${moment().subtract(2, 'year').format('YYYY')}` }, // Two years ago
+      { year: `${moment().subtract(1, 'year').format('YYYY')}` }, // One years ago
+      { year: `${moment().year()}` }, // This year
+    ];
     // ----
   }
 
-  displayGraphData(label, data);
+  // Execute queries
+  try {
+    const periodTransaction = db.transaction((variables) => {
+      variables.forEach((variable) => {
+        const periodCount = query.get(variable);
+        data.push(periodCount.total_sales || 0);
+      });
+    });
+    periodTransaction(periods);
+    displayGraphData(label, data);
+  } catch (error) {
+    swal("Oops", error.message, "error");
+  }
+  db.close();
 }
 
 /**
@@ -532,5 +380,5 @@ function pageRefresh(period) {
 }
 
 window.onload = () => {
-  pageRefresh('current-week');
+  pageRefresh('all');
 };
