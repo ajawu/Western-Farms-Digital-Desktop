@@ -12,10 +12,11 @@ function createWindow() {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true,
+      allowRendererProcessReuse: false,
     },
   });
 
-  win.loadFile('html&css/pages/dashboard/dashboard.html');
+  win.loadFile('html&css/pages/dashboard/inventory-list.html');
   win.maximize();
   // win.openDevTools();
 }

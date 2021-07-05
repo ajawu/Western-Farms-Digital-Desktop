@@ -18,14 +18,6 @@
 "use strict";
 const d = document;
 d.addEventListener("DOMContentLoaded", function (event) {
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-            confirmButton: 'btn btn-primary me-3',
-            cancelButton: 'btn btn-gray'
-        },
-        buttonsStyling: false
-    });
-
     var themeSettingsEl = document.getElementById('theme-settings');
     var themeSettingsExpandEl = document.getElementById('theme-settings-expand');
 
@@ -184,12 +176,6 @@ d.addEventListener("DOMContentLoaded", function (event) {
             }, 1500);
         });
     }
-
-    var scroll = new SmoothScroll('a[href*="#"]', {
-        speed: 500,
-        speedAsDuration: true
-    });
-
     if (d.querySelector('.current-year')) {
         d.querySelector('.current-year').textContent = new Date().getFullYear();
     }

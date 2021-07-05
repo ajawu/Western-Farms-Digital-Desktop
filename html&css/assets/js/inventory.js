@@ -1,28 +1,34 @@
-const sqlite3 = require('sqlite3').verbose();
-const moment = require('moment');
+const Database = require('better-sqlite3');
 const $ = require('jquery');
 const numeral = require('numeral');
 const Datatable = require('datatables.net-bs5')();
 const swal = require('sweetalert');
-const { getCurrentWindow, globalShortcut } = require('electron').remote;
+const bootstrap = require('bootstrap');
+const { getCurrentWindow } = require('electron').remote;
 
-const db = new sqlite3.Database('html&css/assets/js/western-data.db');
 const inventoryTableBody = $('#inventory-body');
+const productIdField = document.getElementById('productIdField');
+const productPopupIdField = document.getElementById('productPopupId');
+const method = document.getElementById('dbMethod');
+const productNameField = document.getElementById('productName');
+const expiryDateField = document.getElementById('expiryDate');
+const costPriceField = document.getElementById('costPrice');
+const sellingPriceField = document.getElementById('sellingPrice');
+const skuField = document.getElementById('sku');
+const quantityField = document.getElementById('quantity');
 
 /**
- * Display the data from the database in the table
- * @param {Array} tableRows Array containing rows data to be added to the table
+ * Append product details to inventory table
  */
-function displayRow(tableRows) {
-  tableRows.forEach((row) => {
-    const tableRow = `<tr>
-      <td><span class="fw-bold">${numeral(row[0]).format('000000')}</span></td>
-      <td><span class="fw-normal text-capitalize">${row[1]}</span></td>
-      <td><span class="fw-normal">${row[2].split(' ')[0]}</span></td>
-      <td><span class="fw-normal">${row[3].split(' ')[0]}</span></td>
-      <td><span class="fw-bold">₦${numeral(row[4]).format('0,0')}</span></td>
-      ${row[5] ? `<td><span class="fw-bold text-danger">Expired</span></td>`
-        : `<td><span class="fw-bold text-success">Unexpired</span></td>`}
+function displayRow(productId, name, quantity, expiryDate, price, status) {
+  const tableRow = `<tr>
+      <td><span class="fw-bold">${numeral(productId).format('000000')}</span></td>
+      <td><span class="fw-normal text-capitalize">${name}</span></td>
+      <td><span class="fw-normal">${quantity}</span></td>
+      <td><span class="fw-normal">${expiryDate.split(' ')[0]}</span></td>
+      <td><span class="fw-bold">₦${numeral(price).format('0,0')}</span></td>
+      ${status ? `<td><span class="fw-bold text-danger">Expired</span></td>`
+      : `<td><span class="fw-bold text-success">Unexpired</span></td>`}
       <td>
         <div class="btn-group">
           <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
@@ -34,7 +40,7 @@ function displayRow(tableRows) {
                   </path>
               </svg><span class="visually-hidden">Toggle Dropdown</span></button>
           <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
-              <button class="dropdown-item d-flex align-items-center" onclick="getProduct(${row[0]})">
+              <button class="dropdown-item d-flex align-items-center" onclick="getProduct(${productId})">
                   <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor"
                       viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                       <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
@@ -45,7 +51,7 @@ function displayRow(tableRows) {
               </button>
           </div>
         </div>
-        <button class="btn btn-link text-dark m-0 p-0" onclick="addDelete(${row[0]}, '${row[1]}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <button class="btn btn-link text-dark m-0 p-0" onclick="addDelete(${productId}, '${name}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
           <svg class="icon icon-xs text-danger" title="" data-bs-toggle="tooltip"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
             data-bs-original-title="Delete" aria-label="Delete">
@@ -56,9 +62,7 @@ function displayRow(tableRows) {
         </button>
       </td>
     </tr>`;
-    inventoryTableBody.append(tableRow);
-  });
-  $('#inventory-table').DataTable();
+  inventoryTableBody.append(tableRow);
 }
 
 /**
@@ -66,13 +70,49 @@ function displayRow(tableRows) {
  * @param {int} productId
  */
 function getProduct(productId) {
-  db.get('SELECT * FROM product WHERE id=?', [productId], (err, row) => {
-    if (row) {
-      console.log(row);
+  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  try {
+    const selectProductQuery = db.prepare('SELECT name, expiry_date, cost_price, selling_price, sku, quantity FROM product WHERE id = ?');
+    const productRow = selectProductQuery.get(productId);
+    if (productRow) {
+      // Load data into form fields
+      productPopupIdField.value = productId;
+      productNameField.value = productRow.name;
+      expiryDateField.value = productRow.expiry_date;
+      costPriceField.value = productRow.cost_price;
+      sellingPriceField.value = productRow.selling_price;
+      skuField.value = productRow.sku;
+      quantityField.value = productRow.quantity;
+      // Format popup modal
+      document.getElementById('addProductButton').textContent = 'Update Product';
+      document.getElementById('modal-title').textContent = 'Product Update';
+      method.value = 'update';
+      const productModal = new bootstrap.Modal(document.getElementById('product-modal'));
+      productModal.show();
     } else {
-      console.log(err);
+      swal("Oops", "An error occurred while fetching product", "error");
     }
-  });
+  } catch (err) {
+    swal("Oops", err.message, "error");
+  }
+  db.close();
+}
+
+/**
+ * Resets the content of all input fields in the product popup
+ */
+function clearProductPopup() {
+  productPopupIdField.value = '';
+  method.value = '';
+  productNameField.value = '';
+  expiryDateField.value = '';
+  costPriceField.value = '';
+  sellingPriceField.value = '';
+  skuField.value = '';
+  quantityField.value = '';
+  method.value = 'create';
+  document.getElementById('addProductButton').textContent = 'Add Product';
+  document.getElementById('modal-title').textContent = 'New Product';
 }
 
 /**
@@ -80,75 +120,111 @@ function getProduct(productId) {
  * @param {number} productId id of the product to be deleted
  * @param {string} productName name of the product to be deleted
  */
+// eslint-disable-next-line no-unused-vars
 function addDelete(productId, productName) {
   document.getElementById('productDeleteName').textContent = productName;
-  document.getElementById('productIdField').textContent = productId;
+  productIdField.textContent = productId;
 }
 
 /**
  * Delete the product with matching product id
  */
+// eslint-disable-next-line no-unused-vars
 function deleteProduct() {
+  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
   const productId = document.getElementById('productIdField').textContent;
-  db.run('DELETE FROM product WHERE id = ?', [productId], (err) => {
-    if (err) {
-      swal("Oops!", "An error occurred while deleting the product", "error");
-    } else {
-      swal("Success", "Product deleted successfully!", "success");
-      setTimeout(() => {
+  try {
+    const deleteProductQuery = db.prepare('DELETE FROM product WHERE id = ?');
+    deleteProductQuery.run(productId);
+    swal("Success", "Product deleted successfully!", "success")
+      .then(() => {
         getCurrentWindow().reload();
-      }, 500);
-    }
-  });
+      });
+  } catch (err) {
+    swal("Oops!", err.message, "error");
+  }
+  db.close();
 }
 
 /**
- * Load inventory items from database
- * @param {boolean} hasExpired
+ * Load products from database
  */
-function loadInventory(hasExpired) {
-  let query;
-  let countQuery;
-  const products = [];
-  let productCount;
-  let countCheck;
-  if (hasExpired) {
-    query = "SELECT * FROM product WHERE date(expiry_date)<'" + moment().format('YYYY[-]MM[-]DD') + "'";
-    countQuery = "SELECT COUNT(*) as product_count FROM product WHERE date(expiry_date)<'"
-      + moment().format('YYYY[-]MM[-]DD') + "'";
-  } else {
-    query = "SELECT * FROM product WHERE date(expiry_date)>'" + moment().format('YYYY[-]MM[-]DD') + "'";
-    countQuery = "SELECT COUNT(*) as product_count FROM product WHERE date(expiry_date)>'"
-      + moment().format('YYYY[-]MM[-]DD') + "'";
-  }
+function loadInventory() {
+  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  try {
+    const productsQuery = db.prepare('SELECT id, name, quantity, expiry_date, selling_price, has_expired FROM product');
+    productsQuery.all().forEach((product) => {
+      displayRow(product.id, product.name, product.quantity, product.expiry_date,
+        product.selling_price, product.has_expired);
+    });
 
-  db.get(countQuery, (err, row) => {
-    if (row) {
-      if (row.product_count) {
-        productCount = row.product_count;
-        countCheck = setInterval(() => {
-          if (products.length === productCount) {
-            displayRow(products);
-            // $('#inventory-table').Datatable();
-            clearInterval(countCheck);
-          }
-        }, 1000);
+    $('#inventory-table').DataTable();
+    document.getElementById('tableLoad').classList.add('d-none');
+    document.getElementById('inventory-table').classList.remove('d-none');
+  } catch (err) {
+    swal("Oops!", err.message, "error")
+      .then(() => {
+        console.log('contact ajawudavid@gmail.com');
+      });
+  }
+  db.close();
+}
+
+/**
+ * Validate the input for the fields in the product popup and display errors for invalid fields
+ * @param {Array} inputFields Array containing input fields to be validated
+ * @returns {bool} true if all field is not blank and false otherwise
+ */
+function validateInputField(inputFields) {
+  for (let index = 0; index < inputFields.length; index += 1) {
+    if (inputFields[index].value) {
+      inputFields[index].classList.remove('is-invalid');
+    } else {
+      inputFields[index].classList.add('is-invalid');
+      return false;
+    }
+  }
+  return true;
+}
+
+document.getElementById('addProductButton').addEventListener('click', (() => {
+  if (validateInputField([productNameField, expiryDateField, costPriceField,
+    sellingPriceField, skuField, quantityField])) {
+    // ------
+    const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+
+    if (method.value === 'update') {
+      try {
+        const updateProductQuery = db.prepare(`UPDATE product SET name = ?, expiry_date = ?, sku = ?, selling_price = ?,
+          cost_price = ?, quantity = ? WHERE id = ?`);
+        updateProductQuery.run(productNameField.value, expiryDateField.value, skuField.value,
+          sellingPriceField.value, costPriceField.value, quantityField.value,
+          productPopupIdField.value);
+        swal("Success", "Product updated successfully!", "success")
+          .then(() => {
+            getCurrentWindow().reload();
+          });
+      } catch (err) {
+        swal("Oops!", err.message, "error");
+      }
+    } else if (method.value === 'create') {
+      try {
+        const createProductQuery = db.prepare(`INSERT INTO product (name, sku, selling_price, cost_price, quantity,
+          date_added, expiry_date, has_expired, is_deleted) VALUES(?, ?, ?, ?, ?, date('now'), ?, 0, 0)`);
+        createProductQuery.run(productNameField.value, skuField.value, sellingPriceField.value,
+          costPriceField.value, quantityField.value, expiryDateField.value);
+        swal("Success", "Product created successfully!", "success")
+          .then(() => {
+            getCurrentWindow().reload();
+          });
+      } catch (err) {
+        swal("Oops!", err.message, "error");
       }
     }
-  });
-
-  db.each(query, (err, row) => {
-    if (row) {
-      products.push([row.id, row.name, row.date_added, row.expiry_date,
-      // eslint-disable-next-line indent
-      row.selling_price, row.has_expired]);
-    } else {
-      // display error
-    }
-  });
-}
+    db.close();
+  }
+}));
 
 $(document).ready(() => {
   loadInventory(false);
-  $('#inventory-button').trigger("click");
 });

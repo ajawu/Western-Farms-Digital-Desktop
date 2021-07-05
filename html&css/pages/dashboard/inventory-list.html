@@ -2,391 +2,388 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <!-- Primary Meta Tags -->
-    <title>Western Farms Nigeria - Sales</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="title" content="Volt Free Bootstrap Dashboard - Transactions">
-    <meta name="author" content="Themesberg">
-    <meta name="description"
-        content="Volt Pro is a Premium Bootstrap 5 Admin Dashboard featuring over 800 components, 10+ plugins and 20 example pages using Vanilla JS.">
-    <meta name="keywords"
-        content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, themesberg, themesberg dashboard, themesberg admin dashboard" />
-    <link rel="canonical" href="https://themesberg.com/product/admin-dashboard/volt-premium-bootstrap-5-dashboard">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <!-- Primary Meta Tags -->
+  <title>Western Farms Nigeria - Inventory</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="120x120" href="../../assets/img/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/img/favicon/favicon-16x16.png">
-    <link rel="manifest" href="../../assets/img/favicon/site.webmanifest">
-    <link rel="mask-icon" href="../../assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="theme-color" content="#ffffff">
+  <!-- Sweet Alert -->
+  <link type="text/css" href="../../vendor/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
 
-    <!-- Sweet Alert -->
-    <link type="text/css" href="../../vendor/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+  <!-- Notyf -->
+  <link type="text/css" href="../../vendor/notyf/notyf.min.css" rel="stylesheet">
 
-    <!-- Notyf -->
-    <link type="text/css" href="../../vendor/notyf/notyf.min.css" rel="stylesheet">
-
-    <!-- Volt CSS -->
-    <link type="text/css" href="../../css/volt.css" rel="stylesheet">
-    <link href="../../vendor/font-awesome/css/all.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../vendor/datatables/datatables.min.css">
+  <!-- Volt CSS -->
+  <link type="text/css" href="../../css/volt.css" rel="stylesheet">
+  <link type="text/css" href="../../css/inventory-list.css" rel="stylesheet">
+  <link href="../../vendor/font-awesome/css/all.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../vendor/datatables/datatables.min.css">
 </head>
 
 <body>
 
-    <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
-        <a class="navbar-brand me-lg-5" href="../../index.html">
-            <img class="navbar-brand-dark" src="../../assets/img/brand/light.svg" alt="Volt logo" /> <img
-                class="navbar-brand-light" src="../../assets/img/brand/dark.svg" alt="Volt logo" />
-        </a>
+  <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
+    <a class="navbar-brand me-lg-5" href="../../index.html">
+      <img class="navbar-brand-dark" src="../../assets/img/brand/light.svg" alt="Volt logo" /> <img
+        class="navbar-brand-light" src="../../assets/img/brand/dark.svg" alt="Volt logo" />
+    </a>
+    <div class="d-flex align-items-center">
+      <button class="navbar-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <nav id="sidebarMenu" class="sidebar d-lg-block bg-gray-800 text-white collapse" data-simplebar>
+    <div class="sidebar-inner px-4 pt-3">
+      <div class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
         <div class="d-flex align-items-center">
-            <button class="navbar-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+          <div class="avatar-lg me-4">
+            <img src="../../assets/img/team/default-avatar.jpg" class="card-img-top rounded-circle border-white"
+              alt="Bonnie Green">
+          </div>
+          <div class="d-block">
+            <h2 class="h5 mb-3">Hi, Jane</h2>
+            <a href="../../../../pages/examples/sign-in.html"
+              class="btn btn-secondary btn-sm d-inline-flex align-items-center">
+              <svg class="icon icon-xxs me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                </path>
+              </svg>
+              Sign Out
+            </a>
+          </div>
+        </div>
+        <div class="collapse-close d-md-none">
+          <a href="#sidebarMenu" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu"
+            aria-expanded="true" aria-label="Toggle navigation">
+            <svg class="icon icon-xs" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <ul class="nav flex-column pt-3 pt-md-0">
+        <li class="nav-item mt-4">
+          <span class="sidebar-icon">
+            <img src="../../assets/img/brand/light.svg" height="20" width="20" alt="Company Logo">
+          </span>
+          <span class="mt-1 ms-4 sidebar-text">Western Overview</span>
+        </li>
+        <li role="separator" class="dropdown-divider mt-3 mb-3 border-gray-700"></li>
+        <li class="nav-item">
+          <a href="../../pages/dashboard/dashboard.html" class="nav-link">
+            <span class="sidebar-icon">
+              <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+              </svg>
+            </span>
+            <span class="sidebar-text">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="transactions.html" class="nav-link">
+            <span class="sidebar-icon">
+              <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
+                <path fill-rule="evenodd"
+                  d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </span>
+            <span class="sidebar-text">View Sales</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a href="inventory-list.html" class="nav-link">
+            <span class="sidebar-icon">
+              <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                  d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </span>
+            <span class="sidebar-text">Inventory</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="users-list.html" class="nav-link">
+            <span class="sidebar-icon">
+              <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z">
+                </path>
+              </svg>
+            </span>
+            <span class="sidebar-text">Users</span>
+          </a>
+        </li>
+        <li class="nav-item ">
+          <a href="settings.html" class="nav-link">
+            <span class="sidebar-icon">
+              <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                  d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </span>
+            <span class="sidebar-text">Settings</span>
+          </a>
+        </li>
+
+        <li role="separator" class="dropdown-divider mt-2 mb-3 border-gray-700"></li>
+
+        <button class="btn btn-secondary d-inline-flex align-items-center me-2 dropdown-toggle">
+          <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+            </path>
+          </svg>
+          New Sale
+        </button>
+
+        <!-- Side navbar separator -->
+        <li role="separator" class="dropdown-divider mt-3 mb-3 border-gray-700"></li>
+        <li class="nav-item ">
+          <a href="../../examples/sign-in.html" class="nav-link">
+            <span class="sidebar-icon">
+              <svg class="icon icon-xs text-danger me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                </path>
+              </svg>
+            </span>
+            <span class="sidebar-text">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="content">
+
+    <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
+      <div class="container-fluid px-0">
+        <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
+          <div class="d-flex align-items-center">
+          </div>
+          <!-- Navbar links -->
+          <ul class="navbar-nav align-items-center">
+            <li class="nav-item dropdown ms-lg-3">
+              <a class="nav-link pt-1 px-0" href="#" aria-expanded="false">
+                <div class="media d-flex align-items-center">
+                  <img class="avatar rounded-circle" alt="Image placeholder" style="height: 100%;"
+                    src="../../assets/img/team/default-avatar.jpg">
+                  <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
+                    <span class="mb-0 font-small fw-bold text-gray-900">David Ajawu</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+      <div class="d-block mb-4 mb-md-0">
+        <h2 class="h4">All Products</h2>
+      </div>
+
+      <!-- Reports dropdown -->
+      <div>
+        <div class="d-inline-block">
+          <button type="button" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center" id="addUser"
+            data-bs-toggle="modal" data-bs-target="#product-modal" onclick="clearProductPopup()">
+            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+              </path>
+            </svg> New Item
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5 mt-2">
+      <div id="tableLoad" class="d-flex justify-content-center py-4">
+        <i class="fas fa-sync fa-spin" style="font-size: 150px;"></i>
+      </div>
+      <table class="table table-hover mb-5 d-none" id="inventory-table">
+        <thead>
+          <tr>
+            <th class="border-gray-200">#</th>
+            <th class="border-gray-200">Name</th>
+            <th class="border-gray-200">Quantity</th>
+            <th class="border-gray-200">Expiry Date</th>
+            <th class="border-gray-200">Selling Price</th>
+            <th class="border-gray-200">Status</th>
+            <th class="border-gray-200">Action</th>
+          </tr>
+        </thead>
+        <tbody id="inventory-body">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- DELETE Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="btn btn-close btn-link" data-bs-dismiss="modal" aria-label="Close">
+              <i class="fas fa-times"></i>
             </button>
+          </div>
+          <div class="modal-body text-center pt-0 mb-2">
+            <i class="far fa-times-circle text-danger" style="font-size: 70px; font-weight: 400;"></i>
+            <h3 class="modal-title mt-2 mb-2" id="deleteModalLabel">
+              Are you Sure?
+            </h3>
+            <p class="modal-body-text mb-0">
+              Do you really want to delete this product?<br>
+              <span id="productDeleteName" class="text-danger fw-bold text-uppercase"></span><br>
+              This process cannot be undone.
+            </p>
+            <span class="d-none" id="productIdField"></span>
+          </div>
+          <div class="modal-footer justify-content-evenly mb-2 pt-3">
+            <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">No, Cancel</button>
+            <button type="button" class="btn btn-danger" onclick="deleteProduct()">
+              Yes, Delete
+            </button>
+          </div>
         </div>
-    </nav>
+      </div>
+    </div>
 
-    <nav id="sidebarMenu" class="sidebar d-lg-block bg-gray-800 text-white collapse" data-simplebar>
-        <div class="sidebar-inner px-4 pt-3">
-            <div
-                class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
-                <div class="d-flex align-items-center">
-                    <div class="avatar-lg me-4">
-                        <img src="../../assets/img/team/default-avatar.jpg"
-                            class="card-img-top rounded-circle border-white" alt="Bonnie Green">
+    <!-- New Product Modal -->
+    <div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="product-modal"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-product" role="document">
+        <div class="modal-content">
+          <div class="modal-body p-0">
+            <div class="card p-3 p-lg-4">
+              <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close">
+                <i class="fas fa-times"></i>
+              </button>
+              <div class="text-center text-md-center mb-4 mt-md-0">
+                <h1 class="mb-0 h4" id="modal-title">New Product</h1>
+              </div>
+              <form action="#" class="mt-2 mb-4">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group mb-4">
+                      <label for="productName">Product Name</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Name of product" id="productName" autofocus
+                          required>
+                        <div class="invalid-feedback">
+                          Please enter a valid product name.
+                        </div>
+                      </div>
                     </div>
-                    <div class="d-block">
-                        <h2 class="h5 mb-3">Hi, Jane</h2>
-                        <a href="../../../../pages/examples/sign-in.html"
-                            class="btn btn-secondary btn-sm d-inline-flex align-items-center">
-                            <svg class="icon icon-xxs me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                                </path>
-                            </svg>
-                            Sign Out
-                        </a>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group mb-4">
+                      <label for="expiryDate">Expiry Date</label>
+                      <div class="input-group">
+                        <input type="date" class="form-control" id="expiryDate" autofocus required>
+                        <div class="invalid-feedback">
+                          Please select a valid date.
+                        </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
-                <div class="collapse-close d-md-none">
-                    <a href="#sidebarMenu" data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
-                        aria-controls="sidebarMenu" aria-expanded="true" aria-label="Toggle navigation">
-                        <svg class="icon icon-xs" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </a>
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group mb-4">
+                      <label for="costPrice">Cost Price (Naira)</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" placeholder="Cost Price" id="costPrice" autofocus
+                          required min="5">
+                        <div class="invalid-feedback">
+                          Please enter a valid cost price less than selling price.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group mb-4">
+                      <label for="sellingPrice">Selling Price (Naira)</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="sellingPrice" placeholder="Selling Price"
+                          autofocus required min="10">
+                        <div class="invalid-feedback">
+                          Please enter a valid selling price greater than cost price.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+
+                <div class="row mb-3">
+                  <input type="hidden" name="dbmethod" id="dbMethod" value="create">
+                  <input type="hidden" name="productPopupId" id="productPopupId" value="">
+                  <div class="col-sm-6">
+                    <div class="form-group mb-4">
+                      <label for="sku">Stock Keeping Unit (SKU)</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" placeholder="E.g. Bag, KG" id="sku" autofocus required>
+                        <div class="invalid-feedback">
+                          Please enter a valid SKU e.g. Bag, kg e.t.c
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group mb-4">
+                      <label for="quantity">Quantity</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="quantity" autofocus required min="1"
+                          placeholder="Quantity">
+                        <div class="invalid-feedback">
+                          Please enter a valid quantity.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-gray-800" id="addProductButton">Add Product</button>
+                </div>
+              </form>
             </div>
-            <ul class="nav flex-column pt-3 pt-md-0">
-                <li class="nav-item mt-4">
-                    <span class="sidebar-icon">
-                        <img src="../../assets/img/brand/light.svg" height="20" width="20" alt="Company Logo">
-                    </span>
-                    <span class="mt-1 ms-4 sidebar-text">Western Overview</span>
-                </li>
-                <li role="separator" class="dropdown-divider mt-3 mb-3 border-gray-700"></li>
-                <li class="nav-item">
-                    <a href="../../pages/dashboard/dashboard.html" class="nav-link">
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-                            </svg>
-                        </span>
-                        <span class="sidebar-text">Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="transactions.html" class="nav-link">
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
-                                <path fill-rule="evenodd"
-                                    d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </span>
-                        <span class="sidebar-text">View Sales</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <span class="nav-link collapsed d-flex justify-content-between align-items-center"
-                        data-bs-toggle="collapse" data-bs-target="#submenu-app" id="inventory-button">
-                        <span>
-                            <span class="sidebar-icon">
-                                <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </span>
-                            <span class="sidebar-text">Inventory</span>
-                        </span>
-                        <span class="link-arrow">
-                            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </span>
-                    </span>
-                    <div class="multi-level collapse " role="list" id="submenu-app" aria-expanded="false">
-                        <ul class="flex-column nav">
-                            <li class="nav-item">
-                            </li>
-                            <li class="nav-item active">
-                                <a class="nav-link" href="inventory-list.html">
-                                    <span class="sidebar-text">View Items</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="expired-inventory-list.html">
-                                    <span class="sidebar-text">View Expired Items</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a href="users-list.html" class="nav-link">
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z">
-                                </path>
-                            </svg>
-                        </span>
-                        <span class="sidebar-text">Users</span>
-                    </a>
-                </li>
-                <li class="nav-item ">
-                    <a href="settings.html" class="nav-link">
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </span>
-                        <span class="sidebar-text">Settings</span>
-                    </a>
-                </li>
-
-                <li role="separator" class="dropdown-divider mt-2 mb-3 border-gray-700"></li>
-
-                <button class="btn btn-secondary d-inline-flex align-items-center me-2 dropdown-toggle">
-                    <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6">
-                        </path>
-                    </svg>
-                    New Sale
-                </button>
-
-                <!-- Side navbar separator -->
-                <li role="separator" class="dropdown-divider mt-3 mb-3 border-gray-700"></li>
-                <li class="nav-item ">
-                    <a href="../../examples/sign-in.html" class="nav-link">
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs text-danger me-2" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                                </path>
-                            </svg>
-                        </span>
-                        <span class="sidebar-text">Logout</span>
-                    </a>
-                </li>
-            </ul>
+          </div>
         </div>
-    </nav>
+      </div>
+    </div>
+  </main>
 
-    <main class="content">
+  <!-- Core -->
+  <script src="../../vendor/@popperjs/core/dist/umd/popper.min.js"></script>
+  <script src="../../vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 
-        <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
-            <div class="container-fluid px-0">
-                <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
-                    <div class="d-flex align-items-center">
-                    </div>
-                    <!-- Navbar links -->
-                    <ul class="navbar-nav align-items-center">
-                        <li class="nav-item dropdown ms-lg-3">
-                            <a class="nav-link pt-1 px-0" href="#" aria-expanded="false">
-                                <div class="media d-flex align-items-center">
-                                    <img class="avatar rounded-circle" alt="Image placeholder" style="height: 100%;"
-                                        src="../../assets/img/team/default-avatar.jpg">
-                                    <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
-                                        <span class="mb-0 font-small fw-bold text-gray-900">David Ajawu</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+  <!-- Vendor JS -->
+  <script src="../../vendor/onscreen/dist/on-screen.umd.min.js"></script>
 
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-            <div class="d-block mb-4 mb-md-0">
-                <h2 class="h4">All Products</h2>
-            </div>
+  <!-- Volt JS -->
+  <script src="../../assets/js/volt.js"></script>
 
-            <!-- Reports dropdown -->
-            <div>
-                <div class="d-inline-block">
-                    <button class="btn btn-sm btn-gray-800 d-inline-flex align-items-center" id="addUser">
-                        <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg> New Item
-                    </button>
-                </div>
-                <button class="btn btn-gray-800 d-inline-flex align-items-center dropdown-toggle"
-                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                        <path fill-rule="evenodd"
-                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    Generate Reports
-                    <svg class="icon icon-xs ms-1" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </button>
-                <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
-                    <button class="dropdown-item d-flex align-items-center">
-                        Today
-                    </button>
-                    <button class="dropdown-item d-flex align-items-center">
-                        Past Week
-                    </button>
-                    <button class="dropdown-item d-flex align-items-center">
-                        Past Month
-                    </button>
-                    <button class="dropdown-item d-flex align-items-center">
-                        Past Year
-                    </button>
-                    <div role="separator" class="dropdown-divider my-1"></div>
-                    <button class="dropdown-item d-flex align-items-center">
-                        <svg class="dropdown-icon text-gray-800 me-2" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                            <path fill-rule="evenodd"
-                                d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        All Time
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5 mt-2">
-            <table class="table table-hover mb-5" id="inventory-table">
-                <thead>
-                    <tr>
-                        <th class="border-gray-200">#</th>
-                        <th class="border-gray-200">Name</th>
-                        <th class="border-gray-200">Date Added</th>
-                        <th class="border-gray-200">Expiry Date</th>
-                        <th class="border-gray-200">Price</th>
-                        <th class="border-gray-200">Status</th>
-                        <th class="border-gray-200">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="inventory-body">
-                </tbody>
-            </table>
-        </div>
-
-        <!-- DELETE Modal -->
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="btn btn-close btn-link" data-bs-dismiss="modal" aria-label="Close">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body text-center pt-0">
-                        <i class="far fa-times-circle text-danger" style="font-size: 70px; font-weight: 400;"></i>
-                        <h3 class="modal-title mt-2 mb-2" id="deleteModalLabel">
-                            Are you Sure?
-                        </h3>
-                        <p class="modal-body-text mb-0">
-                            Do you really want to delete this product?<br>
-                            <span id="productDeleteName" class="text-danger fw-bold text-uppercase"></span><br>
-                            This process cannot be undone.
-                        </p>
-                        <span class="d-none" id="productIdField"></span>
-                    </div>
-                    <div class="modal-footer justify-content-evenly mb-3">
-                        <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">No, Cancel</button>
-                        <button type="button" class="btn btn-danger" onclick="deleteProduct()" data-bs-dismiss="modal">
-                            Yes, Delete
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Core -->
-    <script src="../../vendor/@popperjs/core/dist/umd/popper.min.js"></script>
-    <script src="../../vendor/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- Vendor JS -->
-    <script src="../../vendor/onscreen/dist/on-screen.umd.min.js"></script>
-
-    <!-- Slider -->
-    <script src="../../vendor/nouislider/distribute/nouislider.min.js"></script>
-
-    <!-- Smooth scroll -->
-    <script src="../../vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
-    <!-- Sweet Alerts 2 -->
-    <script src="../../vendor/sweetalert2/dist/sweetalert2.all.min.js"></script>
-
-    <!-- Moment JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
-
-    <!-- Vanilla JS Datepicker -->
-    <script src="../../vendor/vanillajs-datepicker/dist/js/datepicker.min.js"></script>
-
-    <!-- Notyf -->
-    <script src="../../vendor/notyf/notyf.min.js"></script>
-
-    <!-- Simplebar -->
-    <script src="../../vendor/simplebar/dist/simplebar.min.js"></script>
-
-    <!-- Volt JS -->
-    <script src="../../assets/js/volt.js"></script>
-
-    <!-- <script type="text/javascript" src="../../vendor/datatables/jquery.min.js"></script>
-    <script type="text/javascript" src="../../vendor/datatables/datatables.min.js"></script> -->
-
-    <script src="../../assets/js/inventory.js"></script>
+  <script src="../../assets/js/inventory.js"></script>
+  <script>
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById("expiryDate").setAttribute('min', today);
+  </script>
 </body>
 
 </html>

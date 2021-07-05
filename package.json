@@ -6,6 +6,7 @@
   "author": "Ajawu David",
   "license": "MIT",
   "devDependencies": {
+    "@popperjs/core": "^2.9.2",
     "electron": "^13.1.2",
     "electron-builder": "^22.11.7",
     "eslint": "^7.2.0",
@@ -18,6 +19,8 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "better-sqlite3": "^7.4.1",
+    "bootstrap": "^5.0.2",
     "chartist": "^0.11.4",
     "chartist-plugin-tooltips-updated": "^0.1.4",
     "datatables.net-bs5": "^1.10.25",
@@ -27,7 +30,6 @@
     "mailgun-js": "^0.22.0",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
-    "sqlite3": "^5.0.2",
     "sweetalert": "^2.1.2"
   }
 }
