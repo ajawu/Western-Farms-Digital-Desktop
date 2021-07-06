@@ -6,6 +6,14 @@
   <!-- Primary Meta Tags -->
   <title>Western Farms Nigeria - Sales</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="120x120" href="../../assets/img/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/img/favicon/favicon-16x16.png">
+  <link rel="manifest" href="../../assets/img/favicon/site.webmanifest">
+  <link rel="mask-icon" href="../../assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
 
   <!-- Sweet Alert -->
   <link type="text/css" href="../../vendor/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
@@ -15,21 +23,16 @@
 
   <!-- Volt CSS -->
   <link type="text/css" href="../../css/volt.css" rel="stylesheet">
-  <link type="text/css" href="../../css/transaction.css" rel="stylesheet">
-  <link href="../../vendor/font-awesome/css/all.css" rel="stylesheet">
+
   <link rel="stylesheet" href="../../vendor/datatables/datatables.min.css">
-  <style>
-    .text-center {
-      text-align: center;
-    }
-  </style>
 </head>
 
 <body>
+
   <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
     <a class="navbar-brand me-lg-5" href="../../index.html">
-      <img class="navbar-brand-dark" src="../../assets/img/brand/light.svg" alt="Volt logo" />
-      <img class="navbar-brand-light" src="../../assets/img/brand/dark.svg" alt="Volt logo" />
+      <img class="navbar-brand-dark" src="../../assets/img/brand/light.svg" alt="Volt logo" /> <img
+        class="navbar-brand-light" src="../../assets/img/brand/dark.svg" alt="Volt logo" />
     </a>
     <div class="d-flex align-items-center">
       <button class="navbar-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse"
@@ -44,8 +47,8 @@
       <div class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
         <div class="d-flex align-items-center">
           <div class="avatar-lg me-4">
-            <img src="../../assets/img/team/default-avatar.jpg" class="card-img-top rounded-circle border-white"
-              alt="Bonnie Green">
+            <img src="../../../../assets/img/team/profile-picture-3.jpg"
+              class="card-img-top rounded-circle border-white" alt="Bonnie Green">
           </div>
           <div class="d-block">
             <h2 class="h5 mb-3">Hi, Jane</h2>
@@ -54,8 +57,7 @@
               <svg class="icon icon-xxs me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                </path>
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
               </svg>
               Sign Out
             </a>
@@ -91,7 +93,7 @@
             <span class="sidebar-text">Dashboard</span>
           </a>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item  active">
           <a href="transactions.html" class="nav-link">
             <span class="sidebar-icon">
               <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -198,7 +200,7 @@
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
       <div class="d-block mb-4 mb-md-0">
-        <h2 class="h4">All Transactions</h2>
+        <h2 class="h4">All Sales</h2>
       </div>
 
       <!-- Reports dropdown -->
@@ -246,182 +248,128 @@
       </div>
     </div>
     <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5 mt-2">
-      <div id="tableLoad" class="d-flex justify-content-center py-4">
-        <i class="fas fa-sync fa-spin" style="font-size: 150px;"></i>
-      </div>
-      <table class="table table-hover mb-5 d-none" id="sales-table">
+      <table class="table table-hover mb-5" id="order-table">
         <thead>
           <tr>
             <th class="border-gray-200">Receipt ID</th>
             <th class="border-gray-200">Customer Name</th>
-            <th class="border-gray-200">Revenue</th>
-            <th class="border-gray-200">Sales Price</th>
             <th class="border-gray-200">Purchase Date</th>
+            <th class="border-gray-200">Purchase Time</th>
+            <th class="border-gray-200">Total</th>
             <th class="border-gray-200">Payment Method</th>
             <th class="border-gray-200">Action</th>
           </tr>
         </thead>
-        <tbody id="inventory-body">
+        <tbody>
+          <!-- Item -->
+          <tr>
+            <td>
+              <a href="#" class="fw-bold">
+                456478
+              </a>
+            </td>
+            <td>
+              <span class="fw-normal">Daniel Olabisi</span>
+            </td>
+            <td><span class="fw-normal">2020/05/10</span></td>
+            <td><span class="fw-normal">11:00</span></td>
+            <td><span class="fw-bold">₦79,900</span></td>
+            <td><span class="fw-bold text-warning">POS</span></td>
+            <td>
+              <div class="btn-group"><button
+                  class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"><svg class="icon icon-xs" fill="currentColor"
+                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
+                    </path>
+                  </svg> <span class="visually-hidden">Toggle Dropdown</span></button>
+                <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                      <path fill-rule="evenodd"
+                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                        clip-rule="evenodd"></path>
+                    </svg> View Details
+                  </a>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                        d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                    Refund
+                  </a>
+                </div>
+              </div><svg class="icon icon-xs text-danger ms-1" title="" data-bs-toggle="tooltip" fill="currentColor"
+                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-bs-original-title="Delete"
+                aria-label="Delete">
+                <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </td>
+          </tr>
+          <!-- Item -->
+          <tr>
+            <td>
+              <a href="#" class="fw-bold">
+                456423
+              </a>
+            </td>
+            <td>
+              <span class="fw-normal">Vivian Onochie</span>
+            </td>
+            <td><span class="fw-normal">2020/09/26</span></td>
+            <td><span class="fw-normal">13:10</span></td>
+            <td><span class="fw-bold">₦20,000</span></td>
+            <td><span class="fw-bold text-success">Cash</span></td>
+            <td>
+              <div class="btn-group"><button
+                  class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"><svg class="icon icon-xs" fill="currentColor"
+                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
+                    </path>
+                  </svg> <span class="visually-hidden">Toggle Dropdown</span></button>
+                <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                      <path fill-rule="evenodd"
+                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                        clip-rule="evenodd"></path>
+                    </svg> View Details
+                  </a>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                        d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                    Refund
+                  </a>
+                </div>
+              </div><svg class="icon icon-xs text-danger ms-1" title="" data-bs-toggle="tooltip" fill="currentColor"
+                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-bs-original-title="Delete"
+                aria-label="Delete">
+                <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- DELETE Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="btn btn-close btn-link" data-bs-dismiss="modal" aria-label="Close">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-          <div class="modal-body text-center pt-0 mb-2">
-            <i class="far fa-times-circle text-danger" style="font-size: 70px; font-weight: 400;"></i>
-            <h3 class="modal-title mt-2 mb-2" id="deleteModalLabel">
-              Are you Sure?
-            </h3>
-            <p class="modal-body-text mb-0">
-              Do you really want to delete this sale - <br>
-              <span id="salesDeleteName" class="text-danger fw-bold"></span><br>
-              This process cannot be undone.
-            </p>
-            <span class="d-none" id="salesIdField"></span>
-          </div>
-          <div class="modal-footer justify-content-evenly mb-2 pt-3">
-            <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">No, Cancel</button>
-            <button type="button" class="btn btn-danger" onclick="deleteProduct()">
-              Yes, Delete
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- REFUND Modal -->
-    <div class="modal fade" id="refundModal" tabindex="-1" aria-labelledby="refundModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="btn btn-close btn-link" data-bs-dismiss="modal" aria-label="Close">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-          <div class="modal-body text-center pt-0 mb-2">
-            <i class="far fa-times-circle text-danger" style="font-size: 70px; font-weight: 400;"></i>
-            <h3 class="modal-title mt-2 mb-2" id="refundModalLabel">
-              Are you Sure?
-            </h3>
-            <p class="modal-body-text mb-0">
-              Do you really want to refund this sale - <br>
-              <span id="refundSalesName" class="text-danger fw-bold"></span><br>
-              This process cannot be undone.
-            </p>
-            <span class="d-none" id="refundSalesId"></span>
-          </div>
-          <div class="modal-footer justify-content-evenly mb-2 pt-3">
-            <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">No, Cancel</button>
-            <button type="button" class="btn btn-danger" onclick="refundProduct()">
-              Yes, Delete
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sales Modal -->
-    <div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="product-modal"
-      aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-product " style="max-width: 700px;" role="document">
-        <div class="modal-content">
-          <div class="modal-body p-4">
-            <div class="d-flex justify-content-end flex-column">
-              <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close">
-                <i class="fas fa-times" style="font-size: 20px;"></i>
-              </button>
-            </div>
-            <div class="p-3 pt-0 pb-0">
-              <div class="page-content container">
-                <div class="container px-0">
-                  <div class="row">
-                    <div class="col-12">
-                      <h3 class="text-center">
-                        Sales Details
-                      </h3>
-                    </div>
-                    <div class="col-12">
-                      <div class="row mt-3 p-1 m-auto">
-                        <div class="col-sm-6">
-                          <p class="text-primary mb-1" style="font-weight: 600; font-size: 15px;">
-                            CUSTOMER NAME:
-                            <span style="color: #4d4f51; font-weight: 500; text-transform: capitalize;"
-                              id="customerName"></span>
-                          </p>
-                          <p class="text-primary mb-1"
-                            style="font-weight: 600; font-size: 15px; text-transform: capitalize;">
-                            SALES REP:
-                            <span style="color: #4d4f51; font-weight: 500;" id="salesRepName"></span>
-                          </p>
-                        </div>
-
-                        <div class="col-sm-6 align-items-end">
-                          <p class="text-primary mb-1" style="font-weight: 600; font-size: 15px; text-align: right;">
-                            PURCHASE DATE:
-                            <span style="color: #4d4f51; font-weight: 500;" id="purchaseDate"></span>
-                          </p>
-                          <p class="text-primary mb-1"
-                            style="font-weight: 600; font-size: 15px; text-align: right; text-transform: capitalize;">
-                            PAYMENT METHOD:
-                            <span style="color: #4d4f51; font-weight: 500;" id="paymentMethod"></span>
-                          </p>
-                        </div>
-                      </div>
-
-                      <hr />
-                      <div class="table-responsive">
-                        <table class="table table-centered table-nowrap mb-0 rounded">
-                          <thead class="thead-light">
-                            <tr>
-                              <th class="border-0 rounded-start text-center">ID</th>
-                              <th class="border-0 text-center">Product Name</th>
-                              <th class="border-0 text-center">Unit Cost</th>
-                              <th class="border-0 text-center">Quantity</th>
-                              <th class="border-0 text-center">Total Cost</th>
-                            </tr>
-                          </thead>
-                          <tbody id="salesDetailsBody">
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="d-flex flex-column">
-                        <p class="mt-3 mb-0" style="text-align: right;">
-                          <span class="text-primary pr-4" style="font-weight: 600; font-size: 13px;">
-                            TOTAL AMOUNT:
-                          </span>
-                          <span style="font-size: 15px; font-weight: 600;" class="text-danger">
-                            ₦<span id="totalCost"></span>
-                          </span>
-                        </p>
-                        <p class="mt-2 mb-0" style="text-align: right;">
-                          <span class="text-primary pr-4" style="font-weight: 600; font-size: 13px;">
-                            TOTAL REVENUE:
-                          </span>
-                          <span style="font-size: 15px; font-weight: 600;" class="text-success">
-                            ₦<span id="totalRevenue"></span>
-                          </span>
-                        </p>
-                      </div>
-                      <hr />
-                      <p class="text-center text-primary">Thank you for your business</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
   </main>
 
   <!-- Core -->
@@ -431,10 +379,48 @@
   <!-- Vendor JS -->
   <script src="../../vendor/onscreen/dist/on-screen.umd.min.js"></script>
 
+  <!-- Slider -->
+  <script src="../../vendor/nouislider/distribute/nouislider.min.js"></script>
+
+  <!-- Smooth scroll -->
+  <script src="../../vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+
+  <!-- Charts -->
+  <script src="../../vendor/chartist/dist/chartist.min.js"></script>
+  <script src="../../vendor/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+
+  <!-- Datepicker -->
+  <script src="../../vendor/vanillajs-datepicker/dist/js/datepicker.min.js"></script>
+
+  <!-- Sweet Alerts 2 -->
+  <script src="../../vendor/sweetalert2/dist/sweetalert2.all.min.js"></script>
+
+  <!-- Moment JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+
+  <!-- Vanilla JS Datepicker -->
+  <script src="../../vendor/vanillajs-datepicker/dist/js/datepicker.min.js"></script>
+
+  <!-- Notyf -->
+  <script src="../../vendor/notyf/notyf.min.js"></script>
+
+  <!-- Simplebar -->
+  <script src="../../vendor/simplebar/dist/simplebar.min.js"></script>
+
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
   <!-- Volt JS -->
   <script src="../../assets/js/volt.js"></script>
 
-  <script src="../../assets/js/sales.js"></script>
+  <script type="text/javascript" src="../../vendor/datatables/jquery.min.js"></script>
+  <script type="text/javascript" src="../../vendor/datatables/datatables.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('#order-table').DataTable();
+    });
+  </script>
 </body>
 
 </html>
