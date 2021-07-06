@@ -6,22 +6,6 @@
   <!-- Primary Meta Tags -->
   <title>Western Farms Nigeria - Sales</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="title" content="Volt Free Bootstrap Dashboard - Transactions">
-  <meta name="author" content="Themesberg">
-  <meta name="description"
-    content="Volt Pro is a Premium Bootstrap 5 Admin Dashboard featuring over 800 components, 10+ plugins and 20 example pages using Vanilla JS.">
-  <meta name="keywords"
-    content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, themesberg, themesberg dashboard, themesberg admin dashboard" />
-  <link rel="canonical" href="https://themesberg.com/product/admin-dashboard/volt-premium-bootstrap-5-dashboard">
-
-  <!-- Favicon -->
-  <link rel="apple-touch-icon" sizes="120x120" href="../../assets/img/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/img/favicon/favicon-16x16.png">
-  <link rel="manifest" href="../../assets/img/favicon/site.webmanifest">
-  <link rel="mask-icon" href="../../assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
-  <meta name="msapplication-TileColor" content="#ffffff">
-  <meta name="theme-color" content="#ffffff">
 
   <!-- Sweet Alert -->
   <link type="text/css" href="../../vendor/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
@@ -31,15 +15,21 @@
 
   <!-- Volt CSS -->
   <link type="text/css" href="../../css/volt.css" rel="stylesheet">
-
+  <link type="text/css" href="../../css/transaction.css" rel="stylesheet">
+  <link href="../../vendor/font-awesome/css/all.css" rel="stylesheet">
   <link rel="stylesheet" href="../../vendor/datatables/datatables.min.css">
+  <style>
+    .text-center {
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
   <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
     <a class="navbar-brand me-lg-5" href="../../index.html">
-      <img class="navbar-brand-dark" src="../../assets/img/brand/light.svg" alt="Volt logo" /> <img
-        class="navbar-brand-light" src="../../assets/img/brand/dark.svg" alt="Volt logo" />
+      <img class="navbar-brand-dark" src="../../assets/img/brand/light.svg" alt="Volt logo" />
+      <img class="navbar-brand-light" src="../../assets/img/brand/dark.svg" alt="Volt logo" />
     </a>
     <div class="d-flex align-items-center">
       <button class="navbar-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse"
@@ -55,7 +45,7 @@
         <div class="d-flex align-items-center">
           <div class="avatar-lg me-4">
             <img src="../../assets/img/team/default-avatar.jpg" class="card-img-top rounded-circle border-white"
-              alt="User Avatar">
+              alt="Bonnie Green">
           </div>
           <div class="d-block">
             <h2 class="h5 mb-3">Hi, Jane</h2>
@@ -213,185 +203,188 @@
 
       <!-- Reports dropdown -->
       <div>
-        <a href="#" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
-          <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-          </svg> New User
-        </a>
+        <div class="d-inline-block">
+          <button type="button" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center" id="addUser"
+            data-bs-toggle="modal" data-bs-target="#new-user-modal" onclick="clearUserModal()">
+            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+              </path>
+            </svg> New User
+          </button>
+        </div>
       </div>
     </div>
     <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5 mt-2">
-      <table class="table table-hover mb-5" id="users-list-table">
+      <div id="tableLoad" class="d-flex justify-content-center py-4">
+        <i class="fas fa-sync fa-spin" style="font-size: 150px;"></i>
+      </div>
+      <table class="table table-hover mb-5 d-none" id="users-table">
         <thead>
           <tr>
-
-            <th class="border-gray-200">#ID</th>
+            <th class="border-gray-200"># ID</th>
             <th class="border-gray-200">Name & Email</th>
-            <th class="border-gray-200">Date Created</th>
+            <th class="border-gray-200">Date Createde</th>
             <th class="border-gray-200">Total Sales</th>
-            <th class="border-gray-200">Status</th>
+            <th class="border-gray-200">Sales</th>
             <th class="border-gray-200">Action</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Item -->
-          <tr>
-            <td>
-              456478
-            </td>
-            <td><a href="#" class="d-flex align-items-center">
-                <div
-                  class="avatar d-flex align-items-center justify-content-center fw-bold rounded bg-primary text-white me-3">
-                  <span>RF</span>
-                </div>
-                <div class="d-block"><span class="fw-bold">Roy Fendley</span>
-                  <div class="small text-gray">info@example.com</div>
-                </div>
-              </a></td>
-            <td><span class="fw-normal">10 Feb 2020</span></td>
-            <td><span class="fw-normal d-flex align-items-center">20</span>
-            </td>
-            <td><span class="fw-normal text-success">Active</span></td>
-            <td>
-              <div class="btn-group"><button
-                  class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false"><svg class="icon icon-xs" fill="currentColor"
-                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
-                    </path>
-                  </svg> <span class="visually-hidden">Toggle Dropdown</span></button>
-                <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1"><a
-                    class="dropdown-item d-flex align-items-center" href="#"><svg
-                      class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd"
-                        d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z"
-                        clip-rule="evenodd"></path>
-                    </svg> Reset Pass </a><a class="dropdown-item d-flex align-items-center" href="#"><svg
-                      class="dropdown-icon text-danger me-2" fill="currentColor" viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z">
-                      </path>
-                    </svg> Suspend</a></div>
-              </div><svg class="icon icon-xs text-danger ms-1" title="" data-bs-toggle="tooltip" fill="currentColor"
-                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-bs-original-title="Delete"
-                aria-label="Delete">
-                <path fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                  clip-rule="evenodd"></path>
-              </svg>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              456479
-            </td>
-            <td>
-              <a href="#" class="d-flex align-items-center">
-                <div
-                  class="avatar d-flex align-items-center justify-content-center fw-bold rounded bg-secondary text-white me-3">
-                  <span>RB</span>
-                </div>
-                <div class="d-block"><span class="fw-bold">Ronnie Buchanan</span>
-                  <div class="small text-gray">info@example.com</div>
-                </div>
-              </a>
-            </td>
-            <td><span class="fw-normal">10 Feb 2020</span></td>
-            <td>
-              <span class="fw-normal d-flex align-items-center"></span>
-              100
-            </td>
-            <td><span class="fw-normal text-purple">Pending</span></td>
-            <td>
-              <div class="btn-group"><button
-                  class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false"><svg class="icon icon-xs" fill="currentColor"
-                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
-                    </path>
-                  </svg> <span class="visually-hidden">Toggle Dropdown</span></button>
-                <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1"><a
-                    class="dropdown-item d-flex align-items-center" href="#"><svg
-                      class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd"
-                        d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z"
-                        clip-rule="evenodd"></path>
-                    </svg> Reset Pass </a><a class="dropdown-item d-flex align-items-center" href="#"><svg
-                      class="dropdown-icon text-danger me-2" fill="currentColor" viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z">
-                      </path>
-                    </svg> Suspend</a></div>
-              </div><svg class="icon icon-xs text-danger ms-1" title="" data-bs-toggle="tooltip" fill="currentColor"
-                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-bs-original-title="Delete"
-                aria-label="Delete">
-                <path fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                  clip-rule="evenodd"></path>
-              </svg>
-            </td>
-          </tr>
-          <tr>
-            <td class="border-0">
-              458478
-            </td>
-            <td class="border-0"><a href="#" class="d-flex align-items-center">
-                <div
-                  class="avatar d-flex align-items-center justify-content-center fw-bold rounded bg-purple text-white me-3">
-                  <span>MH</span>
-                </div>
-                <div class="d-block"><span class="fw-bold">Michael Hopkins</span>
-                  <div class="small text-gray">info@example.com</div>
-                </div>
-              </a></td>
-            <td class="border-0"><span class="fw-normal">10 Feb 2020</span></td>
-            <td class="border-0"><span class="fw-normal d-flex align-items-center">
-                10
-            </td>
-            <td class="border-0"><span class="fw-normal text-danger">Suspended</span></td>
-            <td class="border-0">
-              <div class="btn-group"><button
-                  class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false"><svg class="icon icon-xs" fill="currentColor"
-                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
-                    </path>
-                  </svg> <span class="visually-hidden">Toggle Dropdown</span></button>
-                <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1"><a
-                    class="dropdown-item d-flex align-items-center" href="#"><svg
-                      class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd"
-                        d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z"
-                        clip-rule="evenodd"></path>
-                    </svg> Reset Pass </a><a class="dropdown-item d-flex align-items-center" href="#"><svg
-                      class="dropdown-icon text-danger me-2" fill="currentColor" viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z">
-                      </path>
-                    </svg> Suspend</a></div>
-              </div><svg class="icon icon-xs text-danger ms-1" title="" data-bs-toggle="tooltip" fill="currentColor"
-                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-bs-original-title="Delete"
-                aria-label="Delete">
-                <path fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                  clip-rule="evenodd"></path>
-              </svg>
-            </td>
-          </tr>
+        <tbody id="users-body">
         </tbody>
       </table>
     </div>
 
+    <!-- DELETE Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="btn btn-close btn-link" data-bs-dismiss="modal" aria-label="Close">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="modal-body text-center pt-0 mb-2">
+            <i class="far fa-times-circle text-danger" style="font-size: 70px; font-weight: 400;"></i>
+            <h3 class="modal-title mt-2 mb-2" id="deleteModalLabel">
+              Are you Sure?
+            </h3>
+            <p class="modal-body-text mb-0">
+              Do you really want to delete this sale - <br>
+              <span id="salesDeleteName" class="text-danger fw-bold"></span><br>
+              This process cannot be undone.
+            </p>
+            <span class="d-none" id="salesIdField"></span>
+          </div>
+          <div class="modal-footer justify-content-evenly mb-2 pt-3">
+            <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">No, Cancel</button>
+            <button type="button" class="btn btn-danger" onclick="deleteProduct()">
+              Yes, Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW USER Content -->
+    <div class="modal fade" id="new-user-modal" tabindex="-1" role="dialog" aria-labelledby="new-user-modal"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered p-2" role="document" style="max-width: 550px;">
+        <div class="modal-content">
+          <div class="modal-body p-0">
+            <div class="card" style="padding: 1.4rem 2.4rem;">
+              <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+              <div class="text-center text-md-center mb-4 mt-md-0">
+                <h1 class="mb-0 h4" id="user-modal-title">New User</h1>
+              </div>
+              <form action="#" class="mt-2 mb-4">
+                <!-- Form -->
+                <div class="row">
+                  <div class="col-6">
+                    <div class="form-group mb-4">
+                      <label for="first-name">Your First Name</label>
+                      <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">
+                          <i class="fas fa-user-plus"></i>
+                        </span>
+                        <input type="text" class="form-control" placeholder="First Name" id="first-name" autofocus
+                          required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group mb-4">
+                      <label for="last-name">Your Last Name</label>
+                      <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">
+                          <i class="fas fa-user-plus"></i>
+                        </span>
+                        <input type="text" class="form-control" placeholder="Last Name" id="last-name" autofocus
+                          required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group mb-4">
+                      <label for="email">Your Email</label>
+                      <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">
+                          <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z">
+                            </path>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z">
+                            </path>
+                          </svg>
+                        </span>
+                        <input type="email" class="form-control" placeholder="example@gmail.com" id="email" autofocus
+                          required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="form-group">
+                      <div class="form-group mb-4">
+                        <label for="password">Your Password</label>
+                        <div class="input-group">
+                          <span class="input-group-text" id="basic-addon2">
+                            <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd"
+                                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                clip-rule="evenodd"></path>
+                            </svg>
+                          </span>
+                          <input type="password" placeholder="Password" class="form-control" id="password" required>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group mb-4">
+                      <label for="first-name">Total Sales</label>
+                      <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">
+                          <i class="fas fa-calculator"></i>
+                        </span>
+                        <input type="number" class="form-control" placeholder="0" id="total-sales" autofocus disabled
+                          required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group mb-4">
+                      <label for="last-name">Last Login</label>
+                      <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">
+                          <i class="fas fa-history"></i>
+                        </span>
+                        <input type="date" class="form-control" placeholder="Last Name" id="last-login" autofocus
+                          disabled required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 mb-4">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="remember">
+                      <label class="form-check-label mb-0" for="remember">
+                        Remember me
+                      </label>
+                    </div>
+                    <input type="hidden" name="method" id="dbMethod">
+                    <input type="hidden" name="user-id" id="user-id-field">
+                  </div>
+                </div>
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-gray-800" id="add-user">Sign up</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- Core -->
@@ -401,48 +394,10 @@
   <!-- Vendor JS -->
   <script src="../../vendor/onscreen/dist/on-screen.umd.min.js"></script>
 
-  <!-- Slider -->
-  <script src="../../vendor/nouislider/distribute/nouislider.min.js"></script>
-
-  <!-- Smooth scroll -->
-  <script src="../../vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
-
-  <!-- Charts -->
-  <script src="../../vendor/chartist/dist/chartist.min.js"></script>
-  <script src="../../vendor/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
-
-  <!-- Datepicker -->
-  <script src="../../vendor/vanillajs-datepicker/dist/js/datepicker.min.js"></script>
-
-  <!-- Sweet Alerts 2 -->
-  <script src="../../vendor/sweetalert2/dist/sweetalert2.all.min.js"></script>
-
-  <!-- Moment JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
-
-  <!-- Vanilla JS Datepicker -->
-  <script src="../../vendor/vanillajs-datepicker/dist/js/datepicker.min.js"></script>
-
-  <!-- Notyf -->
-  <script src="../../vendor/notyf/notyf.min.js"></script>
-
-  <!-- Simplebar -->
-  <script src="../../vendor/simplebar/dist/simplebar.min.js"></script>
-
-  <!-- Github buttons -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
-
   <!-- Volt JS -->
   <script src="../../assets/js/volt.js"></script>
 
-  <script type="text/javascript" src="../../vendor/datatables/jquery.min.js"></script>
-  <script type="text/javascript" src="../../vendor/datatables/datatables.min.js"></script>
-
-  <script>
-    $(document).ready(function () {
-      $('#users-list-table').DataTable();
-    });
-  </script>
+  <script src="../../assets/js/users.js"></script>
 </body>
 
 </html>
