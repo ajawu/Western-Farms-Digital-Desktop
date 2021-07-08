@@ -1,5 +1,6 @@
 const Database = require('better-sqlite3');
 const $ = require('jquery');
+const bcrypt = require('bcryptjs');
 const numeral = require('numeral');
 const Datatable = require('datatables.net-bs5')();
 const swal = require('sweetalert');
@@ -9,6 +10,7 @@ const { getCurrentWindow } = require('electron').remote;
 const usersTableBody = $('#users-body');
 const productIdField = document.getElementById('productIdField');
 const productPopupIdField = document.getElementById('productPopupId');
+const saltRounds = 10;
 
 const userModalId = document.getElementById('user-id-field');
 const method = document.getElementById('dbMethod');
@@ -63,23 +65,28 @@ function displayRow(id, firstName, lastName, email, dateJoined, totalSales, isAc
             </svg>
             View Details
           </button>
-          <button class="dropdown-item d-flex align-items-center">
-            <svg
-              class="dropdown-icon text-danger me-2" fill="currentColor" viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z">
-              </path>
-            </svg> Suspend
+          <button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#deleteModal"
+            onclick="addModify(${id}, '${firstName + ' ' + lastName}', 'activate')">
+            <i class="fas fa-user-plus dropdown-icon text-success me-2"></i>
+            Activate
+          </button>
+          <button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#deleteModal"
+            onclick="addModify(${id}, '${firstName + ' ' + lastName}', 'suspend')">
+            <i class="fas fa-user-minus dropdown-icon text-danger me-2"></i>
+            Suspend
           </button>
         </div>
-      </div><svg class="icon icon-xs text-danger ms-1" title="" data-bs-toggle="tooltip" fill="currentColor"
-        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-bs-original-title="Delete"
-        aria-label="Delete">
-        <path fill-rule="evenodd"
-          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-          clip-rule="evenodd"></path>
-      </svg>
+      </div>
+      <button class="btn btn-link text-dark m-0 p-0" data-bs-toggle="modal" data-bs-target="#deleteModal"
+        onclick="addModify(${id}, '${firstName + ' ' + lastName}', 'delete')" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <svg class="icon icon-xs text-danger" title="" data-bs-toggle="tooltip"
+          fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+          data-bs-original-title="Delete" aria-label="Delete">
+          <path fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"></path>
+        </svg>
+      </button>
     </td>
   </tr>
   `;
@@ -93,7 +100,7 @@ function loadUsers() {
   const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
   try {
     const usersQuery = db.prepare(`SELECT id, first_name, last_name, email, date_joined,
-      total_sales, is_active FROM auth WHERE is_deleted = 0`);
+      total_sales, is_active FROM auth`);
     usersQuery.all().forEach((user) => {
       displayRow(user.id, user.first_name, user.last_name, user.email,
         user.date_joined, user.total_sales, user.is_active);
@@ -122,6 +129,7 @@ function clearUserModal() {
   passwordField.value = '';
   isAdminField.checked = false;
   method.value = 'create';
+  document.getElementById('last-login').value = '';
   document.getElementById('add-user').textContent = 'Add User';
   document.getElementById('user-modal-title').textContent = 'New User';
 }
@@ -142,14 +150,14 @@ function getUser(id) {
       firstNameField.value = userRow.first_name;
       lastNameField.value = userRow.last_name;
       emailField.value = userRow.email;
-      passwordField.value = 'dummy_password';
+      passwordField.value = '';
       isAdminField.checked = !!userRow.is_admin;
       console.log(userRow.last_login);
-      document.getElementById('last-login').value = userRow.last_login.split(' ')[0];
+      document.getElementById('last-login').value = userRow.last_login ? userRow.last_login.split(' ')[0] : '';
       document.getElementById('total-sales').value = userRow.total_sales;
 
       // Format popup modal
-      method.value = 'create';
+      method.value = 'update';
       document.getElementById('add-user').textContent = 'Update User';
       document.getElementById('user-modal-title').textContent = 'User Details';
       const productModal = new bootstrap.Modal(document.getElementById('new-user-modal'));
@@ -169,22 +177,54 @@ function getUser(id) {
  * @param {string} productName name of the product to be deleted
  */
 // eslint-disable-next-line no-unused-vars
-function addDelete(productId, productName) {
-  document.getElementById('productDeleteName').textContent = productName;
-  productIdField.textContent = productId;
+function addModify(userId, userName, userMethod) {
+  document.getElementById('userDeleteName').textContent = userName;
+  document.getElementById('userIdInput').value = userId;
+
+  // Format popup modal
+  if (userMethod === 'suspend') {
+    document.getElementById('userMethod').value = 'suspend';
+    document.getElementById('userAction').textContent = 'suspend';
+    document.getElementById('modalButton').textContent = 'Yes, Suspend';
+    document.getElementById('no-undo-text').classList.add('d-none');
+  } else if (userMethod === 'delete') {
+    document.getElementById('userMethod').value = 'delete';
+    document.getElementById('userAction').textContent = 'delete';
+    document.getElementById('modalButton').textContent = 'Yes, Delete';
+    document.getElementById('no-undo-text').classList.remove('d-none');
+  } else if (userMethod === 'activate') {
+    document.getElementById('userMethod').value = 'activate';
+    document.getElementById('userAction').textContent = 'activate';
+    document.getElementById('modalButton').textContent = 'Yes, Activate';
+    document.getElementById('no-undo-text').classList.add('d-none');
+  }
 }
 
 /**
- * Delete the product with matching product id
+ * Delete or suspend the user with matching id
  */
 // eslint-disable-next-line no-unused-vars
-function deleteProduct() {
+function modifyUser() {
   const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
-  const productId = document.getElementById('productIdField').textContent;
+  const userId = document.getElementById('userIdInput').value;
+  let userQueryString;
+  let successMessage;
+
+  if (document.getElementById('userMethod').value === 'suspend') {
+    userQueryString = 'UPDATE auth SET is_active = 0 WHERE id = ?';
+    successMessage = 'User suspended successfully!';
+  } else if (document.getElementById('userMethod').value === 'activate') {
+    userQueryString = 'UPDATE auth SET is_active = 1 WHERE id = ?';
+    successMessage = 'User activated successfully!';
+  } else if (document.getElementById('userMethod').value === 'delete') {
+    userQueryString = 'DELETE FROM auth WHERE id = ?';
+    successMessage = 'User deleted successfully!';
+  }
+
   try {
-    const deleteProductQuery = db.prepare('DELETE FROM product WHERE id = ?');
-    deleteProductQuery.run(productId);
-    swal("Success", "Product deleted successfully!", "success")
+    const userQuery = db.prepare(userQueryString);
+    userQuery.run(userId);
+    swal("Success", successMessage, "success")
       .then(() => {
         getCurrentWindow().reload();
       });
@@ -212,40 +252,47 @@ function validateInputField(inputFields) {
 }
 
 document.getElementById('add-user').addEventListener('click', (() => {
-  if (validateInputField([productNameField, expiryDateField, costPriceField,
-    sellingPriceField, skuField, quantityField])) {
-    // ------
+  const userId = userModalId.value;
+  let successMessage;
+  let userQuery;
+  if (validateInputField([firstNameField, lastNameField, emailField, passwordField])) {
     const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+    // bcrypt.genSalt(10, (err, salt) => {
+    //   if (err) {
+    //     swal("Oops!", err, "error");
+    //   } else {
+    //   }
+    // });
+    bcrypt.hash(passwordField.value, 8, (err, hash) => {
+      try {
+        if (method.value === 'update') {
+          userQuery = db.prepare(`UPDATE auth SET first_name = @first_name, last_name = @last_name,
+            email = @email, password = @password, is_admin = @is_admin WHERE id = @id`);
+          successMessage = 'User updated successfully!';
+        } else if (method.value === 'create') {
+          userQuery = db.prepare(`INSERT INTO auth (first_name, last_name, email, password, is_admin, date_joined)
+            VALUES (@first_name, @last_name, @email, @password, @is_admin, date('now'))`);
+          successMessage = 'User created successfully!';
+        }
 
-    if (method.value === 'update') {
-      try {
-        const updateProductQuery = db.prepare(`UPDATE product SET name = ?, expiry_date = ?, sku = ?, selling_price = ?,
-          cost_price = ?, quantity = ? WHERE id = ?`);
-        updateProductQuery.run(productNameField.value, expiryDateField.value, skuField.value,
-          sellingPriceField.value, costPriceField.value, quantityField.value,
-          productPopupIdField.value);
-        swal("Success", "Product updated successfully!", "success")
+        userQuery.run({
+          first_name: firstNameField.value,
+          last_name: lastNameField.value,
+          email: emailField.value,
+          password: hash,
+          is_admin: isAdminField ? '1' : '0',
+          id: userId,
+        });
+
+        swal("Success", successMessage, "success")
           .then(() => {
             getCurrentWindow().reload();
           });
       } catch (err) {
         swal("Oops!", err.message, "error");
       }
-    } else if (method.value === 'create') {
-      try {
-        const createProductQuery = db.prepare(`INSERT INTO product (name, sku, selling_price, cost_price, quantity,
-          date_added, expiry_date, has_expired, is_deleted) VALUES(?, ?, ?, ?, ?, date('now'), ?, 0, 0)`);
-        createProductQuery.run(productNameField.value, skuField.value, sellingPriceField.value,
-          costPriceField.value, quantityField.value, expiryDateField.value);
-        swal("Success", "Product created successfully!", "success")
-          .then(() => {
-            getCurrentWindow().reload();
-          });
-      } catch (err) {
-        swal("Oops!", err.message, "error");
-      }
-    }
-    db.close();
+      db.close();
+    });
   }
 }));
 

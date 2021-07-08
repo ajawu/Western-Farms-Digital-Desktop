@@ -224,9 +224,9 @@
           <tr>
             <th class="border-gray-200"># ID</th>
             <th class="border-gray-200">Name & Email</th>
-            <th class="border-gray-200">Date Createde</th>
+            <th class="border-gray-200">Date Created</th>
             <th class="border-gray-200">Total Sales</th>
-            <th class="border-gray-200">Sales</th>
+            <th class="border-gray-200">Status</th>
             <th class="border-gray-200">Action</th>
           </tr>
         </thead>
@@ -245,20 +245,23 @@
             </button>
           </div>
           <div class="modal-body text-center pt-0 mb-2">
-            <i class="far fa-times-circle text-danger" style="font-size: 70px; font-weight: 400;"></i>
+            <i class="far fa-question-circle text-danger" style="font-size: 70px; font-weight: 400;"></i>
             <h3 class="modal-title mt-2 mb-2" id="deleteModalLabel">
               Are you Sure?
             </h3>
             <p class="modal-body-text mb-0">
-              Do you really want to delete this sale - <br>
-              <span id="salesDeleteName" class="text-danger fw-bold"></span><br>
-              This process cannot be undone.
+              Do you really want to <span id="userAction"></span> this user - <br>
+              <span id="userDeleteName" class="text-danger fw-bold"></span><br>
+              <span id="no-undo-text" class="fw-bold d-none" style="color: #555;">
+                "This process cannot be undone."
+              </span>
             </p>
-            <span class="d-none" id="salesIdField"></span>
+            <input type="hidden" id="userIdInput">
+            <input type="hidden" id="userMethod">
           </div>
           <div class="modal-footer justify-content-evenly mb-2 pt-3">
             <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">No, Cancel</button>
-            <button type="button" class="btn btn-danger" onclick="deleteProduct()">
+            <button type="button" class="btn btn-danger" onclick="modifyUser()" id="modalButton">
               Yes, Delete
             </button>
           </div>
@@ -271,9 +274,13 @@
       aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered p-2" role="document" style="max-width: 550px;">
         <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="btn btn-close btn-link" data-bs-dismiss="modal" aria-label="Close">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
           <div class="modal-body p-0">
-            <div class="card" style="padding: 1.4rem 2.4rem;">
-              <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="card" style="padding: 1.4rem 2.4rem; border-top: none;">
               <div class="text-center text-md-center mb-4 mt-md-0">
                 <h1 class="mb-0 h4" id="user-modal-title">New User</h1>
               </div>
@@ -289,6 +296,9 @@
                         </span>
                         <input type="text" class="form-control" placeholder="First Name" id="first-name" autofocus
                           required>
+                        <div class="invalid-feedback">
+                          Enter user's first name.
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -301,6 +311,9 @@
                         </span>
                         <input type="text" class="form-control" placeholder="Last Name" id="last-name" autofocus
                           required>
+                        <div class="invalid-feedback">
+                          Enter user's last name.
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -319,6 +332,9 @@
                         </span>
                         <input type="email" class="form-control" placeholder="example@gmail.com" id="email" autofocus
                           required>
+                        <div class="invalid-feedback">
+                          Enter user's email.
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -337,6 +353,9 @@
                             </svg>
                           </span>
                           <input type="password" placeholder="Password" class="form-control" id="password" required>
+                          <div class="invalid-feedback">
+                            Enter user's new password.
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -369,7 +388,7 @@
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" value="" id="remember">
                       <label class="form-check-label mb-0" for="remember">
-                        Remember me
+                        Is Admin
                       </label>
                     </div>
                     <input type="hidden" name="method" id="dbMethod">
