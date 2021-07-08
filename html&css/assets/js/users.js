@@ -257,12 +257,6 @@ document.getElementById('add-user').addEventListener('click', (() => {
   let userQuery;
   if (validateInputField([firstNameField, lastNameField, emailField, passwordField])) {
     const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
-    // bcrypt.genSalt(10, (err, salt) => {
-    //   if (err) {
-    //     swal("Oops!", err, "error");
-    //   } else {
-    //   }
-    // });
     bcrypt.hash(passwordField.value, 8, (err, hash) => {
       try {
         if (method.value === 'update') {
