@@ -112,6 +112,11 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+"@tarekraafat/autocomplete.js@^10.2.4":
+  version "10.2.4"
+  resolved "https://registry.yarnpkg.com/@tarekraafat/autocomplete.js/-/autocomplete.js-10.2.4.tgz#a6afe59641272dff2abfb0f058cb4b14d1f320ce"
+  integrity sha512-ElUl+Zn93fp1Vwf6Df+wXlYPpY3qjn263wBcyMsi1g2C8HTU/G/zp2GJxwBDiSrOuTKgitH3H27pKZ+D6/IwQA==
+
 "@types/debug@^4.1.5":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"

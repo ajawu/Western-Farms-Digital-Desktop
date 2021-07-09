@@ -49,15 +49,13 @@
 
   <!-- Volt CSS -->
   <link type="text/css" href="../../css/volt.css" rel="stylesheet">
+  <link type="text/css" href="../../vendor/autocomplete/autocomplete.min.css" rel="stylesheet">
 
   <!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
 
 </head>
 
 <body>
-
-  <!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
-
 
   <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
     <a class="navbar-brand me-lg-5" href="../../index.html">
@@ -161,7 +159,7 @@
             <span class="sidebar-text">Users</span>
           </a>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item">
           <a href="settings.html" class="nav-link">
             <span class="sidebar-icon">
               <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -176,14 +174,14 @@
 
         <li role="separator" class="dropdown-divider mt-2 mb-3 border-gray-700"></li>
 
-        <a class="btn btn-secondary d-inline-flex align-items-center me-2 dropdown-toggle" href="new-sale.html">
+        <button class="btn btn-secondary d-inline-flex align-items-center me-2 dropdown-toggle">
           <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
             </path>
           </svg>
           New Sale
-        </a>
+        </button>
 
         <!-- Side navbar separator -->
         <li role="separator" class="dropdown-divider mt-3 mb-3 border-gray-700"></li>
@@ -206,160 +204,64 @@
 
   <main class="content">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-
     </div>
-    <div class="row">
-      <div class="col-12 col-xl-8">
+    <div class="row d-flex justify-content-center">
+      <div class="col-8">
         <div class="card card-body border-0 shadow mb-4">
-          <h2 class="h5 mb-4">Personal information</h2>
-          <div>
-            <div class="row">
-              <div class="col-md-6 mb-4">
-                <div>
-                  <label for="first-name">First Name</label>
-                  <input class="form-control" id="first-name" type="text" placeholder="First Name" required>
-                  <div class="invalid-feedback">
-                    Enter user's first name
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 mb-4">
-                <div>
-                  <label for="last-name">Last Name</label>
-                  <input class="form-control" id="last-name" type="text" placeholder="Last Name" required>
-                  <div class="invalid-feedback">
-                    Enter user's last name
-                  </div>
+          <h2 class="h2 mb-4 text-center">New Sale</h2>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div>
+                <label for="first-name">Customer Name</label>
+                <input class="form-control" id="customer-name" type="text" placeholder="Customer Name" required>
+                <div class="invalid-feedback">
+                  Enter the customer's name
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-6 mb-4">
-                <div class="form-group">
-                  <label for="email">Email</label>
-                  <input class="form-control" id="email" type="email" placeholder="name@company.com" required>
-                  <div class="invalid-feedback">
-                    Enter user's email address
-                  </div>
+            <div class="col-md-6 mb-3">
+              <div>
+                <label for="last-name">Payment Method</label>
+                <select name="payment-method" id="payment-method" class="form-control" required>
+                  <option value="Cash" selected>Cash</option>
+                  <option value="POS">POS</option>
+                  <option value="Bank Transfer">Bank Transfer</option>
+                </select>
+                <div class="invalid-feedback">
+                  Select payment method
                 </div>
               </div>
-              <div class="col-md-6 mb-4">
-                <div class="form-group">
-                  <label for="phone">Phone</label>
-                  <input class="form-control" id="phone" type="number" placeholder="+234 903 4686 700" required>
-                  <div class="invalid-feedback">
-                    Enter user's phone number
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="mb-5">
-              <button class="btn btn-gray-800 mt-2 animate-up-2" id="personal-button">Update Personal Info</button>
-            </div>
-          </div>
-          <div>
-            <h2 class="h5 mb-4">Authentication</h2>
-            <div class="row">
-              <div class="col-12 mb-4">
-                <div class="form-group">
-                  <label for="old-password">Old Password</label>
-                  <input class="form-control" id="old-password" type="password" placeholder="Password" required>
-                  <div class="invalid-feedback">
-                    Enter user's old password
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-4">
-                <div class="form-group">
-                  <label for="password1">Password</label>
-                  <input class="form-control" id="password1" type="password" placeholder="Password" required>
-                  <div class="invalid-feedback">
-                    Enter new password
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 mb-4">
-                <div class="form-group">
-                  <label for="password2">Password Again</label>
-                  <input class="form-control" id="password2" type="password" placeholder="Password (Again)" required>
-                  <div class="invalid-feedback">
-                    Enter new password again
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="mb-4">
-              <button class="btn btn-gray-800 mt-2 animate-up-2" id="password-button">Update Password</button>
-            </div>
-          </div>
-          <div>
-            <h2 class="h5 my-4">Receipt Info</h2>
-            <div class="row">
-              <div class="col-md-6 mb-4">
-                <div>
-                  <label for="company-name">Company Name</label>
-                  <input class="form-control" id="company-name" type="text" placeholder="Company Name" required>
-                  <div class="invalid-feedback">
-                    Enter Company Name
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 mb-4">
-                <div>
-                  <label for="company-motto">Company Motto</label>
-                  <input class="form-control" id="company-motto" type="text" placeholder="Company Motto" required>
-                  <div class="invalid-feedback">
-                    Enter Company Motto
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-12 mb-4">
-                <div class="form-group">
-                  <label for="address">Company Address</label>
-                  <input class="form-control" id="address" type="text" placeholder="Enter the company address" required>
-                  <div class="invalid-feedback">
-                    Enter Company Address
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="mb-4">
-              <button class="btn btn-gray-800 mt-2 animate-up-2" id="company-button">Save Company Info</button>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="col-12 col-xl-4">
-        <div class="row">
-          <div class="col-12 mb-4">
-            <div class="card shadow border-0 text-center p-0">
-              <div class="profile-cover rounded-top bg-primary">
+          <div class="row justify-content-center">
+            <div class="col-md-5 mb-4">
+              <div>
+                <label for="total-price">Sales Total Price</label>
+                <input class="form-control" id="total-price" type="text" placeholder="Total price of sale" required
+                  disabled>
               </div>
-              <div class="card-body pb-5">
-                <img src="../../assets/img/team/default-avatar.jpg" class="avatar-xl rounded-circle mx-auto mt-n7 mb-4"
-                  alt="Neil Portrait">
-                <h4 class="h3" id="nameText"></h4>
-                <p class="text-gray mb-1 mt-4">
-                  <span style="font-weight: 600;">User ID: </span>
-                  # <span id="userIdText"></span>
-                </p>
-                <p class="text-gray mb-1">
-                  <span style="font-weight: 600;">Role: </span>
-                  <span id="adminText"></span>
-                </p>
-                <p class="text-gray mb-1">
-                  <span style="font-weight: 600;">Creation Date: </span>
-                  <span id="dateJoinedText"></span>
-                </p>
-                <p class="text-gray mb-4">
-                  <span style="font-weight: 600;">Total Sales: </span>
-                  <span id="totalSalesText"></span>
-                </p>
+            </div>
+            <div class="col-md-5 mb-4">
+              <div>
+                <label for="item-count">Sales Product Count</label>
+                <input class="form-control" id="item-count" type="number" placeholder="Total number of items" required
+                  disabled>
               </div>
+            </div>
+          </div>
+          <div class="row m-auto mb-4">
+            <div class="autoComplete_wrapper">
+              <input id="autoComplete" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off"
+                autocapitalize="off" class="form-control">
+            </div>
+          </div>
+          <div id="product-popup-container">
+          </div>
+          <div>
+            <div class="my-3 mb-4">
+              <button class="btn btn-gray-800 mt-2 animate-up-2" id="sale-button" style="width: 100%;">
+                Complete Sale
+              </button>
             </div>
           </div>
         </div>
@@ -367,8 +269,8 @@
     </div>
   </main>
   <!-- Volt JS -->
-  <!-- <script src="../../assets/js/volt.js"></script> -->
-  <script src="../../assets/js/settings.js"></script>
+  <script src="../../assets/js/new-sale.js"></script>
+  <!-- <script src="../../assets/js/settings.js"></script> -->
 
 
 </body>
