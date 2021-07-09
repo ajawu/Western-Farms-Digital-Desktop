@@ -95,7 +95,7 @@ function createProduct(maxQuantity, unitPrice, productName) {
         <div class="col-md-4 mb-4">
           <div class="form-group">
             <label for="quantity">Quantity</label>
-            <input class="form-control" id="product-quantity" type="number" placeholder="Quantity" max="${maxQuantity}" min="1" value="0"
+            <input class="form-control" id="product-quantity" type="number" placeholder="Quantity" max="${maxQuantity}" min="1" value="1"
               oninput="processQuantity()" required>
             <div class="invalid-feedback">
               Enter product Quantity
@@ -135,6 +135,7 @@ const autoCompleteJS = new AutoComplete({
         autoCompleteJS.input.value = selection;
         const productDetails = getDetails(selection);
         createProduct(productDetails.quantity, productDetails.selling_price, selection);
+        processQuantity();
       },
     },
   },

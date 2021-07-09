@@ -209,7 +209,7 @@
       <div class="col-8">
         <div class="card card-body border-0 shadow mb-4">
           <h2 class="h2 mb-4 text-center">New Sale</h2>
-          <div class="row">
+          <div class="row justify-content-center">
             <div class="col-md-6 mb-3">
               <div>
                 <label for="first-name">Customer Name</label>
@@ -234,14 +234,23 @@
             </div>
           </div>
           <div class="row justify-content-center">
-            <div class="col-md-5 mb-4">
+            <div class="col-md-4 mb-3">
+              <div>
+                <label for="first-name">Customer Contact</label>
+                <input class="form-control" id="customer-name" type="text" placeholder="Customer Name" required>
+                <div class="invalid-feedback">
+                  Email address or phone number
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-4">
               <div>
                 <label for="total-price">Sales Total Price</label>
                 <input class="form-control" id="total-price" type="text" placeholder="Total price of sale" required
                   disabled>
               </div>
             </div>
-            <div class="col-md-5 mb-4">
+            <div class="col-md-4 mb-4">
               <div>
                 <label for="item-count">Sales Product Count</label>
                 <input class="form-control" id="item-count" type="number" placeholder="Total number of items" required
