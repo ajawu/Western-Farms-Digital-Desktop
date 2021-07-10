@@ -41,7 +41,7 @@ function displayRow(salesId, customerName, totalRevenue, totalPrice, purchaseTim
                           clip-rule="evenodd"></path>
                   </svg> View Details
               </button>
-              <button class="dropdown-item d-flex align-items-center" onclick="processRefund(${salesId}, '${customerName}')">
+              <button class="dropdown-item d-flex align-items-center admin-only-button" onclick="processRefund(${salesId}, '${customerName}')">
                   <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
@@ -52,7 +52,7 @@ function displayRow(salesId, customerName, totalRevenue, totalPrice, purchaseTim
               </button>
           </div>
         </div>
-        <button class="btn btn-link text-dark m-0 p-0" onclick="addDelete(${salesId}, '${customerName}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <button class="btn btn-link text-dark m-0 p-0 admin-only-button" onclick="addDelete(${salesId}, '${customerName}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
           <svg class="icon icon-xs text-danger" title="" data-bs-toggle="tooltip"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
             data-bs-original-title="Delete" aria-label="Delete">
@@ -270,5 +270,19 @@ function loadSales() {
 
 $(document).ready(() => {
   loadSales(false);
-  document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
+  // Display Name
+  try {
+    document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
+  } catch (err) {
+    console.log('Element missing');
+  }
+
+  // Hide Elements from non admin users
+  const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
+  if (`${isAdmin}` === '0') {
+    const adminOnlyElements = document.getElementsByClassName('admin-only-button');
+    for (const adminAlone of adminOnlyElements) {
+      adminAlone.classList.add('d-none');
+    }
+  }
 });

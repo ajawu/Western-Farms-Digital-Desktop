@@ -51,7 +51,7 @@ function displayRow(productId, name, quantity, expiryDate, price, status) {
               </button>
           </div>
         </div>
-        <button class="btn btn-link text-dark m-0 p-0" onclick="addDelete(${productId}, '${name}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <button class="btn btn-link text-dark m-0 p-0 admin-only-button" onclick="addDelete(${productId}, '${name}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
           <svg class="icon icon-xs text-danger" title="" data-bs-toggle="tooltip"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
             data-bs-original-title="Delete" aria-label="Delete">
@@ -227,5 +227,19 @@ document.getElementById('addProductButton').addEventListener('click', (() => {
 
 $(document).ready(() => {
   loadInventory(false);
-  document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
+  // Display Name
+  try {
+    document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
+  } catch (err) {
+    console.log('Element missing');
+  }
+
+  // Hide Elements from non admin users
+  const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
+  if (`${isAdmin}` === '0') {
+    const adminOnlyElements = document.getElementsByClassName('admin-only-button');
+    for (const adminAlone of adminOnlyElements) {
+      adminAlone.classList.add('d-none');
+    }
+  }
 });

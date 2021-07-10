@@ -168,5 +168,20 @@ window.onload = () => {
     swal("Oops!", err.message, "error");
   }
   db.close();
-  document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
+
+  // Display Name
+  try {
+    document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
+  } catch (err) {
+    console.log('Element missing');
+  }
+
+  // Hide Elements from non admin users
+  const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
+  if (`${isAdmin}` === '0') {
+    const adminOnlyElements = document.getElementsByClassName('admin-only-button');
+    for (const adminAlone of adminOnlyElements) {
+      adminAlone.classList.add('d-none');
+    }
+  }
 };
