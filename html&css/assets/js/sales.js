@@ -270,4 +270,5 @@ function loadSales() {
 
 $(document).ready(() => {
   loadSales(false);
+  document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
 });

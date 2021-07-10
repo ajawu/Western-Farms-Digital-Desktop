@@ -168,4 +168,5 @@ window.onload = () => {
     swal("Oops!", err.message, "error");
   }
   db.close();
+  document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
 };

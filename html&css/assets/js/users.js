@@ -282,8 +282,8 @@ document.getElementById('add-user').addEventListener('click', (() => {
           .then(() => {
             getCurrentWindow().reload();
           });
-      } catch (err) {
-        swal("Oops!", err.message, "error");
+      } catch (error) {
+        swal("Oops!", error.message, "error");
       }
       db.close();
     });
@@ -292,4 +292,5 @@ document.getElementById('add-user').addEventListener('click', (() => {
 
 $(document).ready(() => {
   loadUsers(false);
+  document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
 });

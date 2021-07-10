@@ -118,10 +118,10 @@ function getSalesPeriod(period) {
   try {
     if (period === 'all') {
       salesQuery = db.prepare(`SELECT SUM(total_revenue) as total_revenue, SUM(total_price)
-     as total_sales, COUNT(DISTINCT customer_name) as customer_count FROM sales`);
+     as total_sales, COUNT(customer_name) as customer_count FROM sales`);
     } else {
       salesQuery = db.prepare("SELECT SUM(total_revenue) as total_revenue, SUM(total_price) as total_sales, "
-        + "COUNT(DISTINCT customer_name) as customer_count FROM sales WHERE strftime('%Y-%m-%d', `purchase_time`)>='"
+        + "COUNT(customer_name) as customer_count FROM sales WHERE strftime('%Y-%m-%d', `purchase_time`)>='"
         + startDate + "' AND strftime('%Y-%m-%d', `purchase_time`)<='" + endDate + "'");
     }
 
@@ -380,5 +380,6 @@ function pageRefresh(period) {
 }
 
 window.onload = () => {
+  document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
   pageRefresh('all');
 };

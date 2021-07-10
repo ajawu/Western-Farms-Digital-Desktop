@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <!-- Primary Meta Tags -->
-  <title>Western Farm - Settings Page</title>
+  <title>Western Farm - New Sale Page</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="title" content="Volt Free Bootstrap Dashboard - Settings">
   <meta name="author" content="Themesberg">
@@ -186,7 +186,7 @@
         <!-- Side navbar separator -->
         <li role="separator" class="dropdown-divider mt-3 mb-3 border-gray-700"></li>
         <li class="nav-item ">
-          <a href="../../examples/sign-in.html" class="nav-link">
+          <a class="nav-link" id="window-logout-button">
             <span class="sidebar-icon">
               <svg class="icon icon-xs text-danger me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
@@ -237,7 +237,8 @@
             <div class="col-md-4 mb-3">
               <div>
                 <label for="first-name">Customer Contact</label>
-                <input class="form-control" id="customer-name" type="text" placeholder="Customer Name" required>
+                <input class="form-control" id="customer-contact" type="text"
+                  placeholder="Customer Email / Phone Number" required>
                 <div class="invalid-feedback">
                   Email address or phone number
                 </div>
@@ -268,7 +269,7 @@
           </div>
           <div>
             <div class="my-3 mb-4">
-              <button class="btn btn-gray-800 mt-2 animate-up-2" id="sale-button" style="width: 100%;">
+              <button class="btn btn-gray-800 mt-2 animate-up-2" style="width: 100%;" id="complete-sale">
                 Complete Sale
               </button>
             </div>
@@ -279,8 +280,7 @@
   </main>
   <!-- Volt JS -->
   <script src="../../assets/js/new-sale.js"></script>
-  <!-- <script src="../../assets/js/settings.js"></script> -->
-
+  <script src="../../assets/js/auth/logout.js"></script>
 
 </body>
 

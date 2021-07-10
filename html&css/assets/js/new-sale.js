@@ -2,6 +2,9 @@ const AutoComplete = require('@tarekraafat/autocomplete.js');
 const Database = require('better-sqlite3');
 const $ = require('jquery');
 const swal = require('sweetalert');
+const validator = require('email-validator');
+const { getCurrentWindow } = require('electron').remote;
+
 const salesTotalPrice = document.getElementById('total-price');
 const salesProductCount = document.getElementById('item-count');
 
@@ -31,7 +34,7 @@ function getProducts() {
 function getDetails(productName) {
   const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
   try {
-    return db.prepare('SELECT quantity, selling_price FROM product WHERE name = ?').get(productName);
+    return db.prepare('SELECT id, quantity, selling_price FROM product WHERE name = ?').get(productName);
   } catch (err) {
     swal("Oops", err.message, "error");
   }
@@ -52,7 +55,6 @@ function processQuantity() {
     const productTotalCostField = productPopup.querySelector('#product-total-price');
     const productQuantityField = productPopup.querySelector('#product-quantity');
     if (parseInt(productQuantityField.value, 10) > 0) {
-      console.log('Greater too');
       totPriceTemp = parseInt(productUnitCostField.value, 10)
         * parseInt(productQuantityField.value, 10);
       productTotalCostField.value = totPriceTemp;
@@ -71,7 +73,7 @@ function removeProduct(event) {
   processQuantity();
 }
 
-function createProduct(maxQuantity, unitPrice, productName) {
+function createProduct(id, maxQuantity, unitPrice, productName) {
   const productElement = `
     <div class="row card py-3 mb-3 m-auto product-popup">
       <div class="col-12 mb-4">
@@ -110,6 +112,7 @@ function createProduct(maxQuantity, unitPrice, productName) {
           </div>
         </div>
       </div>
+      <input type="hidden" id="saleProductId" value="${id}">
       <button class="btn btn-danger mt-2 animate-up-2 m-auto" id="remove-product-button" style="width: 50%;" onclick="removeProduct(event)">
         Remove Product
       </button>
@@ -134,7 +137,8 @@ const autoCompleteJS = new AutoComplete({
         const selection = event.detail.selection.value;
         autoCompleteJS.input.value = selection;
         const productDetails = getDetails(selection);
-        createProduct(productDetails.quantity, productDetails.selling_price, selection);
+        createProduct(productDetails.id, productDetails.quantity, productDetails.selling_price,
+          selection);
         processQuantity();
       },
     },
@@ -145,4 +149,109 @@ document.querySelector("#autoComplete").addEventListener("click", () => {
   autoCompleteJS.input.value = '';
 });
 
-// Spycies
+function validatePhoneNumber(phoneNumber) {
+  if (phoneNumber.length === 11 && phoneNumber.match(/^[0-9]+$/)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function getId() {
+  return JSON.parse(window.localStorage.getItem('auth')).id;
+}
+
+function validateSaleWindow(customerContactField, customerNameField, ItemCountField) {
+  if (validator.validate(customerContactField.value)
+    || validatePhoneNumber(customerContactField.value)) {
+    customerContactField.classList.remove('is-invalid');
+  } else {
+    customerContactField.classList.add('is-invalid');
+    return false;
+  }
+
+  if (customerNameField.value.length > 1) {
+    customerNameField.classList.remove('is-invalid');
+  } else {
+    customerNameField.classList.add('is-invalid');
+    return false;
+  }
+
+  if (parseInt(ItemCountField.value, 10) > 0) {
+    ItemCountField.classList.remove('is-invalid');
+  } else {
+    ItemCountField.classList.add('is-invalid');
+    return false;
+  }
+  return true;
+}
+
+function saveItems(saleId) {
+  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  try {
+    const ItemsQuery = db.prepare(`INSERT INTO sales_item (product_name, unit_cost, quantity, total_cost,
+      sale, product) VALUES(@product_name, @unit_cost, @quantity, @total_cost, @sale, @product)`);
+    const insertMany = db.transaction((variables) => {
+      for (const variable of variables) ItemsQuery.run(variable);
+    });
+    const queryParameters = [];
+
+    const allProductContainers = document.getElementsByClassName('product-popup');
+    for (const productPopup of allProductContainers) {
+      if (parseInt(productPopup.querySelector('#product-quantity').value, 10) > 0
+        && parseInt(productPopup.querySelector('#product-unit-cost').value, 10) > 0) {
+        queryParameters.push({
+          product_name: productPopup.querySelector('#product-name').value,
+          unit_cost: productPopup.querySelector('#product-unit-cost').value,
+          quantity: productPopup.querySelector('#product-quantity').value,
+          total_cost: productPopup.querySelector('#product-total-price').value,
+          sale: saleId,
+          product: productPopup.querySelector('#saleProductId').value,
+        });
+      }
+    }
+    insertMany(queryParameters);
+  } catch (err) {
+    swal("Oops", err.message, "error");
+    return false;
+  }
+  db.close();
+  return true;
+}
+
+document.getElementById('complete-sale').addEventListener('click', () => {
+  const customerNameField = document.getElementById('customer-name');
+  const paymentMethodField = document.getElementById('payment-method');
+  const customerContactField = document.getElementById('customer-contact');
+  let saleId;
+
+  if (validateSaleWindow(customerContactField, customerNameField, salesProductCount)) {
+    // Save Sales
+    const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+    try {
+      const salesRow = db.prepare(`INSERT INTO sales (customer_name, purchase_time, total_price,
+          total_revenue, payment_method, sales_rep, customer_contact) VALUES(?, 
+          datetime('now'), ?, ?, ?, ?, ?)`)
+        .run(customerNameField.value, salesTotalPrice.value, 0, paymentMethodField.value,
+          getId(), customerContactField.value);
+      saleId = salesRow.lastInsertRowid;
+    } catch (err) {
+      swal("Oops", err.message, "error");
+    }
+    db.close();
+    console.log('sale saved');
+    // Save Sales Items
+    if (saveItems(saleId)) {
+      swal("Success!", 'New sale saved to the database', "success")
+        .then(() => {
+          getCurrentWindow().reload();
+        });
+    }
+  } else {
+    swal("Error!", 'Ensure allfields are filled', "error");
+  }
+});
+
+window.onload = () => {
+  document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
+};
