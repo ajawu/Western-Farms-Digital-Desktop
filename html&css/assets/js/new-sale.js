@@ -34,7 +34,7 @@ function getProducts() {
 function getDetails(productName) {
   const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
   try {
-    return db.prepare('SELECT id, quantity, selling_price FROM product WHERE name = ?').get(productName);
+    return db.prepare('SELECT id, quantity, selling_price, cost_price FROM product WHERE name = ?').get(productName);
   } catch (err) {
     swal("Oops", err.message, "error");
   }
@@ -73,7 +73,7 @@ function removeProduct(event) {
   processQuantity();
 }
 
-function createProduct(id, maxQuantity, unitPrice, productName) {
+function createProduct(id, maxQuantity, unitPrice, productName, revenue) {
   const productElement = `
     <div class="row card py-3 mb-3 m-auto product-popup">
       <div class="col-12 mb-4">
@@ -113,6 +113,7 @@ function createProduct(id, maxQuantity, unitPrice, productName) {
         </div>
       </div>
       <input type="hidden" id="saleProductId" value="${id}">
+      <input type="hidden" id="saleProductRevenue" value="${revenue}">
       <button class="btn btn-danger mt-2 animate-up-2 m-auto" id="remove-product-button" style="width: 50%;" onclick="removeProduct(event)">
         Remove Product
       </button>
@@ -138,7 +139,7 @@ const autoCompleteJS = new AutoComplete({
         autoCompleteJS.input.value = selection;
         const productDetails = getDetails(selection);
         createProduct(productDetails.id, productDetails.quantity, productDetails.selling_price,
-          selection);
+          selection, productDetails.selling_price - productDetails.cost_price);
         processQuantity();
       },
     },
@@ -188,6 +189,7 @@ function validateSaleWindow(customerContactField, customerNameField, ItemCountFi
 
 function saveItems(saleId) {
   const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  let totalRevenue = 0;
   try {
     const ItemsQuery = db.prepare(`INSERT INTO sales_item (product_name, unit_cost, quantity, total_cost,
       sale, product) VALUES(@product_name, @unit_cost, @quantity, @total_cost, @sale, @product)`);
@@ -209,14 +211,16 @@ function saveItems(saleId) {
           product: productPopup.querySelector('#saleProductId').value,
         });
       }
+      totalRevenue += parseInt(productPopup.querySelector('#saleProductRevenue').value, 10)
+        * parseInt(productPopup.querySelector('#product-quantity').value, 10);
     }
     insertMany(queryParameters);
   } catch (err) {
     swal("Oops", err.message, "error");
-    return false;
   }
   db.close();
-  return true;
+  console.log(totalRevenue);
+  return totalRevenue;
 }
 
 document.getElementById('complete-sale').addEventListener('click', () => {
@@ -239,13 +243,21 @@ document.getElementById('complete-sale').addEventListener('click', () => {
       swal("Oops", err.message, "error");
     }
     db.close();
-    console.log('sale saved');
     // Save Sales Items
-    if (saveItems(saleId)) {
-      swal("Success!", 'New sale saved to the database', "success")
-        .then(() => {
-          getCurrentWindow().reload();
-        });
+    const saleRevenue = saveItems(saleId);
+    console.log(saleRevenue);
+    if (saleRevenue > 0) {
+      const dbRevenue = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+      try {
+        dbRevenue.prepare(`UPDATE sales SET total_revenue = ? WHERE id = ?`).run(saleRevenue, saleId);
+        swal("Success!", 'New sale saved to the database', "success")
+          .then(() => {
+            getCurrentWindow().reload();
+          });
+      } catch (err) {
+        swal("Oops", err.message, "error");
+      }
+      dbRevenue.close();
     }
   } else {
     swal("Error!", 'Ensure allfields are filled', "error");
