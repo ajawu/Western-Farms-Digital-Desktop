@@ -28,8 +28,10 @@ Application features include:-
 
 ## Sample Pages
 1. Login Page.
+
     ![Login](/sample_images/login-page.png)
 2. Dashboard Page.
+
     ![Dashboard](/sample_images/dashboard-page.png)
 
 ## Installation
