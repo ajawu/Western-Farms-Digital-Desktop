@@ -3,8 +3,10 @@ const Database = require('better-sqlite3');
 const $ = require('jquery');
 const swal = require('sweetalert');
 const validator = require('email-validator');
-const { getCurrentWindow } = require('electron').remote;
+const { app, getCurrentWindow } = require('electron').remote;
+const path = require('path');
 
+const databasePath = path.join(app.getAppPath('userData').replace('app.asar', ''), 'western-data.db');
 const salesTotalPrice = document.getElementById('total-price');
 const salesProductCount = document.getElementById('item-count');
 
@@ -13,7 +15,7 @@ const salesProductCount = document.getElementById('item-count');
  * @returns {Array} An array containing the names of all products in the product table
  */
 function getProducts() {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   const products = [];
   try {
     db.prepare('SELECT name FROM product').all().forEach((row) => {
@@ -32,7 +34,7 @@ function getProducts() {
  * @param {string} productName name of the product to get details
  */
 function getDetails(productName) {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   try {
     return db.prepare('SELECT id, quantity, selling_price, cost_price FROM product WHERE name = ?').get(productName);
   } catch (err) {
@@ -188,7 +190,7 @@ function validateSaleWindow(customerContactField, customerNameField, ItemCountFi
 }
 
 function saveItems(saleId) {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   let totalRevenue = 0;
   try {
     const ItemsQuery = db.prepare(`INSERT INTO sales_item (product_name, unit_cost, quantity, total_cost,
@@ -231,7 +233,7 @@ document.getElementById('complete-sale').addEventListener('click', () => {
 
   if (validateSaleWindow(customerContactField, customerNameField, salesProductCount)) {
     // Save Sales
-    const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+    const db = new Database(databasePath, { verbose: console.log });
     try {
       const salesRow = db.prepare(`INSERT INTO sales (customer_name, purchase_time, total_price,
           total_revenue, payment_method, sales_rep, customer_contact) VALUES(?, 
@@ -247,7 +249,7 @@ document.getElementById('complete-sale').addEventListener('click', () => {
     const saleRevenue = saveItems(saleId);
     console.log(saleRevenue);
     if (saleRevenue > 0) {
-      const dbRevenue = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+      const dbRevenue = new Database(databasePath, { verbose: console.log });
       try {
         dbRevenue.prepare(`UPDATE sales SET total_revenue = ? WHERE id = ?`).run(saleRevenue, saleId);
         swal("Success!", 'New sale saved to the database', "success")
@@ -275,7 +277,7 @@ window.onload = () => {
   // Hide Elements from non admin users
   const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
   if (`${isAdmin}` === '0') {
-    const adminOnlyElements = document.getElementsByClassName('admin-only-button');
+    const adminOnlyElements = document.getElementsByClassName('d-none admin-only-button');
     for (const adminAlone of adminOnlyElements) {
       adminAlone.classList.add('d-none');
     }

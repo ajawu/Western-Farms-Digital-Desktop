@@ -5,7 +5,10 @@ const numeral = require('numeral');
 const Datatable = require('datatables.net-bs5')();
 const swal = require('sweetalert');
 const bootstrap = require('bootstrap');
-const { getCurrentWindow } = require('electron').remote;
+const { app, getCurrentWindow } = require('electron').remote;
+const path = require('path');
+
+const databasePath = path.join(app.getAppPath('userData').replace('app.asar', ''), 'western-data.db');
 
 const usersTableBody = $('#users-body');
 const productIdField = document.getElementById('productIdField');
@@ -97,7 +100,7 @@ function displayRow(id, firstName, lastName, email, dateJoined, totalSales, isAc
  * Load users from database
  */
 function loadUsers() {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   try {
     const usersQuery = db.prepare(`SELECT id, first_name, last_name, email, date_joined,
       total_sales, is_active FROM auth`);
@@ -139,7 +142,7 @@ function clearUserModal() {
  * @param {int} id
  */
 function getUser(id) {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   try {
     const selectUserQuery = db.prepare(`SELECT id, first_name, last_name, email, is_admin, 
     last_login, total_sales FROM auth WHERE id = ?`);
@@ -205,7 +208,7 @@ function addModify(userId, userName, userMethod) {
  */
 // eslint-disable-next-line no-unused-vars
 function modifyUser() {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   const userId = document.getElementById('userIdInput').value;
   let userQueryString;
   let successMessage;
@@ -256,7 +259,7 @@ document.getElementById('add-user').addEventListener('click', (() => {
   let successMessage;
   let userQuery;
   if (validateInputField([firstNameField, lastNameField, emailField, passwordField])) {
-    const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+    const db = new Database(databasePath, { verbose: console.log });
     bcrypt.hash(passwordField.value, 8, (err, hash) => {
       try {
         if (method.value === 'update') {
@@ -302,7 +305,7 @@ $(document).ready(() => {
   // Hide Elements from non admin users
   const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
   if (`${isAdmin}` === '0') {
-    const adminOnlyElements = document.getElementsByClassName('admin-only-button');
+    const adminOnlyElements = document.getElementsByClassName('d-none admin-only-button');
     for (const adminAlone of adminOnlyElements) {
       adminAlone.classList.add('d-none');
     }

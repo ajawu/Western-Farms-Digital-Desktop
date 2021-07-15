@@ -2,7 +2,10 @@ const Database = require('better-sqlite3');
 const swal = require('sweetalert');
 const numeral = require('numeral');
 const bcrypt = require('bcryptjs');
-const { getCurrentWindow } = require('electron').remote;
+const { app, getCurrentWindow } = require('electron').remote;
+const path = require('path');
+
+const databasePath = path.join(app.getAppPath('userData').replace('app.asar', ''), 'western-data.db');
 
 // Personal Info
 const firstNameField = document.getElementById('first-name');
@@ -53,7 +56,7 @@ function retrieveUserInfo() {
 updatePersonalInfoButton.addEventListener('click', () => {
   if (validateInputField([firstNameField, lastNameField, emailField, phoneField])) {
     const userId = retrieveUserInfo().id;
-    const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+    const db = new Database(databasePath, { verbose: console.log });
 
     try {
       const userQuery = db.prepare(`UPDATE auth SET first_name = @first_name, last_name = @last_name,
@@ -78,7 +81,7 @@ updatePersonalInfoButton.addEventListener('click', () => {
 updatePasswordButton.addEventListener('click', () => {
   if (validateInputField([firstNameField, lastNameField, emailField, phoneField])) {
     const userId = retrieveUserInfo().id;
-    let db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+    let db = new Database(databasePath, { verbose: console.log });
 
     try {
       const passwordRow = db.prepare('SELECT password FROM auth WHERE id = ?').get(userId);
@@ -91,7 +94,7 @@ updatePasswordButton.addEventListener('click', () => {
               bcrypt.hash(passwordOneField.value, 8, (hashError, hash) => {
                 console.log('hash generated');
                 if (hash) {
-                  db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+                  db = new Database(databasePath, { verbose: console.log });
                   db.prepare(`UPDATE auth SET password = ? WHERE id = ?`).run(hash, userId);
                   swal("Success", 'Personal info updated', "success");
                 } else {
@@ -117,7 +120,7 @@ updatePasswordButton.addEventListener('click', () => {
 
 updateCompanyInfoButton.addEventListener('click', () => {
   if (validateInputField([companyNameField, companyMottoField, companyAddressField])) {
-    const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+    const db = new Database(databasePath, { verbose: console.log });
 
     try {
       const userQuery = db.prepare(`UPDATE company SET company_name = ?, company_motto = ?, company_address = ? WHERE id = 1`);
@@ -135,7 +138,7 @@ updateCompanyInfoButton.addEventListener('click', () => {
 
 window.onload = () => {
   const userId = retrieveUserInfo().id;
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
 
   try {
     const userQuery = db.prepare(`SELECT id, first_name, last_name, email, date_joined, phone,
@@ -179,7 +182,7 @@ window.onload = () => {
   // Hide Elements from non admin users
   const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
   if (`${isAdmin}` === '0') {
-    const adminOnlyElements = document.getElementsByClassName('admin-only-button');
+    const adminOnlyElements = document.getElementsByClassName('d-none admin-only-button');
     for (const adminAlone of adminOnlyElements) {
       adminAlone.classList.add('d-none');
     }

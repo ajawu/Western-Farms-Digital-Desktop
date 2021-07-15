@@ -4,7 +4,10 @@ const Chartist = require('chartist');
 const numeral = require('numeral');
 const swal = require('sweetalert');
 const ChartistTooltip = require('chartist-plugin-tooltips-updated');
+const { app } = require('electron').remote;
+const path = require('path');
 
+const databasePath = path.join(app.getAppPath('userData').replace('app.asar', ''), 'western-data.db');
 const currentMonthTextFields = document.getElementsByClassName('current-month-text');
 const customerCountField = document.getElementById('customer-count');
 const salesTotalField = document.getElementById('salesTotal');
@@ -113,7 +116,7 @@ function getSalesPeriod(period) {
   }
 
   // Create and execute db query
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
 
   try {
     if (period === 'all') {
@@ -177,7 +180,7 @@ function getGraphData(period) {
   let query;
   let periods = [];
   // Create and execute db query
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
 
   if (period === 'today') {
     label = ['12 AM', '6 AM', '12 PM', '6 PM'];
@@ -391,7 +394,7 @@ window.onload = () => {
   // Hide Elements from non admin users
   const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
   if (`${isAdmin}` === '0') {
-    const adminOnlyElements = document.getElementsByClassName('admin-only-button');
+    const adminOnlyElements = document.getElementsByClassName('d-none admin-only-button');
     for (const adminAlone of adminOnlyElements) {
       adminAlone.classList.add('d-none');
     }

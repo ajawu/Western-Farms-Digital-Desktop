@@ -1,12 +1,11 @@
 {
-  "name": "my-electron-app",
+  "name": "western-farm-desktop",
   "version": "1.0.0",
-  "description": "Sample app to learn electron",
+  "description": "Inventory app for western farms",
   "main": "main.js",
   "author": "Ajawu David",
   "license": "MIT",
   "devDependencies": {
-    "@popperjs/core": "^2.9.2",
     "electron": "^13.1.2",
     "electron-builder": "^22.11.7",
     "eslint": "^7.2.0",
@@ -15,9 +14,11 @@
   },
   "scripts": {
     "start": "electron .",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "dist": "electron-builder"
   },
   "dependencies": {
+    "@popperjs/core": "^2.9.2",
     "@tarekraafat/autocomplete.js": "^10.2.4",
     "bcryptjs": "^2.4.3",
     "better-sqlite3": "^7.4.1",
@@ -31,6 +32,17 @@
     "mailgun-js": "^0.22.0",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
+    "print-this": "^1.15.1",
     "sweetalert": "^2.1.2"
+  },
+  "build": {
+    "appId": "com.electron.app",
+    "win": {
+      "target": "portable"
+    },
+    "portable": {
+      "unicode": false,
+      "artifactName": "western-farm.exe"
+    }
   }
 }

@@ -112,7 +112,7 @@
             <span class="sidebar-text">Inventory</span>
           </a>
         </li>
-        <li class="nav-item admin-only-button">
+        <li class="nav-item d-none admin-only-button">
           <a href="users-list.html" class="nav-link">
             <span class="sidebar-icon">
               <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -200,8 +200,9 @@
       <!-- Reports dropdown -->
       <div>
         <div class="d-inline-block">
-          <button type="button" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center admin-only-button"
-            id="addUser" data-bs-toggle="modal" data-bs-target="#product-modal" onclick="clearProductPopup()">
+          <button type="button"
+            class="btn btn-sm btn-gray-800 d-inline-flex align-items-center d-none admin-only-button" id="addUser"
+            data-bs-toggle="modal" data-bs-target="#product-modal" onclick="clearProductPopup()">
             <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
@@ -359,7 +360,7 @@
                 </div>
 
                 <div class="d-grid">
-                  <button type="submit" class="btn btn-gray-800 admin-only-button" id="addProductButton">Add
+                  <button type="submit" class="btn btn-gray-800 d-none admin-only-button" id="addProductButton">Add
                     Product</button>
                 </div>
               </div>
@@ -371,7 +372,7 @@
   </main>
 
   <!-- Core -->
-  <script src="../../assets/js/auth/logout.js"></script>
+  <script src="../../assets/js/logout.js"></script>
   <script src="../../vendor/@popperjs/core/dist/umd/popper.min.js"></script>
   <script src="../../vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 

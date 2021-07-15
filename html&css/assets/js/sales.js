@@ -4,8 +4,10 @@ const numeral = require('numeral');
 const Datatable = require('datatables.net-bs5')();
 const swal = require('sweetalert');
 const bootstrap = require('bootstrap');
-const { getCurrentWindow } = require('electron').remote;
+const { app, getCurrentWindow } = require('electron').remote;
+const path = require('path');
 
+const databasePath = path.join(app.getAppPath('userData').replace('app.asar', ''), 'western-data.db');
 const salesTableBody = $('#inventory-body');
 const salesDetailsBody = $('#salesDetailsBody');
 
@@ -41,7 +43,7 @@ function displayRow(salesId, customerName, totalRevenue, totalPrice, purchaseTim
                           clip-rule="evenodd"></path>
                   </svg> View Details
               </button>
-              <button class="dropdown-item d-flex align-items-center admin-only-button" onclick="processRefund(${salesId}, '${customerName}')">
+              <button class="dropdown-item d-flex align-items-center d-none admin-only-button" onclick="processRefund(${salesId}, '${customerName}')">
                   <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
@@ -52,7 +54,7 @@ function displayRow(salesId, customerName, totalRevenue, totalPrice, purchaseTim
               </button>
           </div>
         </div>
-        <button class="btn btn-link text-dark m-0 p-0 admin-only-button" onclick="addDelete(${salesId}, '${customerName}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <button class="btn btn-link text-dark m-0 p-0 d-none admin-only-button" onclick="addDelete(${salesId}, '${customerName}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
           <svg class="icon icon-xs text-danger" title="" data-bs-toggle="tooltip"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
             data-bs-original-title="Delete" aria-label="Delete">
@@ -93,7 +95,7 @@ function displaySalesData(productName, unitCost, quantity, totalCost, indexNumbe
  * get the first and last name of the user with matching user id
  */
 function getSalesRepName(userId) {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   try {
     const salesRepQuery = db.prepare('SELECT first_name, last_name FROM auth WHERE id = ?');
     const salesRep = salesRepQuery.get(userId);
@@ -109,7 +111,7 @@ function getSalesRepName(userId) {
  * Get all sales items with matching sale id and render it on the page
  */
 function getSalesItems(saleId) {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   try {
     const salesRepQuery = db.prepare('SELECT product_name, unit_cost, quantity, total_cost FROM sales_item WHERE sale = ?');
     let index = 1;
@@ -130,7 +132,7 @@ function getSalesItems(saleId) {
  * Get the sale with matching id
  */
 function getSale(salesId) {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   try {
     const selectProductQuery = db.prepare('SELECT customer_name, date(purchase_time) as purchase_date, total_price, total_revenue, payment_method, sales_rep FROM sales WHERE id = ?');
     const salesRow = selectProductQuery.get(`${salesId}`);
@@ -171,7 +173,7 @@ function processRefund(salesId, customerName) {
  * @param {number} addQuantity number to add to product quantity
  */
 function updateProduct(addQuantity, productId) {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   try {
     const productUpdateQuery = db.prepare('UPDATE product SET quantity = quantity + ? WHERE id = ?');
     productUpdateQuery.run(parseInt(addQuantity, 10), productId);
@@ -188,7 +190,7 @@ function updateProduct(addQuantity, productId) {
  * Refunds the product by updating existing product quantity numbers
  */
 function refundProduct() {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   const salesId = document.getElementById('refundSalesId').textContent;
   try {
     const salesItemQuery = db.prepare('SELECT quantity, product FROM sales_item WHERE sale = ?');
@@ -229,7 +231,7 @@ function addDelete(salesId, productName) {
  */
 // eslint-disable-next-line no-unused-vars
 function deleteProduct() {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   const salesId = document.getElementById('salesIdField').textContent;
   try {
     const deleteProductQuery = db.prepare('DELETE FROM sales WHERE id = ?');
@@ -248,7 +250,7 @@ function deleteProduct() {
  * Load products from database
  */
 function loadSales() {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   try {
     const salesQuery = db.prepare('SELECT id, customer_name, total_revenue, total_price, purchase_time, payment_method FROM sales');
     salesQuery.all().forEach((sale) => {
@@ -280,7 +282,7 @@ $(document).ready(() => {
   // Hide Elements from non admin users
   const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
   if (`${isAdmin}` === '0') {
-    const adminOnlyElements = document.getElementsByClassName('admin-only-button');
+    const adminOnlyElements = document.getElementsByClassName('d-none admin-only-button');
     for (const adminAlone of adminOnlyElements) {
       adminAlone.classList.add('d-none');
     }

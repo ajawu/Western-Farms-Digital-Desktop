@@ -17,6 +17,7 @@
   <link type="text/css" href="../../css/volt.css" rel="stylesheet">
   <link type="text/css" href="../../css/transaction.css" rel="stylesheet">
   <link href="../../vendor/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../../vendor/printjs/print.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../vendor/datatables/datatables.min.css">
   <style>
     .text-center {
@@ -116,7 +117,7 @@
             <span class="sidebar-text">Inventory</span>
           </a>
         </li>
-        <li class="nav-item admin-only-button">
+        <li class="nav-item d-none admin-only-button">
           <a href="users-list.html" class="nav-link">
             <span class="sidebar-icon">
               <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -202,9 +203,10 @@
       </div>
 
       <!-- Reports dropdown -->
-      <div class="admin-only-button">
+      <div class="d-none admin-only-button">
         <button class="btn btn-gray-800 d-inline-flex align-items-center dropdown-toggle" data-bs-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
+          aria-haspopup="true" aria-expanded="false" id="generate-report-button"
+          onclick="printJS('sales-table', 'html')">
           <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
             <path fill-rule="evenodd"
@@ -215,7 +217,7 @@
         </button>
       </div>
     </div>
-    <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5 mt-2">
+    <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5 mt-2" id="table-print">
       <div id="tableLoad" class="d-flex justify-content-center py-4">
         <i class="fas fa-sync fa-spin" style="font-size: 150px;"></i>
       </div>
@@ -395,12 +397,17 @@
   </main>
 
   <!-- Core -->
-  <script src="../../assets/js/auth/logout.js"></script>
+  <script src="../../assets/js/logout.js"></script>
   <script src="../../vendor/@popperjs/core/dist/umd/popper.min.js"></script>
   <script src="../../vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 
   <!-- Vendor JS -->
   <script src="../../vendor/onscreen/dist/on-screen.umd.min.js"></script>
+  <script src="../../vendor/jquery/jquery.min.js" type="text/javascript">
+    $('#generate-report-button').on("click", () => {
+      $('#table-print').printThis();
+    });
+  </script>
 
   <!-- Volt JS -->
   <script src="../../assets/js/volt.js"></script>

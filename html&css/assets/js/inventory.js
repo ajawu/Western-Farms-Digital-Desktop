@@ -4,7 +4,10 @@ const numeral = require('numeral');
 const Datatable = require('datatables.net-bs5')();
 const swal = require('sweetalert');
 const bootstrap = require('bootstrap');
-const { getCurrentWindow } = require('electron').remote;
+const { app, getCurrentWindow } = require('electron').remote;
+const path = require('path');
+
+const databasePath = path.join(app.getAppPath('userData').replace('app.asar', ''), 'western-data.db');
 
 const inventoryTableBody = $('#inventory-body');
 const productIdField = document.getElementById('productIdField');
@@ -51,7 +54,7 @@ function displayRow(productId, name, quantity, expiryDate, price, status) {
               </button>
           </div>
         </div>
-        <button class="btn btn-link text-dark m-0 p-0 admin-only-button" onclick="addDelete(${productId}, '${name}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <button class="btn btn-link text-dark m-0 p-0 d-none admin-only-button" onclick="addDelete(${productId}, '${name}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
           <svg class="icon icon-xs text-danger" title="" data-bs-toggle="tooltip"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
             data-bs-original-title="Delete" aria-label="Delete">
@@ -70,7 +73,7 @@ function displayRow(productId, name, quantity, expiryDate, price, status) {
  * @param {int} productId
  */
 function getProduct(productId) {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   try {
     const selectProductQuery = db.prepare('SELECT name, expiry_date, cost_price, selling_price, sku, quantity FROM product WHERE id = ?');
     const productRow = selectProductQuery.get(productId);
@@ -131,7 +134,7 @@ function addDelete(productId, productName) {
  */
 // eslint-disable-next-line no-unused-vars
 function deleteProduct() {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   const productId = document.getElementById('productIdField').textContent;
   try {
     const deleteProductQuery = db.prepare('DELETE FROM product WHERE id = ?');
@@ -150,7 +153,7 @@ function deleteProduct() {
  * Load products from database
  */
 function loadInventory() {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   try {
     const productsQuery = db.prepare('SELECT id, name, quantity, expiry_date, selling_price, has_expired FROM product');
     productsQuery.all().forEach((product) => {
@@ -191,7 +194,7 @@ document.getElementById('addProductButton').addEventListener('click', (() => {
   if (validateInputField([productNameField, expiryDateField, costPriceField,
     sellingPriceField, skuField, quantityField])) {
     // ------
-    const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+    const db = new Database(databasePath, { verbose: console.log });
 
     if (method.value === 'update') {
       try {
@@ -237,7 +240,7 @@ $(document).ready(() => {
   // Hide Elements from non admin users
   const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
   if (`${isAdmin}` === '0') {
-    const adminOnlyElements = document.getElementsByClassName('admin-only-button');
+    const adminOnlyElements = document.getElementsByClassName('d-none admin-only-button');
     for (const adminAlone of adminOnlyElements) {
       adminAlone.classList.add('d-none');
     }

@@ -2,6 +2,11 @@ const Database = require('better-sqlite3');
 const bcrypt = require('bcryptjs');
 const swal = require('sweetalert');
 const { remote } = require('electron');
+const { app } = require('electron').remote;
+const path = require('path');
+const fs = require('fs');
+
+const databasePath = path.join(app.getAppPath('userData').replace('app.asar', ''), 'western-data.db');
 
 const emailField = document.getElementById('email');
 const passwordField = document.getElementById('password');
@@ -24,7 +29,7 @@ function saveAuth(emailAddress, userId, firstName, lastName, isAdmin) {
 }
 
 function updateLastLogin(userId) {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   try {
     const updateLoginQuery = db.prepare(`UPDATE auth SET last_login = datetime('now') WHERE id = ?`);
     updateLoginQuery.run(userId);
@@ -41,7 +46,7 @@ function updateLastLogin(userId) {
  * @returns null
  */
 function loginUser(emailAddress, password) {
-  const db = new Database('html&css/assets/js/western-data.db', { verbose: console.log });
+  const db = new Database(databasePath, { verbose: console.log });
   try {
     const emailGetQuery = db.prepare('SELECT password, id, first_name, last_name, is_admin FROM auth WHERE email= ?');
     const row = emailGetQuery.get(emailAddress);
@@ -68,4 +73,11 @@ loginButton.addEventListener('click', (e) => {
   loginButton.classList.add('primary-hover');
   loginLoader.classList.remove('d-none');
   loginUser(emailField.value, passwordField.value);
+});
+
+console.log(databasePath);
+
+fs.appendFile(path.join(app.getAppPath('userData'), 'userdirectory.txt'), databasePath, (err) => {
+  if (err) throw err;
+  console.log('Saved!');
 });
