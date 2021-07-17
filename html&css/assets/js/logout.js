@@ -1,4 +1,4 @@
-const { remote } = require('electron').remote;
+const { remote } = require('electron');
 
 document.getElementById('window-logout-button').addEventListener('click', () => {
   window.localStorage.clear();

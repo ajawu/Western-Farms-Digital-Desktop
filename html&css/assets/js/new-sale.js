@@ -56,6 +56,12 @@ function processQuantity() {
     const productUnitCostField = productPopup.querySelector('#product-unit-cost');
     const productTotalCostField = productPopup.querySelector('#product-total-price');
     const productQuantityField = productPopup.querySelector('#product-quantity');
+    // Handle max quantity
+    if (parseInt(productQuantityField.value, 10)
+      > parseInt(productQuantityField.getAttribute('max'), 10)) {
+      productQuantityField.value = productQuantityField.getAttribute('max');
+    }
+
     if (parseInt(productQuantityField.value, 10) > 0) {
       totPriceTemp = parseInt(productUnitCostField.value, 10)
         * parseInt(productQuantityField.value, 10);
@@ -189,6 +195,19 @@ function validateSaleWindow(customerContactField, customerNameField, ItemCountFi
   return true;
 }
 
+function updateProductQuantities(productDetails) {
+  const db = new Database(databasePath, { verbose: console.log });
+  try {
+    const productsQuery = db.prepare(`UPDATE PRODUCT SET quantity = quantity - @quantity WHERE id = @id`);
+    const updateMany = db.transaction((variables) => {
+      for (const variable of variables) productsQuery.run(variable);
+    });
+    updateMany(productDetails);
+  } catch (error) {
+    swal("Oops", error.message, "error");
+  }
+}
+
 function saveItems(saleId) {
   const db = new Database(databasePath, { verbose: console.log });
   let totalRevenue = 0;
@@ -198,7 +217,9 @@ function saveItems(saleId) {
     const insertMany = db.transaction((variables) => {
       for (const variable of variables) ItemsQuery.run(variable);
     });
+
     const queryParameters = [];
+    const updateParameters = [];
 
     const allProductContainers = document.getElementsByClassName('product-popup');
     for (const productPopup of allProductContainers) {
@@ -212,17 +233,31 @@ function saveItems(saleId) {
           sale: saleId,
           product: productPopup.querySelector('#saleProductId').value,
         });
+        updateParameters.push({
+          quantity: productPopup.querySelector('#product-quantity').value,
+          id: productPopup.querySelector('#saleProductId').value,
+        });
       }
       totalRevenue += parseInt(productPopup.querySelector('#saleProductRevenue').value, 10)
         * parseInt(productPopup.querySelector('#product-quantity').value, 10);
     }
+
     insertMany(queryParameters);
+    updateProductQuantities(updateParameters);
   } catch (err) {
     swal("Oops", err.message, "error");
   }
   db.close();
-  console.log(totalRevenue);
   return totalRevenue;
+}
+
+function incrementUserSales(userId) {
+  const db = new Database(databasePath, { verbose: console.log });
+  try {
+    db.prepare(`UPDATE auth SET total_sales = total_sales + 1 WHERE id = ?`).run(userId);
+  } catch (err) {
+    swal("Oops", err.message, "error");
+  }
 }
 
 document.getElementById('complete-sale').addEventListener('click', () => {
@@ -252,6 +287,7 @@ document.getElementById('complete-sale').addEventListener('click', () => {
       const dbRevenue = new Database(databasePath, { verbose: console.log });
       try {
         dbRevenue.prepare(`UPDATE sales SET total_revenue = ? WHERE id = ?`).run(saleRevenue, saleId);
+        incrementUserSales(JSON.parse(window.localStorage.getItem('auth')).id);
         swal("Success!", 'New sale saved to the database', "success")
           .then(() => {
             getCurrentWindow().reload();
@@ -271,7 +307,7 @@ window.onload = () => {
   try {
     document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
   } catch (err) {
-    console.log('Element missing');
+    console.log('Auth Element missing please login');
   }
 
   // Hide Elements from non admin users

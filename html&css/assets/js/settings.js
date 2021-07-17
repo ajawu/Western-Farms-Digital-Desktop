@@ -25,7 +25,6 @@ const companyAddressField = document.getElementById('address');
 
 const updatePersonalInfoButton = document.getElementById('personal-button');
 const updatePasswordButton = document.getElementById('password-button');
-const updateCompanyInfoButton = document.getElementById('company-button');
 
 /**
  * Validate the input for the fields in the product popup and display errors for invalid fields
@@ -118,23 +117,25 @@ updatePasswordButton.addEventListener('click', () => {
   }
 });
 
-updateCompanyInfoButton.addEventListener('click', () => {
-  if (validateInputField([companyNameField, companyMottoField, companyAddressField])) {
-    const db = new Database(databasePath, { verbose: console.log });
+// const updateCompanyInfoButton = document.getElementById('company-button');
 
-    try {
-      const userQuery = db.prepare(`UPDATE company SET company_name = ?, company_motto = ?, company_address = ? WHERE id = 1`);
-      userQuery.run(companyNameField.value, companyMottoField.value, companyAddressField.value);
-      swal("Success", 'Company info updated', "success")
-        .then(() => {
-          // getCurrentWindow().reload();
-        });
-    } catch (err) {
-      swal("Oops!", err.message, "error");
-    }
-    db.close();
-  }
-});
+// updateCompanyInfoButton.addEventListener('click', () => {
+//   if (validateInputField([companyNameField, companyMottoField, companyAddressField])) {
+//     const db = new Database(databasePath, { verbose: console.log });
+
+//     try {
+//       const userQuery = db.prepare(`UPDATE company SET company_name = ?, company_motto = ?, company_address = ? WHERE id = 1`);
+//       userQuery.run(companyNameField.value, companyMottoField.value, companyAddressField.value);
+//       swal("Success", 'Company info updated', "success")
+//         .then(() => {
+//           // getCurrentWindow().reload();
+//         });
+//     } catch (err) {
+//       swal("Oops!", err.message, "error");
+//     }
+//     db.close();
+//   }
+// });
 
 window.onload = () => {
   const userId = retrieveUserInfo().id;
@@ -160,17 +161,17 @@ window.onload = () => {
     swal("Oops!", err.message, "error");
   }
 
-  try {
-    const companyRow = db.prepare(`SELECT * FROM company`).get();
-    if (companyRow) {
-      companyNameField.value = companyRow.company_name;
-      companyMottoField.value = companyRow.company_motto;
-      companyAddressField.value = companyRow.company_address;
-    }
-  } catch (err) {
-    swal("Oops!", err.message, "error");
-  }
-  db.close();
+  // try {
+  //   const companyRow = db.prepare(`SELECT * FROM company`).get();
+  //   if (companyRow) {
+  //     companyNameField.value = companyRow.company_name;
+  //     companyMottoField.value = companyRow.company_motto;
+  //     companyAddressField.value = companyRow.company_address;
+  //   }
+  // } catch (err) {
+  //   swal("Oops!", err.message, "error");
+  // }
+  // db.close();
 
   // Display Name
   try {

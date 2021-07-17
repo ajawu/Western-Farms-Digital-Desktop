@@ -16,7 +16,7 @@ function createWindow() {
     },
   });
 
-  win.loadFile('html&css/pages/dashboard/dashboard.html');
+  win.loadFile('html&css/pages/auth/sign-in.html');
   win.maximize();
   // win.removeMenu();
   // win.openDevTools();

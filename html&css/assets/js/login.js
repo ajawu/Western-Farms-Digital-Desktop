@@ -53,7 +53,11 @@ function loginUser(emailAddress, password) {
     if (bcrypt.compareSync(password, row.password)) {
       saveAuth(emailAddress, row.id, row.first_name, row.last_name, row.is_admin);
       updateLastLogin(row.id);
-      remote.getCurrentWindow().loadFile('html&css/pages/dashboard/dashboard.html');
+      if (row.is_admin === 1) {
+        remote.getCurrentWindow().loadFile('html&css/pages/dashboard/dashboard.html');
+      } else {
+        remote.getCurrentWindow().loadFile('html&css/pages/dashboard/new-sale.html');
+      }
     } else {
       loginButton.classList.add('btn-gray-800');
       loginButton.classList.remove('primary-hover');

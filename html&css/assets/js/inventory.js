@@ -237,12 +237,12 @@ $(document).ready(() => {
     console.log('Element missing');
   }
 
-  // Hide Elements from non admin users
+  // Display admin only elements
   const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
-  if (`${isAdmin}` === '0') {
-    const adminOnlyElements = document.getElementsByClassName('d-none admin-only-button');
-    for (const adminAlone of adminOnlyElements) {
-      adminAlone.classList.add('d-none');
+  const adminElments = document.getElementsByClassName('admin-only-button');
+  if (parseInt(isAdmin, 10) === 1) {
+    for (const adminElement of adminElments) {
+      adminElement.classList.remove('d-none');
     }
   }
 });
