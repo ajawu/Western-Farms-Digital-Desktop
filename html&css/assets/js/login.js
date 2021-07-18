@@ -4,7 +4,6 @@ const swal = require('sweetalert');
 const { remote } = require('electron');
 const { app } = require('electron').remote;
 const path = require('path');
-const fs = require('fs');
 
 const databasePath = path.join(app.getAppPath('userData').replace('app.asar', ''), 'western-data.db');
 
@@ -77,11 +76,4 @@ loginButton.addEventListener('click', (e) => {
   loginButton.classList.add('primary-hover');
   loginLoader.classList.remove('d-none');
   loginUser(emailField.value, passwordField.value);
-});
-
-console.log(databasePath);
-
-fs.appendFile(path.join(app.getAppPath('userData'), 'userdirectory.txt'), databasePath, (err) => {
-  if (err) throw err;
-  console.log('Saved!');
 });
