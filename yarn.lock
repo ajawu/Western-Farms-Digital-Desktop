@@ -2635,6 +2635,11 @@ prepend-http@^2.0.0:
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-2.0.0.tgz#e92434bfa5ea8c19f41cdfd401d741a3c819d897"
   integrity sha1-6SQ0v6XqjBn0HN/UAddBo8gZ2Jc=
 
+print-html-element@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/print-html-element/-/print-html-element-0.5.1.tgz#ad8a4b32045e0e8411bc55a30116b1f136bd7e86"
+  integrity sha1-rYpLMgReDoQRvFWjARax8Ta9foY=
+
 print-this@^1.15.1:
   version "1.15.1"
   resolved "https://registry.yarnpkg.com/print-this/-/print-this-1.15.1.tgz#0aa849b9710c0c897a30fa2f27b3bcd6738300c2"

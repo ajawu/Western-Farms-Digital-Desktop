@@ -32,6 +32,7 @@
     "mailgun-js": "^0.22.0",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
+    "print-html-element": "^0.5.1",
     "print-this": "^1.15.1",
     "sweetalert": "^2.1.2"
   },

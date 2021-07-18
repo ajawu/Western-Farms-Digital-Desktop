@@ -1,10 +1,14 @@
 const AutoComplete = require('@tarekraafat/autocomplete.js');
 const Database = require('better-sqlite3');
 const $ = require('jquery');
+const PHE = require('print-html-element');
+const bootstrap = require('bootstrap');
+const moment = require('moment');
 const swal = require('sweetalert');
 const validator = require('email-validator');
 const { app, getCurrentWindow } = require('electron').remote;
 const path = require('path');
+const { parse } = require('path');
 
 const databasePath = path.join(app.getAppPath('userData').replace('app.asar', ''), 'western-data.db');
 const salesTotalPrice = document.getElementById('total-price');
@@ -170,6 +174,10 @@ function getId() {
   return JSON.parse(window.localStorage.getItem('auth')).id;
 }
 
+function getName() {
+  return JSON.parse(window.localStorage.getItem('auth')).name;
+}
+
 function validateSaleWindow(customerContactField, customerNameField, ItemCountField) {
   if (validator.validate(customerContactField.value)
     || validatePhoneNumber(customerContactField.value)) {
@@ -209,6 +217,7 @@ function updateProductQuantities(productDetails) {
 }
 
 function saveItems(saleId) {
+  const tableBodyPopup = $('#table-body-popup tbody');
   const db = new Database(databasePath, { verbose: console.log });
   let totalRevenue = 0;
   try {
@@ -240,6 +249,20 @@ function saveItems(saleId) {
       }
       totalRevenue += parseInt(productPopup.querySelector('#saleProductRevenue').value, 10)
         * parseInt(productPopup.querySelector('#product-quantity').value, 10);
+      const tablePopupRow = `
+        <tr>
+          <td class="text-center">
+            ${productPopup.querySelector('#product-name').value}
+          </td>
+          <td class="text-center">
+            ${productPopup.querySelector('#product-quantity').value}
+          </td>
+          <td class="text-center">
+            ₦${productPopup.querySelector('#product-total-price').value}
+          </td>
+        </tr>
+      `;
+      tableBodyPopup.append(tablePopupRow);
     }
 
     insertMany(queryParameters);
@@ -267,31 +290,49 @@ document.getElementById('complete-sale').addEventListener('click', () => {
   let saleId;
 
   if (validateSaleWindow(customerContactField, customerNameField, salesProductCount)) {
+    // Update print popup
+    document.getElementById('customer-name-popup').textContent = customerNameField.value;
+    document.getElementById('customer-contact-popup').textContent = customerContactField.value;
+    document.getElementById('sales-payment-popup').textContent = paymentMethodField.value;
+    document.getElementById('sales-rep-popup').textContent = getName();
+    document.getElementById('sales-date-popup').textContent = moment().format('D/MM/YYYY, hh:mm:ss');
+    const hasVat = document.getElementById('include-vat').checked ? 1 : 0;
+    let salesTotal = 0;
+    let vatTotal = 0;
+    if (hasVat === 1) {
+      vatTotal = parseInt(salesTotalPrice.value, 10) * 0.075;
+      salesTotal = parseInt(salesTotalPrice.value, 10) + vatTotal;
+    } else {
+      salesTotal = parseInt(salesTotalPrice.value, 10);
+    }
+    document.getElementById('total-text-popup').textContent = `₦${salesTotal}`;
+    document.getElementById('vat-text-popup').textContent = `₦${vatTotal}`;
+
     // Save Sales
     const db = new Database(databasePath, { verbose: console.log });
     try {
       const salesRow = db.prepare(`INSERT INTO sales (customer_name, purchase_time, total_price,
-          total_revenue, payment_method, sales_rep, customer_contact) VALUES(?, 
-          datetime('now'), ?, ?, ?, ?, ?)`)
-        .run(customerNameField.value, salesTotalPrice.value, 0, paymentMethodField.value,
-          getId(), customerContactField.value);
+          total_revenue, payment_method, sales_rep, customer_contact, includes_vat) VALUES(?, 
+          datetime('now'), ?, ?, ?, ?, ?, ?)`)
+        .run(customerNameField.value, salesTotal, 0, paymentMethodField.value,
+          getId(), customerContactField.value, hasVat);
       saleId = salesRow.lastInsertRowid;
     } catch (err) {
       swal("Oops", err.message, "error");
     }
     db.close();
+
     // Save Sales Items
     const saleRevenue = saveItems(saleId);
-    console.log(saleRevenue);
+    document.getElementById('sales-id-popup').textContent = saleId;
+
     if (saleRevenue > 0) {
       const dbRevenue = new Database(databasePath, { verbose: console.log });
       try {
         dbRevenue.prepare(`UPDATE sales SET total_revenue = ? WHERE id = ?`).run(saleRevenue, saleId);
-        incrementUserSales(JSON.parse(window.localStorage.getItem('auth')).id);
-        swal("Success!", 'New sale saved to the database', "success")
-          .then(() => {
-            getCurrentWindow().reload();
-          });
+        incrementUserSales(getId());
+        const invoiceModal = new bootstrap.Modal(document.getElementById('invoice-modal'));
+        invoiceModal.show();
       } catch (err) {
         swal("Oops", err.message, "error");
       }
@@ -302,20 +343,6 @@ document.getElementById('complete-sale').addEventListener('click', () => {
   }
 });
 
-window.onload = () => {
-  // Display Name
-  try {
-    document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
-  } catch (err) {
-    console.log('Auth Element missing please login');
-  }
-
-  // Hide Elements from non admin users
-  const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
-  if (`${isAdmin}` === '0') {
-    const adminOnlyElements = document.getElementsByClassName('d-none admin-only-button');
-    for (const adminAlone of adminOnlyElements) {
-      adminAlone.classList.add('d-none');
-    }
-  }
-};
+document.getElementById('printInvoiceButton').addEventListener('click', () => {
+  PHE.printElement(document.getElementById('invoice-print'));
+});

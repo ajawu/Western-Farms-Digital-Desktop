@@ -2,6 +2,7 @@ const Database = require('better-sqlite3');
 const $ = require('jquery');
 const numeral = require('numeral');
 const Datatable = require('datatables.net-bs5')();
+const PHE = require('print-html-element');
 const swal = require('sweetalert');
 const bootstrap = require('bootstrap');
 const { app, getCurrentWindow } = require('electron').remote;
@@ -279,12 +280,16 @@ $(document).ready(() => {
     console.log('Element missing');
   }
 
-  // Hide Elements from non admin users
+  // Display admin only elements
   const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
-  if (`${isAdmin}` === '0') {
-    const adminOnlyElements = document.getElementsByClassName('d-none admin-only-button');
-    for (const adminAlone of adminOnlyElements) {
-      adminAlone.classList.add('d-none');
+  const adminElments = document.getElementsByClassName('admin-only-button');
+  if (parseInt(isAdmin, 10) === 1) {
+    for (const adminElement of adminElments) {
+      adminElement.classList.remove('d-none');
     }
   }
+});
+
+document.getElementById('generate-report-button').addEventListener('click', () => {
+  PHE.printElement(document.getElementById('sales-table'));
 });

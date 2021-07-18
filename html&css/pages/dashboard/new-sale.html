@@ -207,7 +207,7 @@
             </div>
           </div>
           <div class="row justify-content-center">
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-3">
               <div>
                 <label for="first-name">Customer Contact</label>
                 <input class="form-control" id="customer-contact" type="text"
@@ -217,14 +217,22 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-6 mb-4">
+              <div class="form-check mt-4 pt-3">
+                <input class="form-check-input" type="checkbox" value="" id="include-vat" checked>
+                <label class="form-check-label mb-0" for="remember">
+                  Include VAT
+                </label>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
               <div>
                 <label for="total-price">Sales Total Price</label>
                 <input class="form-control" id="total-price" type="text" placeholder="Total price of sale" required
                   disabled>
               </div>
             </div>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-6 mb-4">
               <div>
                 <label for="item-count">Sales Product Count</label>
                 <input class="form-control" id="item-count" type="number" placeholder="Total number of items" required
@@ -236,6 +244,10 @@
             <div class="autoComplete_wrapper">
               <input id="autoComplete" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off"
                 autocapitalize="off" class="form-control">
+              <button class="btn bg-danger text-white" onclick="location.reload()"
+                style="width: 200px; margin-left: 50px;">
+                Refresh
+              </button>
             </div>
           </div>
           <div id="product-popup-container">
@@ -245,13 +257,111 @@
               <button class="btn btn-gray-800 mt-2 animate-up-2" style="width: 100%;" id="complete-sale">
                 Complete Sale
               </button>
+              <!-- <button class="btn btn-gray-800 mt-2 animate-up-2" style="width: 100%;" data-bs-toggle="modal"
+                data-bs-target="#invoice-modal">
+                Show popup
+              </button> -->
             </div>
           </div>
         </div>
       </div>
     </div>
   </main>
+
+  <!-- Invoice Modal -->
+  <div class="modal fade" id="invoice-modal" tabindex="-1" role="dialog" aria-labelledby="invoice-modal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-product" role="document">
+      <div class="modal-content">
+        <div class="modal-footer justify-content-evenly mb-2">
+          <button type="submit" class="btn btn-gray-800 mr-2" id="printInvoiceButton">
+            Print Receipt
+          </button>
+          <button type="submit" class="btn btn-danger" id="close-modal" data-bs-dismiss="modal"
+            onclick="location.reload();">
+            Cancel Print
+          </button>
+        </div>
+        <div class="modal-body p-0" id="invoice-print">
+          <h3 class="text-center mb-3">Western Farms</h3>
+
+          <div class="row m-auto">
+            <div class="col-6">
+              <p style="font-size: 14px;" class="fw-bold border border-primary p-2">
+                <span style="text-transform: uppercase;">Name:</span>
+                <span id="customer-name-popup"></span>
+              </p>
+              <p style="font-size: 14px;" class="fw-bold border border-primary p-2">
+                <span style="text-transform: uppercase;">Contact:</span>
+                <span id="customer-contact-popup"></span>
+              </p>
+              <p style="font-size: 14px;" class="fw-bold border border-primary p-2">
+                <span style="text-transform: uppercase;">Payment Method:</span>
+                <span id="sales-payment-popup"></span>
+              </p>
+            </div>
+            <div class="col-6">
+              <p style="font-size: 14px;" class="fw-bold border border-primary p-2">
+                <span style="text-transform: uppercase;">Date:</span>
+                <span id="sales-date-popup"></span>
+              </p>
+              <p style="font-size: 14px;" class="fw-bold border border-primary p-2">
+                <span style="text-transform: uppercase;">Receipt ID:</span>
+                <span id="sales-id-popup"></span>
+              </p>
+              <p style="font-size: 14px;" class="fw-bold border border-primary p-2">
+                <span style="text-transform: uppercase;">Rep:</span>
+                <span id="sales-rep-popup"></span>
+              </p>
+            </div>
+          </div>
+
+          <table class="table table-bordered" id="table-body-popup">
+            <thead class="thead-light">
+              <tr class="tabletitle">
+                <th scope="col" class="text-center">Item</th>
+                <th scope="col" class="text-center">Qty</th>
+                <th scope="col" class="text-center">Sub Total</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+              <tr style="background-color: #F2F4F6 !important;">
+                <td>
+                </td>
+                <td class="text-center">
+                  VAT (7.5%)
+                </td>
+                <td class="text-center text-danger fw-bold" id="vat-text-popup">
+                  ₦0
+                </td>
+              </tr>
+
+              <tr style="background-color: #F2F4F6 !important;">
+                <td>
+                </td>
+                <td class="text-center">
+                  Total
+                </td>
+                <td class="text-center text-success fw-bold" id="total-text-popup">
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+          <div id="legalcopy">
+            <p class="text-center">
+              <strong>Thank you for your business!</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Volt JS -->
+  <script src="../../vendor/@popperjs/core/dist/umd/popper.min.js"></script>
+  <script src="../../vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+
   <script src="../../assets/js/logout.js"></script>
   <script src="../../assets/js/new-sale.js"></script>
 
