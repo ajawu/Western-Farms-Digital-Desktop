@@ -271,7 +271,7 @@
   <!-- Invoice Modal -->
   <div class="modal fade" id="invoice-modal" tabindex="-1" role="dialog" aria-labelledby="invoice-modal"
     aria-hidden="true">
-    <div class="modal-dialog modal-product" role="document" style="width: 300px; color: #000 !important;">
+    <div class="modal-dialog modal-product" role="document" style="width: 200px; color: #000 !important;">
       <div class="modal-content">
         <div class="modal-footer justify-content-evenly mb-2">
           <button type="submit" class="btn btn-gray-800 mr-2" id="printInvoiceButton">
@@ -283,34 +283,30 @@
           </button>
         </div>
         <div class="modal-body p-0" id="invoice-print">
-          <h3 class="text-center" style="font-weight: 400; color: #000;">Western Farms</h3>
+          <h3 class="text-center" style="font-weight: 400; color: #000; font-size: 20px;">Western Farms</h3>
 
           <div class="row m-auto border mb-2">
-            <div class="col-6 p-0">
-              <p style="font-size: 12px;" class="border-primary p-1 mb-1">
-                <span id="customer-name-popup"></span>
-              </p>
-              <p style="font-size: 12px;" class="border-primary p-1 mb-1">
-                <span id="customer-contact-popup"></span>
-              </p>
-              <p style="font-size: 12px;" class="border-primary p-1 mb-1">
-                <span style="text-transform: uppercase;">Paid </span>
-                <span id="sales-payment-popup"></span>
-              </p>
-            </div>
-            <div class="col-6 p-0">
-              <p style="font-size: 12px;" class="border-primary p-1 mb-1">
-                <span id="sales-date-popup"></span>
-              </p>
-              <p style="font-size: 12px;" class="border-primary p-1 mb-1">
-                <span style="text-transform: uppercase;">ID</span>
-                <span id="sales-id-popup"></span>
-              </p>
-              <p style="font-size: 12px;" class="border-primary p-1 mb-1">
-                <span style="text-transform: uppercase;">Rep:</span>
-                <span id="sales-rep-popup"></span>
-              </p>
-            </div>
+            <p class="border-primary p-1 mb-1 receipt-title">
+              <span id="customer-name-popup"></span>
+            </p>
+            <p class="border-primary p-1 mb-1 receipt-title">
+              <span id="customer-contact-popup"></span>
+            </p>
+            <p class="border-primary p-1 mb-1 receipt-title">
+              <span style="text-transform: uppercase;">Paid:</span>
+              <span id="sales-payment-popup"></span>
+            </p>
+            <p class="border-primary p-1 mb-1 receipt-title">
+              <span id="sales-date-popup"></span>
+            </p>
+            <p class="border-primary p-1 mb-1 receipt-title">
+              <span style="text-transform: uppercase;">ID:</span>
+              <span id="sales-id-popup"></span>
+            </p>
+            <p class="border-primary p-1 mb-1 receipt-title">
+              <span style="text-transform: uppercase;">Rep:</span>
+              <span id="sales-rep-popup"></span>
+            </p>
           </div>
 
           <table class="table table-bordered" id="table-body-popup">
@@ -322,6 +318,11 @@
               </tr>
             </thead>
             <tbody style="color: #000 !important;">
+              <tr>
+                <td>Broiler Cage</td>
+                <td>2</td>
+                <td>18,000</td>
+              </tr>
             </tbody>
             <tfoot>
               <tr style="background-color: #F2F4F6 !important; color: #000 !important;">
@@ -348,7 +349,7 @@
           </table>
           <div id="legalcopy">
             <p class="text-center" style="color: #000;">
-              Thank you for your business!
+              Thanks for your business!
             </p>
           </div>
         </div>

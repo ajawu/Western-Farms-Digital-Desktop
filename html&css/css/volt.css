@@ -28626,3 +28626,8 @@ article .h1, article .h2, article .h3, article .h4, article .h5, article .h6 {
 .bg-light-green {
     background-color: #edfbf3;
 }
+
+.receipt-title {
+    color: #000;
+    font-size: 14px;
+}

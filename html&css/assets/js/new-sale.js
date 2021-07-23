@@ -22,7 +22,7 @@ function getProducts() {
   const db = new Database(databasePath, { verbose: console.log });
   const products = [];
   try {
-    db.prepare('SELECT name FROM product').all().forEach((row) => {
+    db.prepare('SELECT name FROM product WHERE is_deleted = 0').all().forEach((row) => {
       products.push(row.name);
     });
   } catch (err) {
@@ -40,7 +40,7 @@ function getProducts() {
 function getDetails(productName) {
   const db = new Database(databasePath, { verbose: console.log });
   try {
-    return db.prepare('SELECT id, quantity, selling_price, cost_price FROM product WHERE name = ?').get(productName);
+    return db.prepare('SELECT id, quantity, selling_price, cost_price FROM product WHERE name = ? AND is_deleted = 0').get(productName);
   } catch (err) {
     swal("Oops", err.message, "error");
   }
@@ -339,7 +339,7 @@ document.getElementById('complete-sale').addEventListener('click', () => {
       dbRevenue.close();
     }
   } else {
-    swal("Error!", 'Ensure allfields are filled', "error");
+    swal("Error!", 'Ensure all fields are filled', "error");
   }
 });
 
