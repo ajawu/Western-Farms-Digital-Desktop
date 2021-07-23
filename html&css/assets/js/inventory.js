@@ -137,7 +137,7 @@ function deleteProduct() {
   const db = new Database(databasePath, { verbose: console.log });
   const productId = document.getElementById('productIdField').textContent;
   try {
-    const deleteProductQuery = db.prepare('DELETE FROM product WHERE id = ?');
+    const deleteProductQuery = db.prepare('UPDATE product SET is_deleted = 1 WHERE id = ?');
     deleteProductQuery.run(productId);
     swal("Success", "Product deleted successfully!", "success")
       .then(() => {
@@ -155,7 +155,7 @@ function deleteProduct() {
 function loadInventory() {
   const db = new Database(databasePath, { verbose: console.log });
   try {
-    const productsQuery = db.prepare('SELECT id, name, quantity, expiry_date, selling_price, has_expired FROM product');
+    const productsQuery = db.prepare('SELECT id, name, quantity, expiry_date, selling_price, has_expired FROM product WHERE is_deleted = 0');
     productsQuery.all().forEach((product) => {
       displayRow(product.id, product.name, product.quantity, product.expiry_date,
         product.selling_price, product.has_expired);
