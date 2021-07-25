@@ -217,7 +217,7 @@ function updateProductQuantities(productDetails) {
 }
 
 function saveItems(saleId) {
-  const tableBodyPopup = $('#table-body-popup tbody');
+  const tableBodyPopup = $('#table-popup-data');
   const db = new Database(databasePath, { verbose: console.log });
   let totalRevenue = 0;
   try {
@@ -250,17 +250,20 @@ function saveItems(saleId) {
       totalRevenue += parseInt(productPopup.querySelector('#saleProductRevenue').value, 10)
         * parseInt(productPopup.querySelector('#product-quantity').value, 10);
       const tablePopupRow = `
-        <tr>
-          <td class="text-center">
-            ${productPopup.querySelector('#product-name').value}
-          </td>
-          <td class="text-center">
-            ${productPopup.querySelector('#product-quantity').value}
-          </td>
-          <td class="text-center">
-            ₦${productPopup.querySelector('#product-total-price').value}
-          </td>
-        </tr>
+        <div style="color: #000; border-bottom: 1px solid #000; padding: 10px 5px 5px;">
+          <p>
+            <span style="font-weight: 500;">Item</span>
+            <em>${productPopup.querySelector('#product-name').value}</em>
+          </p>
+          <p>
+            <span style="font-weight: 500;">Quantity</span>
+            <em>${productPopup.querySelector('#product-quantity').value}</em>
+          </p>
+          <p class="mb-1">
+            <span style="font-weight: 500;">Subtotal</span>
+            <em>₦${productPopup.querySelector('#product-total-price').value}</em>
+          </p>
+        </div>
       `;
       tableBodyPopup.append(tablePopupRow);
     }
