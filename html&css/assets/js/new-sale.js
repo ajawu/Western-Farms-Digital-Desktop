@@ -250,7 +250,7 @@ function saveItems(saleId) {
       totalRevenue += parseInt(productPopup.querySelector('#saleProductRevenue').value, 10)
         * parseInt(productPopup.querySelector('#product-quantity').value, 10);
       const tablePopupRow = `
-        <div style="color: #000; border-bottom: 1px solid #000; padding: 10px 5px 5px;">
+        <div style="color: #000; border-bottom: 1px solid #000; border-top: 1px solid #000; padding: 10px 5px 5px;">
           <p>
             <span style="font-weight: 500;">Item</span>
             <em>${productPopup.querySelector('#product-name').value}</em>

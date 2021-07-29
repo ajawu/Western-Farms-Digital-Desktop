@@ -310,30 +310,17 @@
           </div>
 
           <div id="table-popup-data"></div>
-          <table class="table table-bordered" id="table-body-popup">
-            <tfoot>
-              <tr style="background-color: #F2F4F6 !important; color: #000 !important;">
-                <td>
-                </td>
-                <td class="text-center">
-                  VAT (7.5%)
-                </td>
-                <td class="text-center text-danger fw-bold" id="vat-text-popup">
-                  ₦0
-                </td>
-              </tr>
-          
-              <tr style="background-color: #F2F4F6 !important; color: #000 !important;">
-                <td>
-                </td>
-                <td class="text-center">
-                  Total
-                </td>
-                <td class="text-center text-success fw-bold" id="total-text-popup">
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+          <div id="receipt-summary">
+            <p class="border-primary p-1 mb-1 receipt-title" style="padding: 12px 0; background-color: #F2F4F6 !important; color: #000 !important;">
+              <span style="text-transform: uppercase;">VAT (7.5%)</span>
+              <span id="vat-text-popup">₦0</span>
+            </p>
+            <p class="border-primary p-1 mb-1 receipt-title"
+              style="padding: 12px 0; background-color: #F2F4F6 !important; color: #000 !important;">
+              <span style="text-transform: uppercase;">Total</span>
+              <span id="total-text-popup">₦0</span>
+            </p>
+          </div>
 
           <div id="legalcopy" class="mt-2">
             <p class="text-center" style="color: #000; font-weight: 500;">
