@@ -29,6 +29,7 @@
     "datatables.net-bs5": "^1.10.25",
     "datatables.net-fixedheader-bs5": "^3.1.9",
     "email-validator": "^2.0.4",
+    "eslint-config-prettier": "^8.3.0",
     "jquery": "^3.6.0",
     "mailgun-js": "^0.22.0",
     "moment": "^2.29.1",

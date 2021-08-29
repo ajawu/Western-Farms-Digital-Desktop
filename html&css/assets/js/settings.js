@@ -5,7 +5,10 @@ const bcrypt = require('bcryptjs');
 const { app, getCurrentWindow } = require('electron').remote;
 const path = require('path');
 
-const databasePath = path.join(app.getAppPath('userData').replace('app.asar', ''), 'western-data.db');
+const databasePath = path.join(
+    app.getAppPath('userData').replace('app.asar', ''),
+    'western-data.db',
+);
 
 // Personal Info
 const firstNameField = document.getElementById('first-name');
@@ -32,15 +35,15 @@ const updatePasswordButton = document.getElementById('password-button');
  * @returns {bool} true if all field is not blank and false otherwise
  */
 function validateInputField(inputFields) {
-  for (let index = 0; index < inputFields.length; index += 1) {
-    if (inputFields[index].value) {
-      inputFields[index].classList.remove('is-invalid');
-    } else {
-      inputFields[index].classList.add('is-invalid');
-      return false;
+    for (let index = 0; index < inputFields.length; index += 1) {
+        if (inputFields[index].value) {
+            inputFields[index].classList.remove('is-invalid');
+        } else {
+            inputFields[index].classList.add('is-invalid');
+            return false;
+        }
     }
-  }
-  return true;
+    return true;
 }
 
 /**
@@ -48,73 +51,112 @@ function validateInputField(inputFields) {
  * @returns {object}
  */
 function retrieveUserInfo() {
-  // { email: emailAddress, id: userId, name: `${firstName} ${lastName}` }));
-  return JSON.parse(window.localStorage.getItem('auth'));
+    // { email: emailAddress, id: userId, name: `${firstName} ${lastName}` }));
+    return JSON.parse(window.localStorage.getItem('auth'));
 }
 
 updatePersonalInfoButton.addEventListener('click', () => {
-  if (validateInputField([firstNameField, lastNameField, emailField, phoneField])) {
-    const userId = retrieveUserInfo().id;
-    const db = new Database(databasePath, { verbose: console.log });
+    if (
+        validateInputField([
+            firstNameField,
+            lastNameField,
+            emailField,
+            phoneField,
+        ])
+    ) {
+        const userId = retrieveUserInfo().id;
+        const db = new Database(databasePath, { verbose: console.log });
 
-    try {
-      const userQuery = db.prepare(`UPDATE auth SET first_name = @first_name, last_name = @last_name,
+        try {
+            const userQuery =
+                db.prepare(`UPDATE auth SET first_name = @first_name, last_name = @last_name,
             email = @email WHERE id = @id`);
-      userQuery.run({
-        first_name: firstNameField.value,
-        last_name: lastNameField.value,
-        email: emailField.value,
-        id: userId,
-      });
-      swal("Success", 'Personal info updated', "success")
-        .then(() => {
-          // getCurrentWindow().reload();
-        });
-    } catch (err) {
-      swal("Oops!", err.message, "error");
+            userQuery.run({
+                first_name: firstNameField.value,
+                last_name: lastNameField.value,
+                email: emailField.value,
+                id: userId,
+            });
+            swal('Success', 'Personal info updated', 'success').then(() => {
+                // getCurrentWindow().reload();
+            });
+        } catch (err) {
+            swal('Oops!', err.message, 'error');
+        }
+        db.close();
     }
-    db.close();
-  }
 });
 
 updatePasswordButton.addEventListener('click', () => {
-  if (validateInputField([firstNameField, lastNameField, emailField, phoneField])) {
-    const userId = retrieveUserInfo().id;
-    let db = new Database(databasePath, { verbose: console.log });
+    if (
+        validateInputField([
+            firstNameField,
+            lastNameField,
+            emailField,
+            phoneField,
+        ])
+    ) {
+        const userId = retrieveUserInfo().id;
+        let db = new Database(databasePath, { verbose: console.log });
 
-    try {
-      const passwordRow = db.prepare('SELECT password FROM auth WHERE id = ?').get(userId);
-      if (passwordRow) {
-        bcrypt.compare(oldPasswordField.value, passwordRow.password, (err, res) => {
-          if (res) {
-            console.log('Compared success');
-            if (passwordOneField.value === passwordTwoField.value) {
-              console.log('password match');
-              bcrypt.hash(passwordOneField.value, 8, (hashError, hash) => {
-                console.log('hash generated');
-                if (hash) {
-                  db = new Database(databasePath, { verbose: console.log });
-                  db.prepare(`UPDATE auth SET password = ? WHERE id = ?`).run(hash, userId);
-                  swal("Success", 'Personal info updated', "success");
-                } else {
-                  swal("Oops!", hashError, "error");
-                }
-              });
+        try {
+            const passwordRow = db
+                .prepare('SELECT password FROM auth WHERE id = ?')
+                .get(userId);
+            if (passwordRow) {
+                bcrypt.compare(
+                    oldPasswordField.value,
+                    passwordRow.password,
+                    (err, res) => {
+                        if (res) {
+                            console.log('Compared success');
+                            if (
+                                passwordOneField.value ===
+                                passwordTwoField.value
+                            ) {
+                                console.log('password match');
+                                bcrypt.hash(
+                                    passwordOneField.value,
+                                    8,
+                                    (hashError, hash) => {
+                                        console.log('hash generated');
+                                        if (hash) {
+                                            db = new Database(databasePath, {
+                                                verbose: console.log,
+                                            });
+                                            db.prepare(
+                                                `UPDATE auth SET password = ? WHERE id = ?`,
+                                            ).run(hash, userId);
+                                            swal(
+                                                'Success',
+                                                'Personal info updated',
+                                                'success',
+                                            );
+                                        } else {
+                                            swal('Oops!', hashError, 'error');
+                                        }
+                                    },
+                                );
+                            } else {
+                                swal(
+                                    'Oops!',
+                                    'Password must be the same in password one and two fields',
+                                    'error',
+                                );
+                            }
+                        } else {
+                            swal('Oops!', 'Invalid Password entered', 'error');
+                        }
+                    },
+                );
             } else {
-              swal("Oops!", 'Password must be the same in password one and two fields', "error");
+                console.log('Error occurred while fetching password');
             }
-          } else {
-            swal("Oops!", 'Invalid Password entered', "error");
-          }
-        });
-      } else {
-        console.log('Error occurred while fetching password');
-      }
-    } catch (err) {
-      swal("Oops!", err.message, "error");
+        } catch (err) {
+            swal('Oops!', err.message, 'error');
+        }
+        db.close();
     }
-    db.close();
-  }
 });
 
 // const updateCompanyInfoButton = document.getElementById('company-button');
@@ -138,54 +180,66 @@ updatePasswordButton.addEventListener('click', () => {
 // });
 
 window.onload = () => {
-  const userId = retrieveUserInfo().id;
-  const db = new Database(databasePath, { verbose: console.log });
+    const userId = retrieveUserInfo().id;
+    const db = new Database(databasePath, { verbose: console.log });
 
-  try {
-    const userQuery = db.prepare(`SELECT id, first_name, last_name, email, date_joined, phone,
+    try {
+        const userQuery =
+            db.prepare(`SELECT id, first_name, last_name, email, date_joined, phone,
       total_sales, is_admin, date_joined FROM auth WHERE id = ?`);
-    const userRow = userQuery.get(userId);
-    if (userRow) {
-      firstNameField.value = userRow.first_name;
-      lastNameField.value = userRow.last_name;
-      emailField.value = userRow.email;
-      phoneField.value = userRow.phone;
+        const userRow = userQuery.get(userId);
+        if (userRow) {
+            firstNameField.value = userRow.first_name;
+            lastNameField.value = userRow.last_name;
+            emailField.value = userRow.email;
+            phoneField.value = userRow.phone;
 
-      document.getElementById('nameText').textContent = `${userRow.first_name} ${userRow.last_name}`;
-      document.getElementById('userIdText').textContent = numeral(userId).format('000000');
-      document.getElementById('adminText').textContent = userRow.is_admin ? 'Administrator' : 'Sales Personnel';
-      document.getElementById('dateJoinedText').textContent = userRow.date_joined;
-      document.getElementById('totalSalesText').textContent = userRow.total_sales;
+            document.getElementById(
+                'nameText',
+            ).textContent = `${userRow.first_name} ${userRow.last_name}`;
+            document.getElementById('userIdText').textContent =
+                numeral(userId).format('000000');
+            document.getElementById('adminText').textContent = userRow.is_admin
+                ? 'Administrator'
+                : 'Sales Personnel';
+            document.getElementById('dateJoinedText').textContent =
+                userRow.date_joined;
+            document.getElementById('totalSalesText').textContent =
+                userRow.total_sales;
+        }
+    } catch (err) {
+        swal('Oops!', err.message, 'error');
     }
-  } catch (err) {
-    swal("Oops!", err.message, "error");
-  }
 
-  // try {
-  //   const companyRow = db.prepare(`SELECT * FROM company`).get();
-  //   if (companyRow) {
-  //     companyNameField.value = companyRow.company_name;
-  //     companyMottoField.value = companyRow.company_motto;
-  //     companyAddressField.value = companyRow.company_address;
-  //   }
-  // } catch (err) {
-  //   swal("Oops!", err.message, "error");
-  // }
-  // db.close();
+    // try {
+    //   const companyRow = db.prepare(`SELECT * FROM company`).get();
+    //   if (companyRow) {
+    //     companyNameField.value = companyRow.company_name;
+    //     companyMottoField.value = companyRow.company_motto;
+    //     companyAddressField.value = companyRow.company_address;
+    //   }
+    // } catch (err) {
+    //   swal("Oops!", err.message, "error");
+    // }
+    // db.close();
 
-  // Display Name
-  try {
-    document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
-  } catch (err) {
-    console.log('Element missing');
-  }
-
-  // Hide Elements from non admin users
-  const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
-  if (`${isAdmin}` === '0') {
-    const adminOnlyElements = document.getElementsByClassName('d-none admin-only-button');
-    for (const adminAlone of adminOnlyElements) {
-      adminAlone.classList.add('d-none');
+    // Display Name
+    try {
+        document.getElementById('full-name').textContent = JSON.parse(
+            window.localStorage.getItem('auth'),
+        ).name;
+    } catch (err) {
+        console.log('Element missing');
     }
-  }
+
+    // Hide Elements from non admin users
+    const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
+    if (`${isAdmin}` === '0') {
+        const adminOnlyElements = document.getElementsByClassName(
+            'd-none admin-only-button',
+        );
+        for (const adminAlone of adminOnlyElements) {
+            adminAlone.classList.add('d-none');
+        }
+    }
 };

@@ -17,38 +17,46 @@ const registerButton = document.getElementById('register-button');
  * @returns null
  */
 function insertUserData(email, passwordHash) {
-  const today = new Date();
-  let month = today.getMonth() + 1;
-  if (month < 10) month = `0${month}`;
-  const db = new sqlite3.Database('../western-data.db');
-  db.run("INSERT INTO auth('email', 'password', 'date_joined') VALUES(?, ?, ?)",
-    [email, passwordHash, `${today.getFullYear()}/${month}/${today.getDate()}`], (err) => {
-      if (err) console.log(err);
-    });
-  window.localStorage.setItem('auth', email); // save email address for authentication
-  remote.getCurrentWindow().loadFile('html&css/pages/dashboard/dashboard.html');
-  db.close();
+    const today = new Date();
+    let month = today.getMonth() + 1;
+    if (month < 10) month = `0${month}`;
+    const db = new sqlite3.Database('../western-data.db');
+    db.run(
+        "INSERT INTO auth('email', 'password', 'date_joined') VALUES(?, ?, ?)",
+        [
+            email,
+            passwordHash,
+            `${today.getFullYear()}/${month}/${today.getDate()}`,
+        ],
+        (err) => {
+            if (err) console.log(err);
+        },
+    );
+    window.localStorage.setItem('auth', email); // save email address for authentication
+    remote
+        .getCurrentWindow()
+        .loadFile('html&css/pages/dashboard/dashboard.html');
+    db.close();
 }
 
 /**
  * Register a new user with the credentials enterered into the register form
  */
 function registerUser() {
-  if (validator.validate(emailField.value)) {
-    if (passwordOneField.value === passwordTwoField.value) {
-      bcrypt.hash('password', saltRounds)
-        .then((hash) => {
-          insertUserData(emailField.value, hash);
-        });
+    if (validator.validate(emailField.value)) {
+        if (passwordOneField.value === passwordTwoField.value) {
+            bcrypt.hash('password', saltRounds).then((hash) => {
+                insertUserData(emailField.value, hash);
+            });
+        } else {
+            errorField.textContent = 'Passwords entered do not match';
+        }
     } else {
-      errorField.textContent = 'Passwords entered do not match';
+        errorField.textContent = 'Email address entered is invalid';
     }
-  } else {
-    errorField.textContent = 'Email address entered is invalid';
-  }
 }
 
 registerButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  registerUser();
+    e.preventDefault();
+    registerUser();
 });

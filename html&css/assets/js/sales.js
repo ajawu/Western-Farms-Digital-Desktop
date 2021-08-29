@@ -8,22 +8,39 @@ const bootstrap = require('bootstrap');
 const { app, getCurrentWindow } = require('electron').remote;
 const path = require('path');
 
-const databasePath = path.join(app.getAppPath('userData').replace('app.asar', ''), 'western-data.db');
+const databasePath = path.join(
+    app.getAppPath('userData').replace('app.asar', ''),
+    'western-data.db',
+);
 const salesTableBody = $('#inventory-body');
 const salesDetailsBody = $('#salesDetailsBody');
 
 /**
  * Append Sales details to inventory table
  */
-function displayRow(salesId, customerName, totalRevenue, totalPrice, purchaseTime, paymentMethod) {
-  const tableRow = `<tr>
+function displayRow(
+    salesId,
+    customerName,
+    totalRevenue,
+    totalPrice,
+    purchaseTime,
+    paymentMethod,
+) {
+    const tableRow = `<tr>
       <td><span class="fw-bold">${numeral(salesId).format('000000')}</span></td>
       <td><span class="fw-normal text-capitalize">${customerName}</span></td>
-      <td><span class="fw-bold text-success">₦${numeral(totalRevenue).format('0,0.0')}</span></td>
-      <td><span class="fw-normal">₦${numeral(totalPrice).format('0,0.0')}</span></td>
+      <td><span class="fw-bold text-success">₦${numeral(totalRevenue).format(
+          '0,0.0',
+      )}</span></td>
+      <td><span class="fw-normal">₦${numeral(totalPrice).format(
+          '0,0.0',
+      )}</span></td>
       <td><span class="fw-bold">${purchaseTime.split(' ')[0]}</span></td>
-      ${paymentMethod === 'Cash' ? `<td><span class="fw-bold text-success">${paymentMethod}</span></td>`
-      : `<td><span class="fw-bold text-secondary">${paymentMethod}</span></td>`}
+      ${
+          paymentMethod === 'Cash'
+              ? `<td><span class="fw-bold text-success">${paymentMethod}</span></td>`
+              : `<td><span class="fw-bold text-secondary">${paymentMethod}</span></td>`
+      }
       <td>
         <div class="btn-group">
           <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
@@ -66,14 +83,20 @@ function displayRow(salesId, customerName, totalRevenue, totalPrice, purchaseTim
         </button>
       </td>
     </tr>`;
-  salesTableBody.append(tableRow);
+    salesTableBody.append(tableRow);
 }
 
 /**
  * Display the sales items retrieved from the database
  */
-function displaySalesData(productName, unitCost, quantity, totalCost, indexNumber) {
-  const row = `
+function displaySalesData(
+    productName,
+    unitCost,
+    quantity,
+    totalCost,
+    indexNumber,
+) {
+    const row = `
     <tr>
       <td class="text-center"><span href="#" class="text-primary fw-bold">${indexNumber}</span> </td>
       <td class="fw-bold text-center text-capitalize">
@@ -89,84 +112,109 @@ function displaySalesData(productName, unitCost, quantity, totalCost, indexNumbe
         ₦${numeral(totalCost).format('0,0.0')}
       </td>
     </tr>`;
-  salesDetailsBody.append(row);
+    salesDetailsBody.append(row);
 }
 
 /**
  * get the first and last name of the user with matching user id
  */
 function getSalesRepName(userId) {
-  const db = new Database(databasePath, { verbose: console.log });
-  try {
-    const salesRepQuery = db.prepare('SELECT first_name, last_name FROM auth WHERE id = ?');
-    const salesRep = salesRepQuery.get(userId);
-    return `${salesRep.first_name} ${salesRep.last_name}`;
-  } catch (err) {
-    swal("Oops", err.message, "error");
-  }
-  db.close();
-  return undefined;
+    const db = new Database(databasePath, { verbose: console.log });
+    try {
+        const salesRepQuery = db.prepare(
+            'SELECT first_name, last_name FROM auth WHERE id = ?',
+        );
+        const salesRep = salesRepQuery.get(userId);
+        return `${salesRep.first_name} ${salesRep.last_name}`;
+    } catch (err) {
+        swal('Oops', err.message, 'error');
+    }
+    db.close();
+    return undefined;
 }
 
 /**
  * Get all sales items with matching sale id and render it on the page
  */
 function getSalesItems(saleId) {
-  const db = new Database(databasePath, { verbose: console.log });
-  try {
-    const salesRepQuery = db.prepare('SELECT product_name, unit_cost, quantity, total_cost FROM sales_item WHERE sale = ?');
-    let index = 1;
-    salesDetailsBody.empty(); // Clear previous sales table content
-    salesRepQuery.all(saleId).forEach((saleItem) => {
-      displaySalesData(saleItem.product_name, saleItem.unit_cost, saleItem.quantity,
-        saleItem.total_cost, index);
-      index += 1;
-    });
-  } catch (err) {
-    swal("Oops", err.message, "error");
-  }
-  db.close();
-  return undefined;
+    const db = new Database(databasePath, { verbose: console.log });
+    try {
+        const salesRepQuery = db.prepare(
+            'SELECT product_name, unit_cost, quantity, total_cost FROM sales_item WHERE sale = ?',
+        );
+        let index = 1;
+        salesDetailsBody.empty(); // Clear previous sales table content
+        salesRepQuery.all(saleId).forEach((saleItem) => {
+            displaySalesData(
+                saleItem.product_name,
+                saleItem.unit_cost,
+                saleItem.quantity,
+                saleItem.total_cost,
+                index,
+            );
+            index += 1;
+        });
+    } catch (err) {
+        swal('Oops', err.message, 'error');
+    }
+    db.close();
+    return undefined;
 }
 
 /**
  * Get the sale with matching id
  */
 function getSale(salesId) {
-  const db = new Database(databasePath, { verbose: console.log });
-  try {
-    const selectProductQuery = db.prepare('SELECT customer_name, date(purchase_time) as purchase_date, total_price, total_revenue, payment_method, sales_rep FROM sales WHERE id = ?');
-    const salesRow = selectProductQuery.get(`${salesId}`);
-    console.log(salesRow);
-    if (salesRow) {
-      // Load data into form fields
-      document.getElementById('customerName').textContent = salesRow.customer_name;
-      document.getElementById('salesRepName').textContent = getSalesRepName(salesRow.sales_rep || 'Error'); // Get sales rep name
-      document.getElementById('purchaseDate').textContent = salesRow.purchase_date;
-      document.getElementById('paymentMethod').textContent = salesRow.payment_method;
-      document.getElementById('totalCost').textContent = numeral(salesRow.total_price).format('0,0.0');
-      document.getElementById('totalRevenue').textContent = numeral(salesRow.total_revenue).format('0,0.0');
-      getSalesItems(`${salesId}`); // Render sales Items
-      // Format popup modal
-      const productModal = new bootstrap.Modal(document.getElementById('product-modal'));
-      productModal.show();
-    } else {
-      swal("Oops", "An error occurred while fetching product", "error");
+    const db = new Database(databasePath, { verbose: console.log });
+    try {
+        const selectProductQuery = db.prepare(
+            'SELECT customer_name, date(purchase_time) as purchase_date, total_price, total_revenue, payment_method, sales_rep FROM sales WHERE id = ?',
+        );
+        const salesRow = selectProductQuery.get(`${salesId}`);
+        console.log(salesRow);
+        if (salesRow) {
+            // Load data into form fields
+            document.getElementById('customerName').textContent =
+                salesRow.customer_name;
+            document.getElementById('salesRepName').textContent =
+                getSalesRepName(salesRow.sales_rep || 'Error'); // Get sales rep name
+            document.getElementById('purchaseDate').textContent =
+                salesRow.purchase_date;
+            document.getElementById('paymentMethod').textContent =
+                salesRow.payment_method;
+            document.getElementById('totalCost').textContent = numeral(
+                salesRow.total_price,
+            ).format('0,0.0');
+            document.getElementById('totalRevenue').textContent = numeral(
+                salesRow.total_revenue,
+            ).format('0,0.0');
+            getSalesItems(`${salesId}`); // Render sales Items
+            // Format popup modal
+            const productModal = new bootstrap.Modal(
+                document.getElementById('product-modal'),
+            );
+            productModal.show();
+        } else {
+            swal('Oops', 'An error occurred while fetching product', 'error');
+        }
+    } catch (err) {
+        swal('Oops', err.message, 'error');
     }
-  } catch (err) {
-    swal("Oops", err.message, "error");
-  }
-  db.close();
+    db.close();
 }
 
 /**
  * Populate the refund modal with details of the selected sale
  */
 function processRefund(salesId, customerName) {
-  document.getElementById('refundSalesId').textContent = salesId;
-  document.getElementById('refundSalesName').textContent = `With ID "${salesId}" for "${customerName}"`;
-  const refundModal = new bootstrap.Modal(document.getElementById('refundModal'));
-  refundModal.show();
+    document.getElementById('refundSalesId').textContent = salesId;
+    document.getElementById(
+        'refundSalesName',
+    ).textContent = `With ID "${salesId}" for "${customerName}"`;
+    const refundModal = new bootstrap.Modal(
+        document.getElementById('refundModal'),
+    );
+    refundModal.show();
 }
 
 /**
@@ -174,46 +222,49 @@ function processRefund(salesId, customerName) {
  * @param {number} addQuantity number to add to product quantity
  */
 function updateProduct(addQuantity, productId) {
-  const db = new Database(databasePath, { verbose: console.log });
-  try {
-    const productUpdateQuery = db.prepare('UPDATE product SET quantity = quantity + ? WHERE id = ?');
-    productUpdateQuery.run(parseInt(addQuantity, 10), productId);
-    db.close();
-    return true;
-  } catch (err) {
-    swal("Oops!", err.message, "error");
-    db.close();
-    return false;
-  }
+    const db = new Database(databasePath, { verbose: console.log });
+    try {
+        const productUpdateQuery = db.prepare(
+            'UPDATE product SET quantity = quantity + ? WHERE id = ?',
+        );
+        productUpdateQuery.run(parseInt(addQuantity, 10), productId);
+        db.close();
+        return true;
+    } catch (err) {
+        swal('Oops!', err.message, 'error');
+        db.close();
+        return false;
+    }
 }
 
 /**
  * Refunds the product by updating existing product quantity numbers
  */
 function refundProduct() {
-  const db = new Database(databasePath, { verbose: console.log });
-  const salesId = document.getElementById('refundSalesId').textContent;
-  try {
-    const salesItemQuery = db.prepare('SELECT quantity, product FROM sales_item WHERE sale = ?');
-    salesItemQuery.all(salesId).forEach((row) => {
-      updateProduct(row.quantity, row.product);
-    });
-  } catch (err) {
-    swal("Oops!", err.message, "error");
-  }
+    const db = new Database(databasePath, { verbose: console.log });
+    const salesId = document.getElementById('refundSalesId').textContent;
+    try {
+        const salesItemQuery = db.prepare(
+            'SELECT quantity, product FROM sales_item WHERE sale = ?',
+        );
+        salesItemQuery.all(salesId).forEach((row) => {
+            updateProduct(row.quantity, row.product);
+        });
+    } catch (err) {
+        swal('Oops!', err.message, 'error');
+    }
 
-  try {
-    const deleteSalesQuery = db.prepare('DELETE FROM sales WHERE id = ?');
-    swal("Success", "Selected sale refunded", "success")
-      .then(() => {
-        getCurrentWindow().reload();
-      });
-    deleteSalesQuery.run(salesId);
-  } catch (err) {
-    swal("Oops!", "An Error occurred while deleting items", "error");
-  }
+    try {
+        const deleteSalesQuery = db.prepare('DELETE FROM sales WHERE id = ?');
+        swal('Success', 'Selected sale refunded', 'success').then(() => {
+            getCurrentWindow().reload();
+        });
+        deleteSalesQuery.run(salesId);
+    } catch (err) {
+        swal('Oops!', 'An Error occurred while deleting items', 'error');
+    }
 
-  db.close();
+    db.close();
 }
 
 /**
@@ -223,8 +274,12 @@ function refundProduct() {
  */
 // eslint-disable-next-line no-unused-vars
 function addDelete(salesId, productName) {
-  document.getElementById('salesDeleteName').textContent = `By "${productName}" with ID "${numeral(salesId).format('000000')}"`;
-  document.getElementById('salesIdField').textContent = salesId;
+    document.getElementById(
+        'salesDeleteName',
+    ).textContent = `By "${productName}" with ID "${numeral(salesId).format(
+        '000000',
+    )}"`;
+    document.getElementById('salesIdField').textContent = salesId;
 }
 
 /**
@@ -232,64 +287,74 @@ function addDelete(salesId, productName) {
  */
 // eslint-disable-next-line no-unused-vars
 function deleteProduct() {
-  const db = new Database(databasePath, { verbose: console.log });
-  const salesId = document.getElementById('salesIdField').textContent;
-  try {
-    const deleteProductQuery = db.prepare('DELETE FROM sales WHERE id = ?');
-    deleteProductQuery.run(salesId);
-    swal("Success", "Product deleted successfully!", "success")
-      .then(() => {
-        getCurrentWindow().reload();
-      });
-  } catch (err) {
-    swal("Oops!", err.message, "error");
-  }
-  db.close();
+    const db = new Database(databasePath, { verbose: console.log });
+    const salesId = document.getElementById('salesIdField').textContent;
+    try {
+        const deleteProductQuery = db.prepare('DELETE FROM sales WHERE id = ?');
+        deleteProductQuery.run(salesId);
+        swal('Success', 'Product deleted successfully!', 'success').then(() => {
+            getCurrentWindow().reload();
+        });
+    } catch (err) {
+        swal('Oops!', err.message, 'error');
+    }
+    db.close();
 }
 
 /**
  * Load products from database
  */
 function loadSales() {
-  const db = new Database(databasePath, { verbose: console.log });
-  try {
-    const salesQuery = db.prepare('SELECT id, customer_name, total_revenue, total_price, purchase_time, payment_method FROM sales');
-    salesQuery.all().forEach((sale) => {
-      displayRow(sale.id, sale.customer_name, sale.total_revenue, sale.total_price,
-        sale.purchase_time, sale.payment_method);
-    });
+    const db = new Database(databasePath, { verbose: console.log });
+    try {
+        const salesQuery = db.prepare(
+            'SELECT id, customer_name, total_revenue, total_price, purchase_time, payment_method FROM sales',
+        );
+        salesQuery.all().forEach((sale) => {
+            displayRow(
+                sale.id,
+                sale.customer_name,
+                sale.total_revenue,
+                sale.total_price,
+                sale.purchase_time,
+                sale.payment_method,
+            );
+        });
 
-    $('#sales-table').DataTable();
-    document.getElementById('tableLoad').classList.add('d-none');
-    document.getElementById('sales-table').classList.remove('d-none');
-  } catch (err) {
-    swal("Oops!", err.message, "error")
-      .then(() => {
-        console.log('contact ajawudavid@gmail.com');
-      });
-  }
-  db.close();
+        $('#sales-table').DataTable();
+        document.getElementById('tableLoad').classList.add('d-none');
+        document.getElementById('sales-table').classList.remove('d-none');
+    } catch (err) {
+        swal('Oops!', err.message, 'error').then(() => {
+            console.log('contact ajawudavid@gmail.com');
+        });
+    }
+    db.close();
 }
 
 $(document).ready(() => {
-  loadSales(false);
-  // Display Name
-  try {
-    document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
-  } catch (err) {
-    console.log('Element missing');
-  }
-
-  // Display admin only elements
-  const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
-  const adminElments = document.getElementsByClassName('admin-only-button');
-  if (parseInt(isAdmin, 10) === 1) {
-    for (const adminElement of adminElments) {
-      adminElement.classList.remove('d-none');
+    loadSales(false);
+    // Display Name
+    try {
+        document.getElementById('full-name').textContent = JSON.parse(
+            window.localStorage.getItem('auth'),
+        ).name;
+    } catch (err) {
+        console.log('Element missing');
     }
-  }
+
+    // Display admin only elements
+    const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
+    const adminElments = document.getElementsByClassName('admin-only-button');
+    if (parseInt(isAdmin, 10) === 1) {
+        for (const adminElement of adminElments) {
+            adminElement.classList.remove('d-none');
+        }
+    }
 });
 
-document.getElementById('generate-report-button').addEventListener('click', () => {
-  PHE.printElement(document.getElementById('sales-table'));
-});
+document
+    .getElementById('generate-report-button')
+    .addEventListener('click', () => {
+        PHE.printElement(document.getElementById('sales-table'));
+    });

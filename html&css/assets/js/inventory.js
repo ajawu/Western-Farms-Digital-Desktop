@@ -7,7 +7,10 @@ const bootstrap = require('bootstrap');
 const { app, getCurrentWindow } = require('electron').remote;
 const path = require('path');
 
-const databasePath = path.join(app.getAppPath('userData').replace('app.asar', ''), 'western-data.db');
+const databasePath = path.join(
+    app.getAppPath('userData').replace('app.asar', ''),
+    'western-data.db',
+);
 
 const inventoryTableBody = $('#inventory-body');
 const productIdField = document.getElementById('productIdField');
@@ -24,14 +27,19 @@ const quantityField = document.getElementById('quantity');
  * Append product details to inventory table
  */
 function displayRow(productId, name, quantity, expiryDate, price, status) {
-  const tableRow = `<tr>
-      <td><span class="fw-bold">${numeral(productId).format('000000')}</span></td>
+    const tableRow = `<tr>
+      <td><span class="fw-bold">${numeral(productId).format(
+          '000000',
+      )}</span></td>
       <td><span class="fw-normal text-capitalize">${name}</span></td>
       <td><span class="fw-normal">${quantity}</span></td>
       <td><span class="fw-normal">${expiryDate.split(' ')[0]}</span></td>
       <td><span class="fw-bold">₦${numeral(price).format('0,0')}</span></td>
-      ${status ? `<td><span class="fw-bold text-danger">Expired</span></td>`
-      : `<td><span class="fw-bold text-success">Unexpired</span></td>`}
+      ${
+          status
+              ? `<td><span class="fw-bold text-danger">Expired</span></td>`
+              : `<td><span class="fw-bold text-success">Unexpired</span></td>`
+      }
       <td>
         <div class="btn-group">
           <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
@@ -65,7 +73,7 @@ function displayRow(productId, name, quantity, expiryDate, price, status) {
         </button>
       </td>
     </tr>`;
-  inventoryTableBody.append(tableRow);
+    inventoryTableBody.append(tableRow);
 }
 
 /**
@@ -73,49 +81,55 @@ function displayRow(productId, name, quantity, expiryDate, price, status) {
  * @param {int} productId
  */
 function getProduct(productId) {
-  const db = new Database(databasePath, { verbose: console.log });
-  try {
-    const selectProductQuery = db.prepare('SELECT name, expiry_date, cost_price, selling_price, sku, quantity FROM product WHERE id = ?');
-    const productRow = selectProductQuery.get(productId);
-    if (productRow) {
-      // Load data into form fields
-      productPopupIdField.value = productId;
-      productNameField.value = productRow.name;
-      expiryDateField.value = productRow.expiry_date;
-      costPriceField.value = productRow.cost_price;
-      sellingPriceField.value = productRow.selling_price;
-      skuField.value = productRow.sku;
-      quantityField.value = productRow.quantity;
-      // Format popup modal
-      document.getElementById('addProductButton').textContent = 'Update Product';
-      document.getElementById('modal-title').textContent = 'Product Update';
-      method.value = 'update';
-      const productModal = new bootstrap.Modal(document.getElementById('product-modal'));
-      productModal.show();
-    } else {
-      swal("Oops", "An error occurred while fetching product", "error");
+    const db = new Database(databasePath, { verbose: console.log });
+    try {
+        const selectProductQuery = db.prepare(
+            'SELECT name, expiry_date, cost_price, selling_price, sku, quantity FROM product WHERE id = ?',
+        );
+        const productRow = selectProductQuery.get(productId);
+        if (productRow) {
+            // Load data into form fields
+            productPopupIdField.value = productId;
+            productNameField.value = productRow.name;
+            expiryDateField.value = productRow.expiry_date;
+            costPriceField.value = productRow.cost_price;
+            sellingPriceField.value = productRow.selling_price;
+            skuField.value = productRow.sku;
+            quantityField.value = productRow.quantity;
+            // Format popup modal
+            document.getElementById('addProductButton').textContent =
+                'Update Product';
+            document.getElementById('modal-title').textContent =
+                'Product Update';
+            method.value = 'update';
+            const productModal = new bootstrap.Modal(
+                document.getElementById('product-modal'),
+            );
+            productModal.show();
+        } else {
+            swal('Oops', 'An error occurred while fetching product', 'error');
+        }
+    } catch (err) {
+        swal('Oops', err.message, 'error');
     }
-  } catch (err) {
-    swal("Oops", err.message, "error");
-  }
-  db.close();
+    db.close();
 }
 
 /**
  * Resets the content of all input fields in the product popup
  */
 function clearProductPopup() {
-  productPopupIdField.value = '';
-  method.value = '';
-  productNameField.value = '';
-  expiryDateField.value = '';
-  costPriceField.value = '';
-  sellingPriceField.value = '';
-  skuField.value = '';
-  quantityField.value = '';
-  method.value = 'create';
-  document.getElementById('addProductButton').textContent = 'Add Product';
-  document.getElementById('modal-title').textContent = 'New Product';
+    productPopupIdField.value = '';
+    method.value = '';
+    productNameField.value = '';
+    expiryDateField.value = '';
+    costPriceField.value = '';
+    sellingPriceField.value = '';
+    skuField.value = '';
+    quantityField.value = '';
+    method.value = 'create';
+    document.getElementById('addProductButton').textContent = 'Add Product';
+    document.getElementById('modal-title').textContent = 'New Product';
 }
 
 /**
@@ -125,8 +139,8 @@ function clearProductPopup() {
  */
 // eslint-disable-next-line no-unused-vars
 function addDelete(productId, productName) {
-  document.getElementById('productDeleteName').textContent = productName;
-  productIdField.textContent = productId;
+    document.getElementById('productDeleteName').textContent = productName;
+    productIdField.textContent = productId;
 }
 
 /**
@@ -134,43 +148,51 @@ function addDelete(productId, productName) {
  */
 // eslint-disable-next-line no-unused-vars
 function deleteProduct() {
-  const db = new Database(databasePath, { verbose: console.log });
-  const productId = document.getElementById('productIdField').textContent;
-  try {
-    const deleteProductQuery = db.prepare('UPDATE product SET is_deleted = 1 WHERE id = ?');
-    deleteProductQuery.run(productId);
-    swal("Success", "Product deleted successfully!", "success")
-      .then(() => {
-        getCurrentWindow().reload();
-      });
-  } catch (err) {
-    swal("Oops!", err.message, "error");
-  }
-  db.close();
+    const db = new Database(databasePath, { verbose: console.log });
+    const productId = document.getElementById('productIdField').textContent;
+    try {
+        const deleteProductQuery = db.prepare(
+            'UPDATE product SET is_deleted = 1 WHERE id = ?',
+        );
+        deleteProductQuery.run(productId);
+        swal('Success', 'Product deleted successfully!', 'success').then(() => {
+            getCurrentWindow().reload();
+        });
+    } catch (err) {
+        swal('Oops!', err.message, 'error');
+    }
+    db.close();
 }
 
 /**
  * Load products from database
  */
 function loadInventory() {
-  const db = new Database(databasePath, { verbose: console.log });
-  try {
-    const productsQuery = db.prepare('SELECT id, name, quantity, expiry_date, selling_price, has_expired FROM product WHERE is_deleted = 0');
-    productsQuery.all().forEach((product) => {
-      displayRow(product.id, product.name, product.quantity, product.expiry_date,
-        product.selling_price, product.has_expired);
-    });
+    const db = new Database(databasePath, { verbose: console.log });
+    try {
+        const productsQuery = db.prepare(
+            'SELECT id, name, quantity, expiry_date, selling_price, has_expired FROM product WHERE is_deleted = 0',
+        );
+        productsQuery.all().forEach((product) => {
+            displayRow(
+                product.id,
+                product.name,
+                product.quantity,
+                product.expiry_date,
+                product.selling_price,
+                product.has_expired,
+            );
+        });
 
-    $('#inventory-table').DataTable();
-    document.getElementById('tableLoad').classList.add('d-none');
-    document.getElementById('inventory-table').classList.remove('d-none');
-  } catch (err) {
-    swal("Oops!", err.message, "error")
-      .then(() => {
-        console.log('contact ajawudavid@gmail.com');
-      });
-  }
-  db.close();
+        $('#inventory-table').DataTable();
+        document.getElementById('tableLoad').classList.add('d-none');
+        document.getElementById('inventory-table').classList.remove('d-none');
+    } catch (err) {
+        swal('Oops!', err.message, 'error').then(() => {
+            console.log('contact ajawudavid@gmail.com');
+        });
+    }
+    db.close();
 }
 
 /**
@@ -179,70 +201,100 @@ function loadInventory() {
  * @returns {bool} true if all field is not blank and false otherwise
  */
 function validateInputField(inputFields) {
-  for (let index = 0; index < inputFields.length; index += 1) {
-    if (inputFields[index].value) {
-      inputFields[index].classList.remove('is-invalid');
-    } else {
-      inputFields[index].classList.add('is-invalid');
-      return false;
+    for (let index = 0; index < inputFields.length; index += 1) {
+        if (inputFields[index].value) {
+            inputFields[index].classList.remove('is-invalid');
+        } else {
+            inputFields[index].classList.add('is-invalid');
+            return false;
+        }
     }
-  }
-  return true;
+    return true;
 }
 
-document.getElementById('addProductButton').addEventListener('click', (() => {
-  if (validateInputField([productNameField, expiryDateField, costPriceField,
-    sellingPriceField, skuField, quantityField])) {
-    // ------
-    const db = new Database(databasePath, { verbose: console.log });
+document.getElementById('addProductButton').addEventListener('click', () => {
+    if (
+        validateInputField([
+            productNameField,
+            expiryDateField,
+            costPriceField,
+            sellingPriceField,
+            skuField,
+            quantityField,
+        ])
+    ) {
+        // ------
+        const db = new Database(databasePath, { verbose: console.log });
 
-    if (method.value === 'update') {
-      try {
-        const updateProductQuery = db.prepare(`UPDATE product SET name = ?, expiry_date = ?, sku = ?, selling_price = ?,
+        if (method.value === 'update') {
+            try {
+                const updateProductQuery =
+                    db.prepare(`UPDATE product SET name = ?, expiry_date = ?, sku = ?, selling_price = ?,
           cost_price = ?, quantity = ? WHERE id = ?`);
-        updateProductQuery.run(productNameField.value, expiryDateField.value, skuField.value,
-          sellingPriceField.value, costPriceField.value, quantityField.value,
-          productPopupIdField.value);
-        swal("Success", "Product updated successfully!", "success")
-          .then(() => {
-            getCurrentWindow().reload();
-          });
-      } catch (err) {
-        swal("Oops!", err.message, "error");
-      }
-    } else if (method.value === 'create') {
-      try {
-        const createProductQuery = db.prepare(`INSERT INTO product (name, sku, selling_price, cost_price, quantity,
+                updateProductQuery.run(
+                    productNameField.value,
+                    expiryDateField.value,
+                    skuField.value,
+                    sellingPriceField.value,
+                    costPriceField.value,
+                    quantityField.value,
+                    productPopupIdField.value,
+                );
+                swal(
+                    'Success',
+                    'Product updated successfully!',
+                    'success',
+                ).then(() => {
+                    getCurrentWindow().reload();
+                });
+            } catch (err) {
+                swal('Oops!', err.message, 'error');
+            }
+        } else if (method.value === 'create') {
+            try {
+                const createProductQuery =
+                    db.prepare(`INSERT INTO product (name, sku, selling_price, cost_price, quantity,
           date_added, expiry_date, has_expired, is_deleted) VALUES(?, ?, ?, ?, ?, date('now'), ?, 0, 0)`);
-        createProductQuery.run(productNameField.value, skuField.value, sellingPriceField.value,
-          costPriceField.value, quantityField.value, expiryDateField.value);
-        swal("Success", "Product created successfully!", "success")
-          .then(() => {
-            getCurrentWindow().reload();
-          });
-      } catch (err) {
-        swal("Oops!", err.message, "error");
-      }
+                createProductQuery.run(
+                    productNameField.value,
+                    skuField.value,
+                    sellingPriceField.value,
+                    costPriceField.value,
+                    quantityField.value,
+                    expiryDateField.value,
+                );
+                swal(
+                    'Success',
+                    'Product created successfully!',
+                    'success',
+                ).then(() => {
+                    getCurrentWindow().reload();
+                });
+            } catch (err) {
+                swal('Oops!', err.message, 'error');
+            }
+        }
+        db.close();
     }
-    db.close();
-  }
-}));
+});
 
 $(document).ready(() => {
-  loadInventory(false);
-  // Display Name
-  try {
-    document.getElementById('full-name').textContent = JSON.parse(window.localStorage.getItem('auth')).name;
-  } catch (err) {
-    console.log('Element missing');
-  }
-
-  // Display admin only elements
-  const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
-  const adminElments = document.getElementsByClassName('admin-only-button');
-  if (parseInt(isAdmin, 10) === 1) {
-    for (const adminElement of adminElments) {
-      adminElement.classList.remove('d-none');
+    loadInventory(false);
+    // Display Name
+    try {
+        document.getElementById('full-name').textContent = JSON.parse(
+            window.localStorage.getItem('auth'),
+        ).name;
+    } catch (err) {
+        console.log('Element missing');
     }
-  }
+
+    // Display admin only elements
+    const isAdmin = JSON.parse(window.localStorage.getItem('auth')).admin;
+    const adminElments = document.getElementsByClassName('admin-only-button');
+    if (parseInt(isAdmin, 10) === 1) {
+        for (const adminElement of adminElments) {
+            adminElement.classList.remove('d-none');
+        }
+    }
 });
